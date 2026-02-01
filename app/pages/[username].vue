@@ -4,7 +4,7 @@
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 
-	import { onMounted, ref, watch } from 'vue';
+	import { computed, onMounted, ref, watch } from 'vue';
 	import { useRoute } from 'vue-router';
 
 	import type { User } from 'beamsocial'
@@ -17,12 +17,26 @@
 
 	definePageMeta({
 		title: 'Profil',
-		path: '/@:username'
+		path: '/@:username',
+		middleware: 'users'
 	})
 
 	const route = useRoute();
 	const username = route.params.username as string;
 
+	type ProfileMeta = {
+		name?: string;
+		display_name?: string;
+		description?: string | null;
+		avatar_url?: string | null;
+		badge?: {
+			colors?: {
+				primary?: string;
+			};
+		};
+	};
+
+	const profileUserMeta = useState<ProfileMeta | null>('profileUserMeta', () => null);
 	const profile = ref<User | null>(null);
 	const posts = ref<Post[] | null>(null);
 	const following = ref<User[] | null>(null);
@@ -34,6 +48,51 @@
 
 	const blocked = ref<boolean>(false);
 
+	const profileForMeta = computed(() => profile.value ?? profileUserMeta.value);
+
+	useHead(() => ({
+		title: profileForMeta.value?.display_name
+			? `${profileForMeta.value.display_name} • Beam`
+			: profileForMeta.value?.name
+				? `@${profileForMeta.value.name} • Beam`
+				: 'Profil • Beam',
+
+		meta: [
+			{
+				name: 'description',
+				content: profileForMeta.value?.description || 'Voir le profil Beam de ' + (profileForMeta.value?.name ? `@${profileForMeta.value.name}` : 'cet utilisateur') + '.'
+			},
+			{
+				property: 'og:title',
+				content: profileForMeta.value?.display_name
+					? `${profileForMeta.value.display_name} • Beam`
+					: profileForMeta.value?.name
+						? `@${profileForMeta.value.name} • Beam`
+						: 'Profil • Beam'
+			},
+			{
+				property: 'og:description',
+				content: profileForMeta.value?.description || 'Voir le profil Beam de ' + (profileForMeta.value?.name ? `@${profileForMeta.value.name}` : 'cet utilisateur') + '.'
+			},
+			{
+				property: 'og:type',
+				content: 'profile'
+			},
+			{
+				property: 'og:author',
+				content: profileForMeta.value?.display_name || profileForMeta.value?.name || 'Utilisateur Beam'
+			},
+			{
+				property: 'og:image',
+				content: profileForMeta.value?.avatar_url || ''
+			},
+			{
+				name: 'og:color',
+				content: profileForMeta.value?.badge?.colors?.primary || '#e021ff'
+			}
+		]
+	}));
+
 	async function loadProfile(profileUsername: string) {
 		loading.value = true;
 		errorMessage.value = null;
@@ -43,12 +102,12 @@
 		await refreshMe();
 
 		try {
-		let _profile: User | null = await $client.getUser(profileUsername);
-		profile.value = _profile;
+			const _profile: User | null = await $client.getUser(profileUsername);
+			profile.value = _profile;
 
-		document.title = (_profile?.display_name || `@${profileUsername}`) + " • Beam"
+			document.title = (profile.value?.display_name || `@${profileUsername}`) + " • Beam"
 
-		let _posts: Post[] | null = await $client.fetchUserPosts(profileUsername);
+			let _posts: Post[] | null = await $client.fetchUserPosts(profileUsername);
 			posts.value = _posts;
 		} catch(err: any) {
 			const msg = err.response.data.message || '';
