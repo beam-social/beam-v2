@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { EyeIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
-	import { FingerPrintIcon, SparklesIcon, UserIcon } from '@heroicons/vue/24/solid';
+	import { ArrowRightStartOnRectangleIcon, FingerPrintIcon, SparklesIcon, UserIcon } from '@heroicons/vue/24/solid';
 	import { ChevronRightIcon } from '@heroicons/vue/24/outline';
 
 	import ProfileBadge from '@/components/ProfileBadge.vue';
@@ -230,13 +230,13 @@
 		</div>
 		<section v-if="section == 'home'" class="space-y-8">
 			<div class="space-y-1">
-				<div class="grid grid-cols-1 gap-x-4 gap-y-2 xl:grid-cols-2">
+				<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
 					<button
 						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium border-2 border-border-surface rounded-3xl w-full px-6 py-6"
 						@click="() => section = 'profile'"
 					>
 						<UserCircleIcon class="w-8 h-8" />
-						<span class="grow text-lg text-left">Modifier mon profil</span>
+						<span class="grow text-lg text-left line-clamp-1">Modifier mon profil</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-subtext text-subtext" />
 					</button>
 					<button
@@ -244,8 +244,16 @@
 						@click="() => section = 'plus'"
 					>
 						<SparklesIcon class="text-[#d013ff] w-7 h-7 mx-0.5" />
-						<span class="grow text-lg text-left">Gérer mon grade</span>
+						<span class="grow text-lg text-left line-clamp-1">Gérer mon grade</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-[#d013ff] text-[#d013ff]" />
+					</button>
+					<button
+						class="cursor-pointer flex gap-1 items-center bg-danger/15 text-danger font-medium border-2 border-danger/50 rounded-3xl w-full px-6 py-6"
+						@click="() => router.push('/auth/logout')"
+					>
+						<ArrowRightStartOnRectangleIcon class="text-danger w-7 h-7 mx-0.5" />
+						<span class="grow text-lg text-left line-clamp-1">Se déconnecter</span>
+						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-danger text-danger" />
 					</button>
 				</div>
 			</div>
@@ -257,7 +265,7 @@
 						@click="() => section = 'account'"
 					>
 						<FingerPrintIcon class="w-8 h-8" />
-						<span class="grow text-lg text-left">Compte</span>
+						<span class="grow text-lg text-left line-clamp-1">Compte</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-subtext text-subtext" />
 					</button>
 					<button
@@ -265,7 +273,7 @@
 						@click="() => section = 'privacy'"
 					>
 						<LockClosedIcon class="w-8 h-8" />
-						<span class="grow text-lg text-left">Confidentialité</span>
+						<span class="grow text-lg text-left line-clamp-1">Confidentialité</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-subtext text-subtext" />
 					</button>
 				</div>
@@ -278,7 +286,7 @@
 						@click="() => section = 'appearance'"
 					>
 						<EyeIcon class="w-8 h-8" />
-						<span class="grow text-lg text-left">Apparence</span>
+						<span class="grow text-lg text-left line-clamp-1">Apparence</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-subtext text-subtext" />
 					</button>
 				</div>
