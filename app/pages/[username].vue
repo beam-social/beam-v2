@@ -10,7 +10,7 @@
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 
-	import { computed, onMounted, ref, watch } from 'vue';
+	import { onMounted, ref, watch } from 'vue';
 	import { useRoute } from 'vue-router';
 
 	import type { User } from 'beamsocial'
@@ -24,19 +24,6 @@
 	const route = useRoute();
 	const username = route.params.username as string;
 
-	type ProfileMeta = {
-		name?: string;
-		display_name?: string;
-		description?: string | null;
-		avatar_url?: string | null;
-		badge?: {
-			colors?: {
-				primary?: string;
-			};
-		};
-	};
-
-	const profileUserMeta = useState<ProfileMeta | null>('profileUserMeta', () => null);
 	const profile = ref<User | null>(null);
 	const posts = ref<Post[] | null>(null);
 	const following = ref<User[] | null>(null);

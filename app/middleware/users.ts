@@ -60,7 +60,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:url',
-						content: `https://beam.so/@${meta.name}`
+						content: `https://beam.ejnalo.me/@${meta.name}`
+					},
+					{
+						property: 'og:color',
+						content: meta.badge?.colors?.primary || '#e021ff'
 					}
 				]
 			});
