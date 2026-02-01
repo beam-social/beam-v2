@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@import url('colors.css');
+
+@import "tailwindcss";
+
+@theme {
+	--breakpoint-xs: 475px;
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+	--breakpoint-2xl: 1536px;
+
+	--color-primary-darkest: var(--primary-darkest);
+	--color-primary-lighter: var(--primary-lighter);
+	--color-primary: var(--primary);
+	--color-primary-darker: var(--primary-darker);
+	--color-primary-lightest: var(--primary-lightest);
+
+	--color-background: var(--background);
+	--color-background-stop1: var(--background-stop1);
+	--color-background-stop2: var(--background-stop2);
+
+	--color-background-surface: var(--background-surface);
+
+	--color-navbar-stop1: var(--navbar-stop1);
+	--color-navbar-stop2: var(--navbar-stop2);
+	--color-navbar-text: var(--navbar-text);
+
+	--color-text: var(--text);
+	--color-subtext: var(--subtext);
+	--color-text-surface: var(--text-surface);
+
+	--color-border-surface: var(--border-surface);
+
+	--color-action: var(--action);
+	--color-action-hovered: var(--action-hovered);
+
+	--color-danger: var(--danger);
+	--color-danger-hovered: var(--danger-hovered);
+
+	--color-success: var(--success);
+	--color-success-hovered: var(--success-hovered);
+
+	--font-sans: 'Outfit', sans-serif;
+	--font-mono: 'Ubuntu Mono', monospace;
+
+	--color-success: var(--success);
+	--color-success-hovered: var(--success-hovered);
+}
+
+	@keyframes showSidebar {
+		from {
+			transform: translateX(-512px)
+		}
+
+		to {
+			transform: translateX(0px)
+		}
+	}
+
+	@keyframes hideSidebar {
+		from {
+			transform: translateX(0px)
+		}
+
+		to {
+			transform: translateX(-512px)
+		}
+	}
+
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		background-image: linear-gradient(45deg, var(--background-stop1), var(--background-stop2));
+		background-color: var(--background);
+	}
+
+	* {
+		transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+	}
+
+	body {
+		font-family: 'Outfit', sans-serif;
+	}
+}
+
+@layer components {
+	.md-area * {
+		line-height: normal;
+		line-break: anywhere;
+		max-width: 100%;
+	}
+
+	.md-area a {
+		color: var(--color-primary);
+}
+
+.md-area strong {
+	font-weight: 550;
+}
+
+.md-area *+h1 { margin-top: 24px }
+.md-area h1 {
+	margin-bottom: 12px;
+	font-size: 24px;
+	font-weight: 650;
+}
+
+.md-area *+h2 { margin-top: 20px }
+.md-area h2 {
+	margin-bottom: 12px;
+	font-size: 22px;
+	font-weight: 550;
+}
+
+.md-area *+h3 { margin-top: 16px }
+.md-area h3 {
+	margin-bottom: 8px;
+	font-size: 20px;
+	font-weight: 550;
+}
+
+.md-area *+h4 { margin-top: 16px }
+.md-area h4 {
+	margin-bottom: 8px;
+	font-size: 18px;
+	font-weight: 550;
+}
+
+.md-area hr {
+	background-color: var(--color-border);
+	border: none;
+	border-radius: 1px;
+	width: 50%;
+	height: 2px;
+	margin: 24px auto;
+}
+
+.md-area *+pre { margin-top: 16px }
+.md-area pre, code:not(.md-area pre code) {
+	margin-bottom: 8px;
+	background-color: var(--color-slate-200);
+	color: var(--color-slate-500);
+	font-family: 'Ubuntu Mono', monospace;
+	border: 1px solid var(--color-slate-300);
+	border-radius: 6px;
+	padding: 2px 4px;
+	overflow-y: scroll;
+}
+.md-area pre { border-radius: 8px; padding: 12px 16px }
+
+
+.md-area *+ul { margin-top: 16px }
+.md-area ul > li {
+	margin-bottom: 8px;
+	margin-left: 16px;
+	list-style-type: disc;
+}
+
+.md-area li ul > li {
+	margin-left: 16px;
+	list-style-type: circle;
+}
+
+.md-area img {
+	margin: 16px 0 8px;
+	border-radius: 12px;
+	max-width: 100%;
+}
+}
