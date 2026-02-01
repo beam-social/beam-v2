@@ -26,13 +26,44 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	try {
 		const user = await $client.getUser(username);
 		if (user) {
-			profileUserMeta.value = {
+			const meta = {
 				name: user.name,
 				display_name: user.display_name || undefined,
 				description: user.description ?? null,
 				avatar_url: user.avatar_url ?? null,
 				badge: user.badge ? { colors: user.badge.colors } : undefined,
 			};
+			profileUserMeta.value = meta;
+
+			useHead({
+				title: meta.display_name ? `${meta.display_name} • Beam` : `@${meta.name} • Beam`,
+				meta: [
+					{
+						name: 'description',
+						content: meta.description || `Voir le profil Beam de @${meta.name}.`
+					},
+					{
+						property: 'og:title',
+						content: meta.display_name ? `${meta.display_name} • Beam` : `@${meta.name} • Beam`
+					},
+					{
+						property: 'og:description',
+						content: meta.description || `Voir le profil Beam de @${meta.name}.`
+					},
+					{
+						property: 'og:type',
+						content: 'profile'
+					},
+					{
+						property: 'og:image',
+						content: meta.avatar_url || ''
+					},
+					{
+						property: 'og:url',
+						content: `https://beam.so/@${meta.name}`
+					}
+				]
+			});
 		} else {
 			throw new Error("User not found");
 		}

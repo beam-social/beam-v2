@@ -1,4 +1,10 @@
 <script setup lang="ts">
+	definePageMeta({
+		title: 'Profil',
+		path: '/@:username',
+		middleware: 'users'
+	})
+
 	import PostCard from '@/components/cards/PostCard.vue';
 	import PictureRing from '@/components/PictureRing.vue';
 	import ProfileBadge from '@/components/ProfileBadge.vue';
@@ -14,12 +20,6 @@
 	import { me, refreshMe } from '@/stores/session';
 
 	const { $client } = useNuxtApp();
-
-	definePageMeta({
-		title: 'Profil',
-		path: '/@:username',
-		middleware: 'users'
-	})
 
 	const route = useRoute();
 	const username = route.params.username as string;
@@ -48,50 +48,7 @@
 
 	const blocked = ref<boolean>(false);
 
-	const profileForMeta = computed(() => profile.value ?? profileUserMeta.value);
 
-	useHead(() => ({
-		title: profileForMeta.value?.display_name
-			? `${profileForMeta.value.display_name} • Beam`
-			: profileForMeta.value?.name
-				? `@${profileForMeta.value.name} • Beam`
-				: 'Profil • Beam',
-
-		meta: [
-			{
-				name: 'description',
-				content: profileForMeta.value?.description || 'Voir le profil Beam de ' + (profileForMeta.value?.name ? `@${profileForMeta.value.name}` : 'cet utilisateur') + '.'
-			},
-			{
-				property: 'og:title',
-				content: profileForMeta.value?.display_name
-					? `${profileForMeta.value.display_name} • Beam`
-					: profileForMeta.value?.name
-						? `@${profileForMeta.value.name} • Beam`
-						: 'Profil • Beam'
-			},
-			{
-				property: 'og:description',
-				content: profileForMeta.value?.description || 'Voir le profil Beam de ' + (profileForMeta.value?.name ? `@${profileForMeta.value.name}` : 'cet utilisateur') + '.'
-			},
-			{
-				property: 'og:type',
-				content: 'profile'
-			},
-			{
-				property: 'og:author',
-				content: profileForMeta.value?.display_name || profileForMeta.value?.name || 'Utilisateur Beam'
-			},
-			{
-				property: 'og:image',
-				content: profileForMeta.value?.avatar_url || ''
-			},
-			{
-				name: 'og:color',
-				content: profileForMeta.value?.badge?.colors?.primary || '#e021ff'
-			}
-		]
-	}));
 
 	async function loadProfile(profileUsername: string) {
 		loading.value = true;
