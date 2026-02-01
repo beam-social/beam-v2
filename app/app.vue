@@ -18,6 +18,9 @@
 </script>
 <template>
 	<Sidebar v-if=me :me=me />
+	<div v-else class="sticky top-0 z-1000 sm:top-4 bg-background-surface text-text-surface border-b-2 sm:border-2 border-border-surface sm:rounded-full flex justify-center items-center sm:w-fit px-6 py-4 sm:px-8 sm:mx-auto">
+		<p>Votre expérience sera meilleure en <RouterLink to="/auth/join" class="text-primary underline decoration-transparent decoration-2 transition-all duration-300 hover:decoration-primary">vous connectant</RouterLink>.</p>
+	</div>
 	<div class="md:px-32 lg:px-64 xl:px-72">
 		<NuxtPage class="text-text" />
 	</div>
