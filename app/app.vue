@@ -1,11 +1,20 @@
 <script setup lang="ts">
 	import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/vue/24/solid'
 
-	import Sidebar from './components/layout/Navbar.vue';
+	import Sidebar from '@/components/layout/Navbar.vue';
 
-	import { RouterLink } from 'vue-router';
+	import { me } from '@/stores/session';
+	import { syncTheme } from '@/services/theme';
 
-	import { me } from './stores/session';
+	const route = useRoute();
+
+	watch(
+		() => route.path,
+		() => {
+			syncTheme();
+		},
+		{ immediate: true }
+	);
 </script>
 <template>
 	<Sidebar v-if=me :me=me />
