@@ -5,6 +5,8 @@ export default defineNuxtPlugin(() => {
 	const apiUrl = (config.public.apiUrl as string) || 'http://localhost:5000';
 	const client = new Client(apiUrl);
 
+	console.log('API URL:', apiUrl);
+
 	return {
 		provide: {
 			apiUrl,
