@@ -160,7 +160,7 @@
 				</div>
 				<textarea
 					v-model="content"
-					class="border-none rounded-xl outline-none w-full h-32 resize-none px-2"
+					class="border-none rounded-xl outline-none w-full h-24 resize-none px-2"
 					placeholder="Qu'allez-vous partager aujourd'hui ?"
 					:minlength=1
 					:maxlength=250
