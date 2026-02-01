@@ -1,4 +1,9 @@
 <script setup lang="ts">
+	definePageMeta({
+		title: 'Publication • Beam',
+		middleware: 'posts'
+	})
+
 	import PostCard from "@/components/cards/PostCard.vue";
 	import CommentCard from "@/components/cards/CommentCard.vue";
 
