@@ -2,9 +2,7 @@
 	import PostWidget from '@/components/widgets/PostWidget.vue';
 	import CommentWidget from '@/components/widgets/CommentWidget.vue';
 
-	import { ref } from 'vue';
-
-	import { Post, User } from 'beamsocial';
+	import { Post } from 'beamsocial';
 	import type { Client, Comment, Notification, NotificationComment, NotificationPost, NotificationSingle } from 'beamsocial';
 
 	import { deltatime } from '@/utils/time';
@@ -14,9 +12,8 @@
 		client: Client
 	}>();
 
-	const author = ref<User | null>(null);
-	const post = ref<Post | null>(null)
-	const comment = ref<Comment | null>(null)
+	const post = useState<Post | null>('post', () => null);
+	const comment = useState<Comment | null>('comment', () => null);
 
 	switch (props.notif.type) {
 		case 'like':

@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @import url('colors.css');
+@import url('markdown.css');
 
 @import "tailwindcss";
 
@@ -44,7 +50,7 @@
 	--color-success: var(--success);
 	--color-success-hovered: var(--success-hovered);
 
-	--font-sans: 'Outfit', sans-serif;
+	--font-sans: 'Poppins', sans-serif;
 	--font-mono: 'Ubuntu Mono', monospace;
 
 	--color-success: var(--success);
@@ -84,91 +90,45 @@
 	}
 
 	body {
-		font-family: 'Outfit', sans-serif;
-	}
-}
-
-@layer components {
-	.md-area * {
-		line-height: normal;
-		line-break: anywhere;
-		max-width: 100%;
+		background-color: var(--background);
+		color: var(--text);
+		font-family: var(--font-sans);
+		height: 100vh;
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden;
 	}
 
-	.md-area a {
-		color: var(--color-primary);
-}
+	@media screen and (min-width: 640px) {
+		#__nuxt {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+			margin: 0;
+			padding: 0;
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
 
-.md-area strong {
-	font-weight: 550;
-}
+		.with-sidebar #__nuxt {
+			display: grid;
+			grid-template-columns: 1fr 2fr;
+		}
 
-.md-area *+h1 { margin-top: 24px }
-.md-area h1 {
-	margin-bottom: 12px;
-	font-size: 24px;
-	font-weight: 650;
-}
+		.with-sidebar #__nuxt>nav,
+		.with-sidebar #__nuxt>aside {
+			position: sticky;
+			top: 0;
+			column-span: 1;
+		}
+	}
 
-.md-area *+h2 { margin-top: 20px }
-.md-area h2 {
-	margin-bottom: 12px;
-	font-size: 22px;
-	font-weight: 550;
-}
-
-.md-area *+h3 { margin-top: 16px }
-.md-area h3 {
-	margin-bottom: 8px;
-	font-size: 20px;
-	font-weight: 550;
-}
-
-.md-area *+h4 { margin-top: 16px }
-.md-area h4 {
-	margin-bottom: 8px;
-	font-size: 18px;
-	font-weight: 550;
-}
-
-.md-area hr {
-	background-color: var(--color-border);
-	border: none;
-	border-radius: 1px;
-	width: 50%;
-	height: 2px;
-	margin: 24px auto;
-}
-
-.md-area *+pre { margin-top: 16px }
-.md-area pre, code:not(.md-area pre code) {
-	margin-bottom: 8px;
-	background-color: var(--color-slate-200);
-	color: var(--color-slate-500);
-	font-family: 'Ubuntu Mono', monospace;
-	border: 1px solid var(--color-slate-300);
-	border-radius: 6px;
-	padding: 2px 4px;
-	overflow-y: scroll;
-}
-.md-area pre { border-radius: 8px; padding: 12px 16px }
-
-
-.md-area *+ul { margin-top: 16px }
-.md-area ul > li {
-	margin-bottom: 8px;
-	margin-left: 16px;
-	list-style-type: disc;
-}
-
-.md-area li ul > li {
-	margin-left: 16px;
-	list-style-type: circle;
-}
-
-.md-area img {
-	margin: 16px 0 8px;
-	border-radius: 12px;
-	max-width: 100%;
-}
+	@media screen and (min-width: 1280px) {
+		.with-sidebar #__nuxt {
+			display: grid;
+			grid-template-columns: 1fr 2fr 1fr;
+		}
+	}
 }

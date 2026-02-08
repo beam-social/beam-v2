@@ -1,5 +1,7 @@
 <script setup lang="ts">
-	import { theme as current, themes } from '@/services/theme';
+	import { themes, useTheme } from '@/services/theme';
+
+	const { theme: current } = useTheme();
 
 	const props = defineProps<{
 		theme: string

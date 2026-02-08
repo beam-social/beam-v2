@@ -2,9 +2,6 @@
 	import PictureRing from '@/components/PictureRing.vue';
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 
-	import { onMounted, ref, watch } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
 	import { Comment } from 'beamsocial'
@@ -20,11 +17,11 @@
 	}>()
 
 	const router = useRouter();
-	const content = ref<string>('');
+	const content = useState<string>('content', () => '');
 
-	const comment = ref<Comment | null>(props.data);
+	const comment = useState<Comment | null>('comment', () => props.data);
 
-	const age = ref<string>(comment.value?.creation_date.toLocaleString('fr-FR') || '1970-01-01')
+	const age = useState<string>('age', () => comment.value?.creation_date.toLocaleString('fr-FR') || '1970-01-01')
 
 	onMounted(async () => {
 		content.value = comment.value?.content.slice(0, 200) || "Ce commentaire est privé."
@@ -42,20 +39,12 @@
 
 	const patterns: MarkdownPattern[] = [
 		{
-			pattern: /@([a-zA-Z0-9_]+)/g,
-			replace: (match, username) => `[@${username}](/@${username})`
+			pattern: /(^|\s)@([a-z0-9._]+)/g,
+			replace: (match, leading, username) => `${leading}[@${username}](/@${username})`
 		},
 		{
-			pattern: /#([a-zA-Z0-9_]+)/g,
-			replace: (match, tag) => `[#${tag}](/explore?tag=${tag})`
-		},
-		{
-			pattern: /\r\n/g,
-			replace: () => '<br>'
-		},
-		{
-			pattern: /\[([a-zA-Z0-9_]+)\]\(([a-zA-Z0-9_]+)\)/g,
-			replace: (match, link, url) => `${url}`
+			pattern: /(^|\s)#([\p{L}\p{N}_]+)/gu,
+			replace: (match, leading, tag) => `${leading}[#${tag}](/search?q=${tag})`
 		}
 	]
 </script>
@@ -77,7 +66,7 @@
 			/>
 			<RouterLink :to="'/@' + comment.author?.name" class="block font-semibold">{{ comment.author?.display_name || comment.author?.name || '...' }} <ProfileBadge :badge="comment.author?.badge || null" class="inline w-4 h-4 -translate-y-0.5" /></RouterLink>
 			<div class="grow"></div>
-			<span class="text-text-secondary text-sm">{{ age }}</span>
+			<span class="text-subtext text-sm">{{ age }}</span>
 		</div>
 		<div
 			class="md-area max-w-full px-1"

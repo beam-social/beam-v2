@@ -17,7 +17,7 @@
     "date-fns": "^4.1.0",
     "dompurify": "^3.3.1",
     "i18n-iso-countries": "^7.14.0",
-    "mmi-md": "^1.0.0",
+    "mmi-md": "^1.1.0",
     "nuxt": "^4.3.0",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.27",

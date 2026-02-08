@@ -1,9 +1,13 @@
 <script setup lang="ts">
-	import { onMounted, ref } from 'vue';
-	import { useRoute, useRouter } from 'vue-router';
-
 	import axios from 'axios';
-	import { refreshMe } from '@/stores/session';
+
+	useHead({
+		title: 'Sudo • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Confirmer mon identité pour une action sécurisée.' }
+		]
+	})
 
 	const { $client, $apiUrl } = useNuxtApp();
 
@@ -12,8 +16,8 @@
 
 	const actions: Record<string, string> = {
 		'delete-account': 'Supprimer mon compte',
-		'change-email': 'Changer mon adresse mail',
-		'change-password': 'Changer mon mot de passe',
+		'reset-email': 'Changer mon adresse mail',
+		'reset-password': 'Réinitialiser mon mot de passe',
 	}
 
 	const action = ref<string | undefined>(undefined);
@@ -42,38 +46,36 @@
 							router.push('/account/delete?token=' + encodeURIComponent(result.token));
 							break;
 
-						case 'change-email':
-							router.push('/account/change-email?token=' + encodeURIComponent(result.token));
+						case 'reset-email':
+							router.push('/account/reset-email?token=' + encodeURIComponent(result.token));
 							break;
 
-						case 'change-password':
-							router.push('/account/password-reset?token=' + encodeURIComponent(result.token));
+						case 'reset-password':
+							router.push('/account/reset-password?token=' + encodeURIComponent(result.token));
 							break;
 
 						default:
-							router.push('/settings');
+							router.push('/account/settings');
 							break;
 					}
 				} else {
-					alert('Login failed');
+					alert('Échec de la connexion');
 				}
 			});
 	}
 
 	onMounted(() => {
-		document.title = "Sudo • Beam"
-
 		$client.refresh()
 
 		if (route.query.action && Object.keys(actions).includes(route.query.action as string)) {
 			action.value = route.query.action as string;
 		} else {
-			router.push('/settings');
+			router.push('/account/settings');
 		}
 	})
 </script>
 <template>
-	<main class="p-4 sm:p-8">
+	<main class="p-4 xs:p-8">
 		<nav class="flex px-10 mb-1">
 			<a href="/" class="text-primary font-semibold">Retour en zone sécurisée</a>
 			<div class="grow"></div>

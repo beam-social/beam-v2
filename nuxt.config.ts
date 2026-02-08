@@ -4,7 +4,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-	compatibilityDate: '2025-07-15',
+	compatibilityDate: '2026-02-08',
 	ssr: true,
 	nitro: {
 		preset: 'cloudflare-pages'
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 	srcDir: 'app',
 	runtimeConfig: {
 		public: {
-			apiUrl: 'https://api.beamsocial.com' // Fallback if env not set
+			apiUrl: 'https://api.beam.ejnalo.me'
 		}
 	},
 	css: [

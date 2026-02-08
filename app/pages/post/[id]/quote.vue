@@ -15,10 +15,10 @@
 	import { useSession } from '@/stores/session';
 
 	useHead({
-		title: 'Écrire • Beam',
+		title: 'Reposter • Beam',
 		meta: [
 			{ name: 'robots', content: 'noindex,nofollow' },
-			{ name: 'description', content: 'Écrire un post.' }
+			{ name: 'description', content: 'Reposter une publication.' }
 		]
 	})
 

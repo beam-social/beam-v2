@@ -2,7 +2,7 @@
 	definePageMeta({
 		title: 'Profil',
 		path: '/@:username',
-		middleware: 'users'
+		// middleware: 'users'
 	})
 
 	import PostCard from '@/components/cards/PostCard.vue';
@@ -10,18 +10,18 @@
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 
-	import { onMounted, ref, watch } from 'vue';
-	import { useRoute } from 'vue-router';
-
 	import type { User } from 'beamsocial'
 	import type { Post } from 'beamsocial'
 
 	import { toLiteralNumber } from '@/utils/format';
-	import { me, refreshMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
 
 	const { $client } = useNuxtApp();
+	const { me, refreshMe } = useSession();
 
 	const route = useRoute();
+	const router = useRouter();
+
 	const username = route.params.username as string;
 
 	const profile = ref<User | null>(null);
@@ -29,21 +29,26 @@
 	const following = ref<User[] | null>(null);
 	const followers = ref<User[] | null>(null);
 
-	const loading = ref(true);
+	const loading = ref<boolean>(true);
 	const errorMessage = ref<string | null>(null);
 	const section = ref<string>('posts');
 
 	const blocked = ref<boolean>(false);
 
-
-
 	async function loadProfile(profileUsername: string) {
 		loading.value = true;
 		errorMessage.value = null;
+		profile.value = null;
+		posts.value = null;
+		following.value = null;
+		followers.value = null;
+		blocked.value = false;
 
 		document.title = "@" + profileUsername + " • Beam"
 
-		await refreshMe();
+		await refreshMe(() => {
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+		});
 
 		try {
 			const _profile: User | null = await $client.getUser(profileUsername);
@@ -96,24 +101,20 @@
 		}
 	});
 
-	function reload() {
-		window.location.reload()
-	}
-
 	watch(me, () => {
 		blocked.value = me.value?.relations.blocklist.includes(profile.value?.id || '') || false
 	})
 </script>
 <template>
 	<main v-if="loading"
-		class="relative grow flex items-center justify-center text-center p-4 sm:p-8"
+		class="relative grow flex items-center justify-center text-center p-4 xs:p-8"
 	>
 		<p class="text-2xl font-bold">Chargement...</p>
 	</main>
 
-	<main v-else-if="profile" class="sm:p-8">
-		<section class="flex flex-col sm:gap-6">
-			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 sm:border-2 sm:border-border-surface sm:rounded-4xl w-full h-full sm:p-12 space-y-6">
+	<main v-else-if="profile" class="xs:p-8">
+		<section class="flex flex-col xs:gap-6">
+			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 xs:border-2 xs:border-border-surface xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
 				<div class="space-y-4">
 					<PictureRing
 						:src=profile.avatar_url!
@@ -154,7 +155,8 @@
 					<button v-if="!blocked" @click="async () => { await profile!.block(); await refreshMe() }" class="cursor-pointer bg-danger text-white font-medium rounded-full px-5 py-2.5">Bloquer</button>
 					<button v-if="blocked" @click="async () => { await profile!.unblock(); await refreshMe() }" class="cursor-pointer bg-danger/25 text-danger font-medium rounded-full px-5 py-2.5">Bloqué(e)</button>
 				</div>
-				<div class="space-y-2">
+				<div class="space-y-1">
+					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
 					<p>{{ profile.description }}</p>
 				</div>
 			</div>
@@ -180,12 +182,12 @@
 					<div v-if="posts?.length || 0" class="flex flex-col gap-2 md:gap-4">
 						<PostCard
 							v-for="post in posts"
+							:key=post.id
 							:data=post
 							:me=me
 							:client=$client
 							:clickable=true
 							:short=true
-							class="max-w-lg mx-auto"
 						/>
 					</div>
 					<div v-else class="flex flex-col items-center justify-center h-full pt-6 gap-4">
@@ -198,6 +200,7 @@
 					<div v-if="following?.length || 0" class="grid grid-cols-1 gap-2 lg:grid-cols-2">
 						<ProfileCard
 							v-for="user in following"
+							:key=user.id
 							:profile=user
 							:me=me
 							:clickable=true
@@ -229,6 +232,7 @@
 					<div v-if="followers?.length || 0" class="grid grid-cols-1 gap-2 lg:grid-cols-2">
 						<ProfileCard
 							v-for="user in followers"
+							:key=user.id
 							:profile=user
 							:me=me
 							:clickable=true

@@ -6,9 +6,6 @@
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import Menu from '../Menu.vue';
 
-	import { onMounted, ref } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
 	import { Comment } from 'beamsocial'
@@ -26,8 +23,8 @@
 	const apiUrl = useNuxtApp().$apiUrl;
 
 	const router = useRouter();
-	const content = ref<string>('');
-	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([
+	const content = useState<string>('content', () => '');
+	const actions = useState<Array<{ label: string, style: string, handler: () => Promise<void> }>>(() => [
 		{
 			'label': 'Partager',
 			'style': 'normal',
@@ -38,10 +35,10 @@
 		}
 	])
 
-	const comment = ref<Comment>(props.data);
+	const comment = useState<Comment>('comment', () => props.data);
 
-	const baselike = ref<number | null>(null);
-	const age = ref<string | undefined>(deltatime(comment.value.creation_date || new Date(0)))
+	const baselike = useState<number | null>('baselike', () => null);
+	const age = useState<string | undefined>('age', () => deltatime(comment.value.creation_date || new Date(0)))
 
 	onMounted(async () => {
 		content.value = comment.value.content
@@ -78,20 +75,12 @@
 
 	const patterns: MarkdownPattern[] = [
 		{
-			pattern: /@([a-zA-Z0-9_]+)/g,
-			replace: (match, username) => `[@${username}](/@${username})`
+			pattern: /(^|\s)@([a-z0-9._]+)/g,
+			replace: (match, leading, username) => `${leading}[@${username}](/@${username})`
 		},
 		{
-			pattern: /#([a-zA-Z0-9_]+)/g,
-			replace: (match, tag) => `[#${tag}](/discover?tag=${tag})`
-		},
-		{
-			pattern: /\r\n/g,
-			replace: () => '<br>'
-		},
-		{
-			pattern: /\[([a-zA-Z0-9_]+)\]\(([a-zA-Z0-9_]+)\)/g,
-			replace: (match, link, url) => `${url}`
+			pattern: /(^|\s)#([\p{L}\p{N}_]+)/gu,
+			replace: (match, leading, tag) => `${leading}[#${tag}](/search?q=${tag})`
 		}
 	]
 </script>

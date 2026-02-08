@@ -1,13 +1,17 @@
 <script setup lang="ts">
-	import { onMounted } from 'vue';
-	import { me, refreshMe } from '@/stores/session';
-	import { useRouter } from 'vue-router';
+	import { useSession } from '@/stores/session';
+
+	useHead({
+		title: 'Beam',
+		meta: [
+			{ name: 'description', content: 'Bienvenue sur Beam, le réseau social 100% moderne.' }
+		]
+	})
 
 	const router = useRouter();
+	const { me, refreshMe } = useSession();
 
 	onMounted(async () => {
-		document.title = "Beam • Le réseau social 100% moderne";
-
 		await refreshMe();
 
 		if (me.value) {
@@ -27,10 +31,10 @@
 				<RouterLink to="/auth/join" class="cursor-pointer block bg-action text-white text-center font-medium rounded-full w-40 py-3 duration-300 hover:bg-action-hovered">C'est parti</RouterLink>
 				<RouterLink to="/auth/login" class="cursor-pointer block text-center font-medium underline decoration-[1.5px] decoration-transparent w-fit duration-300 hover:decoration-inherit">J'ai un compte</RouterLink>
 			</div>
-			<!--hr class="border border-border-surface rounded-full w-48 max-md:mx-auto" />
+			<hr class="border border-border-surface rounded-full w-48 max-md:mx-auto" />
 			<div>
-				<p class="text-subtext font-medium md:w-2/3">En rejoignant, vous acceptez nos <RouterLink to="/terms" class="text-primary underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-primary-hovered">Conditions d'utilisation</RouterLink> et vous engagez à les repsecter.</p>
-			</div-->
+				<p class="text-subtext font-medium md:w-2/3">En rejoignant, vous acceptez nos <RouterLink to="/legal/terms" class="text-primary underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-primary-hovered">Conditions d'utilisation</RouterLink> et vous engagez à les repsecter.</p>
+			</div>
 		</div>
 	</header>
 </template>

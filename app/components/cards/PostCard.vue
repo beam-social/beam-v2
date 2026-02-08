@@ -7,9 +7,6 @@
 	import PostWidget from '../widgets/PostWidget.vue';
 	import Menu from '../Menu.vue';
 
-	import { onMounted, ref } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
 	import { Post } from 'beamsocial'
@@ -25,37 +22,29 @@
 		short?: boolean
 	}>()
 
-	const apiUrl = useNuxtApp().$apiUrl;
+	const { $apiUrl } = useNuxtApp();
 
 	const router = useRouter();
-	const show_all = ref<boolean>(true)
+	const show_all = ref<boolean>(true);
 	const content = ref<string>('');
-	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([
-		{
-			'label': 'Partager',
-			'style': 'normal',
-			'handler': async () => {
-				await navigator.clipboard.writeText(apiUrl + '/p/' + post.value.id);
-				alert('Lien du post copié dans le presse-papier: \n' + apiUrl + '/p/' + post.value.id);
-			}
-		}
-	])
+	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([])
 
-	const post = ref<Post>(props.data);
-	const parent = ref<Post | null>(null)
+	const post = computed(() => props.data);
+	const parent = ref<Post | null>(null);
 
 	const baselike = ref<number | null>(null);
-	const age = ref<string | undefined>(deltatime(post.value.creation_date || new Date(0)))
+	const age = computed(() => deltatime(post.value.creation_date || new Date(0)));
 
-
-	onMounted(async () => {
-		content.value = post.value.content
-		baselike.value = post.value.likes - (+!!props.me?.tastes.likes.includes(post.value.id) || 0)
+	const initFromPost = () => {
+		content.value = post.value.content;
+		baselike.value = post.value.likes - (+!!props.me?.tastes.likes.includes(post.value.id) || 0);
 
 		if (post.value.parent_id && props.client) {
 			props.client.getPost(post.value.parent_id).then(
 				data => parent.value = data
 			)
+		} else {
+			parent.value = null;
 		}
 
 		if (props.short) {
@@ -64,13 +53,25 @@
 			content.value = post.value.content.length > 400
 				? post.value.content.slice(0, 400) + `...`
 				: post.value.content;
+		} else {
+			show_all.value = true;
 		}
+	};
 
-
-		age.value = deltatime(post.value.creation_date || new Date(0));
+	const buildActions = () => {
+		const list: Array<{ label: string, style: string, handler: () => Promise<void> }> = [
+			{
+				'label': 'Partager',
+				'style': 'normal',
+				'handler': async () => {
+					await navigator.clipboard.writeText($apiUrl + '/p/' + post.value.id);
+					alert('Lien du post copié dans le presse-papier: \n' + $apiUrl + '/p/' + post.value.id);
+				}
+			}
+		];
 
 		if (props.me && (props.me.profile.id == post.value.author?.id || props.me.profile.level >= 8)) {
-			actions.value.push({
+			list.push({
 				'label': 'Supprimer',
 				'style': 'danger',
 				'handler': async () => { await post.value.delete(); router.back() }
@@ -78,7 +79,7 @@
 		}
 
 		if (props.me?.profile.id != post.value.author?.id) {
-			actions.value.push({
+			list.push({
 				'label': 'Signaler',
 				'style': 'danger',
 				'handler': async () => {
@@ -86,7 +87,7 @@
 				}
 			})
 
-			actions.value.push({
+			list.push({
 				'label': `Bloquer ${post.value.author?.display_name || post.value.author?.name || "l'auteur"}`,
 				'style': 'danger',
 				'handler': async () => {
@@ -94,24 +95,27 @@
 				}
 			});
 		}
-	});
+
+		actions.value = list;
+	};
+
+	watch(
+		() => [post.value, props.me, props.short, props.client],
+		() => {
+			initFromPost();
+			buildActions();
+		},
+		{ immediate: true }
+	);
 
 	const patterns: MarkdownPattern[] = [
 		{
-			pattern: /@([a-zA-Z0-9_]+)/g,
-			replace: (match, username) => `[@${username}](/@${username})`
+			pattern: /(^|\s)@([a-z0-9._]+)/g,
+			replace: (match, leading, username) => `${leading}[@${username}](/@${username})`
 		},
 		{
-			pattern: /#([a-zA-Z0-9_]+)/g,
-			replace: (match, tag) => `[#${tag}](/discover?tag=${tag})`
-		},
-		{
-			pattern: /\r\n/g,
-			replace: () => '<br>'
-		},
-		{
-			pattern: /\[([a-zA-Z0-9_]+)\]\(([a-zA-Z0-9_]+)\)/g,
-			replace: (match, link, url) => `${url}`
+			pattern: /(^|\s)#([\p{L}\p{N}_]+)/gu,
+			replace: (match, leading, tag) => `${leading}[#${tag}](/search?q=${tag})`
 		}
 	]
 </script>
@@ -133,13 +137,14 @@
 			<span class="text-subtext text-sm">{{ age }}</span>
 			<Menu :actions="actions" />
 		</div>
-		<div v-if="post.attachments.length" class="flex flex-wrap gap-0.5 rounded-2xl w-fit overflow-hidden">
+		<div v-if="post.attachments.length" class="grid grid-cols-2 gap-1 rounded-2xl w-full overflow-hidden">
 			<img
 				v-for="(file, index) in post.attachments"
-				:src="file.path"
-				:class="index == 0 && post.attachments.length % 2 == 1
-				? 'w-full'
-				: 'w-[calc(50%-0.0625rem)]'"
+				:src="$apiUrl + '/drive/' + file.id"
+				class="rounded-md min-w-full h-full aspect-video object-cover"
+				:class="(index == 0 && post.attachments.length % 2 == 1)
+					? 'col-span-2 row-span-2'
+					: ''"
 			/>
 		</div>
 		<div
@@ -148,8 +153,9 @@
 			v-markdown="applyMarkdownPatterns(content, patterns)"
 			@click="() => { if (clickable) router.push('/post/' + post!.id) }"
 		></div>
-		<div v-if="!show_all && post.content.length > 200" class="flex justify-end px-2">
-			<button @click="() => { show_all = true; content = post.content }" class="text-subtext text-sm">Voir plus</button>
+		<div v-if="post.content.length > 400" class="flex justify-center px-2">
+			<button v-if=show_all @click="() => { show_all = false; content = post.content.slice(0, 400) + '...' }" class="cursor-pointer text-primary text-sm font-semibold">Voir moins</button>
+			<button v-else @click="() => { show_all = true; content = post.content }" class="cursor-pointer text-primary text-sm font-semibold">Voir plus</button>
 		</div>
 		<div class="px-0">
 			<PostWidget v-if=post.parent_id :data="parent" :client=client :me=me />

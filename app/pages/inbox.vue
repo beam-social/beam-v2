@@ -2,18 +2,24 @@
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 	import NotifCard from '@/components/cards/NotifCard.vue';
 
-	import { onMounted, ref } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import axios from 'axios';
 
 	import type { User } from 'beamsocial'
 	import type { Notification } from 'beamsocial'
 
-	import { me, refreshMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
+
+	useHead({
+		title: 'Notifications • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Consultez vos notifications sur Beam.' }
+		]
+	})
 
 	const router = useRouter();
 	const { $client, $apiUrl } = useNuxtApp();
+	const { me, refreshMe } = useSession();
 
 	const section = ref<string>('unread');
 
@@ -21,14 +27,12 @@
 	const unread = ref<Notification[]>([]);
 	const read = ref<Notification[]>([]);
 
-	onMounted(async () => {
-		document.title = "Notifications • Beam"
 
-		await refreshMe(() => {
-			router.push('/login?return=' + encodeURIComponent(window.location.pathname))
-		});
+	await refreshMe(() => {
+		router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+	});
 
-		axios.get(
+	axios.get(
 		`${$apiUrl}/me/inbox`,
 		{
 			withCredentials: true
@@ -37,27 +41,22 @@
 		const inbox = response.data;
 
 		for (const u of inbox.requests.followers || []) {
-			$client.getUser(u)
-			.then(user => {
-				if (user) {
-					requests.value.push(user);
-				}
-			});
-	}
+			$client.getUser(u.name)
+				.then(user => {
+					if (user) {
+						requests.value.push(user);
+					}
+				});
+		}
 
-	read.value = inbox.read
-	unread.value = inbox.unread
+		read.value = inbox.read
+		unread.value = inbox.unread
 	});
-});
-
-function reload() {
-	window.location.reload()
-}
 </script>
 <template>
-	<main class="flex flex-col p-4 gap-4 sm:p-8">
-		<h1 class="text-3xl text-center font-bold">Notifications</h1>
-		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border-2 border-border-surface rounded-full w-fit p-2 mx-auto">
+	<main class="flex flex-col p-4 gap-4 xs:p-8">
+		<h1 class="text-4xl text-center font-bold">Notifications</h1>
+		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border-2 border-border-surface rounded-full w-fit p-2">
 			<button
 				class="cursor-pointer text-sm font-medium rounded-full px-4 py-2 duration-300"
 				:class="section == 'requests' ? 'text-primary bg-primary/10' : 'text-text-surface hover:bg-primary/5'"
@@ -91,7 +90,6 @@ function reload() {
 				:key=notif.id
 				:notif=notif
 				:client=$client
-				class="max-w-lg mx-auto"
 			/>
 		</section>
 		<section class="space-y-2" v-else>
@@ -100,7 +98,6 @@ function reload() {
 				:key=notif.id
 				:notif=notif
 				:client=$client
-				class="max-w-lg mx-auto"
 			/>
 		</section>
 	</main>

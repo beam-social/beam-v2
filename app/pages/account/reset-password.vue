@@ -1,12 +1,18 @@
 <script setup lang="ts">
-	import { onMounted, ref } from 'vue';
-	import { useRoute, useRouter } from 'vue-router';
-
 	import axios from 'axios';
 
-	import { refreshMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
+
+	useHead({
+		title: 'Réinitialiser mon mot de passe • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Réinitialiser mon mot de passe.' }
+		]
+	})
 
 	const { $apiUrl } = useNuxtApp();
+	const { refreshMe } = useSession();
 
 	const router = useRouter();
 	const route = useRoute();
@@ -15,28 +21,26 @@
 
 	onMounted(async () => {
 		await refreshMe(() => {
-			router.push('/login?return=' + encodeURIComponent(window.location.pathname))
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
-
-		document.title = "Réinitialiser mon mot de passe • Beam"
 	});
 
 	function submit() {
 		axios.post(
-		`${$apiUrl}/auth/password-reset`,
+			`${$apiUrl}/auth/password-reset`,
 			{
 				token: route.query.token,
 				new_password: newPassword.value
 			}
 		).then(() => {
-			router.push('/login')
+			router.push('/auth/login')
 		}).catch((error) => {
 			alert("Erreur lors de la réinitialisation du mot de passe: " + error.response.data.message);
 		});
 	}
 </script>
 <template>
-	<main class="p-4 sm:p-8">
+	<main class="p-4 xs:p-8">
 		<form @submit.prevent="submit" class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl p-8 space-y-4 md:w-1/3 md:mx-auto">
 			<h1 class="text-2xl font-bold text-center">Changer mon mot de passe</h1>
 			<div class="space-y-1">

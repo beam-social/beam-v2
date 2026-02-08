@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { EllipsisVerticalIcon } from '@heroicons/vue/24/solid'
 
-	import { onMounted, onBeforeUnmount, ref } from 'vue'
-
 	const props = defineProps<{
 		actions: {
 			label: string,
@@ -11,9 +9,9 @@
 		}[]
 	}>()
 
-	const showMenu = ref(false)
-	const x = ref(0)
-	const y = ref(0)
+	const showMenu = ref<boolean>(false);
+	const x = ref<number>(0);
+	const y = ref<number>(0);
 
 	function openMenu(event: MouseEvent) {
 		x.value = event.clientX
@@ -21,24 +19,22 @@
 		showMenu.value = true
 	}
 
-	onMounted(() => {
-		window.addEventListener('scroll', () => {
-			showMenu.value = false
-		})
+	const handleScroll = () => {
+		showMenu.value = false
+	}
 
-		window.addEventListener('click', () => {
-			showMenu.value = false
-		})
+	const handleWindowClick = () => {
+		showMenu.value = false
+	}
+
+	onMounted(() => {
+		window.addEventListener('scroll', handleScroll)
+		window.addEventListener('click', handleWindowClick)
 	})
 
 	onBeforeUnmount(() => {
-		window.removeEventListener('scroll', () => {
-			showMenu.value = false
-		})
-
-		window.removeEventListener('click', () => {
-			showMenu.value = false
-		})
+		window.removeEventListener('scroll', handleScroll)
+		window.removeEventListener('click', handleWindowClick)
 	})
 
 	function closeMenu() {
@@ -61,7 +57,7 @@
 			class="relative top-0 z-1000 flex flex-col bg-background-surface text-text-surface border-2 border-border-surface rounded-2xl w-fit h-fit p-2 shadow-lg"
 		>
 			<button
-				:class="classNames[action.style] + ' cursor-pointer text-sm text-left font-medium px-2 py-1'"
+				:class="classNames[action.style] + ' cursor-pointer block text-sm text-left font-medium whitespace-nowrap w-fit px-2 py-1'"
 				v-for="action in actions"
 				@click="() => { action.handler(); closeMenu(); }"
 			>

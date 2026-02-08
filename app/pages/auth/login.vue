@@ -1,10 +1,15 @@
 <script setup lang="ts">
-	import { onMounted } from 'vue';
-	import { useRouter } from 'vue-router';
+	import { useSession } from '@/stores/session';
 
-	import { refreshMe } from '@/stores/session';
+	useHead({
+		title: 'Se connecter • Beam',
+		meta: [
+			{ name: 'description', content: 'Se connecter à mon compte.' }
+		]
+	})
 
 	const { $client } = useNuxtApp();
+	const { refreshMe } = useSession();
 
 	const router = useRouter();
 
@@ -17,17 +22,16 @@
 		if (result) {
 			router.push('/');
 		} else {
-			alert('Login failed');
+			alert('Échec de la connexion');
 		}
 	}
 
 	onMounted(async () => {
 		await refreshMe();
-		document.title = "Se connecter • Beam"
 	})
 </script>
 <template>
-	<main class="p-4 sm:p-8">
+	<main class="p-4 xs:p-8">
 		<nav class="flex max-w-md px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>

@@ -1,19 +1,25 @@
 <script setup lang="ts">
-	import { onMounted } from 'vue';
-	import { useRoute, useRouter } from 'vue-router';
-
 	import axios from 'axios';
 
-	import { refreshMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
+
+	useHead({
+		title: 'Supprimer mon compte • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Supprimer mon compte.' }
+		]
+	})
 
 	const { $apiUrl } = useNuxtApp();
+	const { refreshMe } = useSession();
 
 	const router = useRouter();
 	const route = useRoute();
 
 	onMounted(async () => {
 		await refreshMe(() => {
-			router.push('/login?return=' + encodeURIComponent(window.location.pathname))
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
 		document.title = "Supprimer mon compte • Beam"
@@ -26,12 +32,12 @@
 				token: route.query.token
 			}
 		).then(() => {
-			router.push('/login')
+			router.push('/auth/login')
 		});
 	}
 </script>
 <template>
-	<main class="p-4 sm:p-8">
+	<main class="p-4 xs:p-8">
 		<section class="bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl">
 			<h1 class="text-3xl font-bold mb-4">Suppression de mon compte</h1>
 			<form @submit.prevent="submit" class="flex flex-col gap-4">

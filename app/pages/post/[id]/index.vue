@@ -1,41 +1,39 @@
 <script setup lang="ts">
 	definePageMeta({
 		title: 'Publication • Beam',
-		middleware: 'posts'
-	})
+		// middleware: 'posts'
+	});
 
 	import PostCard from "@/components/cards/PostCard.vue";
 	import CommentCard from "@/components/cards/CommentCard.vue";
+	import PictureRing from "@/components/PictureRing.vue";
+	import ProfileBadge from "@/components/ProfileBadge.vue";
 
-	import { onMounted, ref, watch } from "vue";
-	import { me, refreshMe } from "@/stores/session";
-	import { useRoute } from "vue-router";
+	import { useSession } from "@/stores/session";
 
 	import { Comment } from "beamsocial";
 	import type { Post } from "beamsocial";
 
-	import PictureRing from "@/components/PictureRing.vue";
-	import ProfileBadge from "@/components/ProfileBadge.vue";
-
 	import axios from "axios";
 
 	const { $client: client, $apiUrl: apiUrl } = useNuxtApp();
+	const { me, refreshMe } = useSession();
 
 	const route = useRoute();
+	const router = useRouter();
+
 	const id = route.params.id as string;
 
 	const post = ref<Post | null>(null);
 	const comments = ref<Comment[]>([]);
 	let baselike: number | null = null;
 
-	const loading = ref(true);
+	const loading = ref<boolean>(true);
 	const errorMessage = ref<string | null>(null);
 
 	/* Préparation du commentaire */
-	const content = ref<string>("");
-	const target = ref<"me" | "friends" | "followers" | "everyone">(
-		"everyone",
-	);
+	const content = ref<string>('');
+	const target = ref<"me" | "friends" | "followers" | "everyone">("everyone");
 
 	const submit = async () => {
 		if (!me.value) {
@@ -76,9 +74,9 @@
 		loading.value = true;
 		errorMessage.value = null;
 
-		document.title = "Publication • Beam";
-
-		await refreshMe();
+		await refreshMe(
+			() => router.push("/auth/login?return=" + encodeURIComponent(window.location.pathname)),
+		);
 
 		try {
 			let _post: Post | null = await client.getPost(postId);
@@ -126,6 +124,10 @@
 	}
 
 	onMounted(async () => {
+		await refreshMe(() => {
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+		});
+
 		await loadPost(id);
 	});
 
@@ -141,13 +143,13 @@
 <template>
 	<main
 		v-if="loading"
-		class="relative grow flex items-center justify-center text-center p-4 sm:p-8"
+		class="relative grow flex items-center justify-center text-center p-4 xs:p-8"
 	>
 		<p class="text-2xl font-bold">Chargement...</p>
 	</main>
 
-	<main v-else-if="post" class="p-4 space-y-2 max-w-xl mx-auto sm:p-8">
-		<PostCard :data="post" :me="me" :client="client" class="w-lg" />
+	<main v-else-if="post" class="p-4 space-y-2 xs:p-8">
+		<PostCard :data="post" :me="me" :client="client" />
 		<section class="mt-8">
 			<h2 class="text-2xl font-bold mb-4">
 				Commentaires ({{ post.comments }})
@@ -189,7 +191,6 @@
 					:me="me"
 					:client="client"
 					:clickable="false"
-					class="w-lg"
 				/>
 			</div>
 		</section>
@@ -197,14 +198,14 @@
 
 	<main
 		v-else-if="errorMessage"
-		class="relative grow flex items-center justify-center text-center p-4 sm:p-8"
+		class="relative grow flex items-center justify-center text-center p-4 xs:p-8"
 	>
 		<p class="text-2xl font-bold">{{ errorMessage }}</p>
 	</main>
 
 	<main
 		v-else
-		class="relative grow flex items-center justify-center text-center p-4 sm:p-8"
+		class="relative grow flex items-center justify-center text-center p-4 xs:p-8"
 	>
 		<p class="text-2xl font-bold">Ce post n'existe pas.</p>
 	</main>

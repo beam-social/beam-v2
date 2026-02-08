@@ -1,24 +1,32 @@
 <script setup lang="ts">
 	import { EyeIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
-	import { ArrowRightStartOnRectangleIcon, FingerPrintIcon, SparklesIcon, UserIcon } from '@heroicons/vue/24/solid';
+	import { FingerPrintIcon, SparklesIcon, UserIcon } from '@heroicons/vue/24/solid';
 	import { ChevronRightIcon } from '@heroicons/vue/24/outline';
 
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import ThemePreviewCard from '@/components/cards/ThemePreviewCard.vue';
 	import ShopBadgeCard from '@/components/cards/ShopBadgeCard.vue';
 
-	import { onMounted, onUnmounted, ref, watch } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import axios from 'axios';
 
 	import type { Badge } from 'beamsocial';
 
-	import { me, refreshMe, setMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
+
+	useHead({
+		title: 'Mes paramètres • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Mes paramètres.' }
+		]
+	})
 
 	const { $client, $apiUrl } = useNuxtApp();
-	import { syncTheme, setTheme, themes } from '@/services/theme';
+	import { themes, useTheme } from '@/services/theme';
 	import { grades } from '@/utils/profiles';
+
+	const { me, refreshMe, setMe } = useSession();
+	const { syncTheme, setTheme } = useTheme();
 
 	interface Entitlement {
 		id: string;
@@ -46,8 +54,8 @@
 		pronouns: string;
 		account_type: string;
 		status: string;
-		description: string
-		badge: string | null
+		description: string;
+		badge: string | null;
 	}>({
 		name: '',
 		display_name: '',
@@ -69,7 +77,7 @@
 		appearance: {
 			global_theme: string;
 			high_contrast: boolean;
-			color_blind_mode: boolean
+			color_blind_mode: boolean;
 		}
 	}>({
 		id: '',
@@ -98,35 +106,33 @@
 	const entitlements = ref<Entitlement[]>([]);
 
 	onMounted(async () => {
-		document.title = "Paramètres • Beam"
-
 		await refreshMe(() => {
-			router.push('/login?return=' + encodeURIComponent(window.location.pathname))
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
-	$client.me()
-		.then((session: any) => {
-			if (!session) {
-				router.push('/login?return=' + encodeURIComponent(window.location.pathname))
-			} else {
-				setMe(session)
+		$client.me()
+			.then((session: any) => {
+				if (!session) {
+					router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+				} else {
+					setMe(session)
 
-			profile.value = {
-				name: session.profile.name,
-				display_name: session.profile.display_name ?? '',
-				pronouns: session.profile.pronouns ?? '',
-				account_type: session.profile.account_type ?? '',
-				status: session.profile.status ?? '',
-				description: session.profile.description ?? '',
-				badge: session.profile.badge?.id || null
-			}
+					profile.value = {
+						name: session.profile.name,
+						display_name: session.profile.display_name ?? '',
+						pronouns: session.profile.pronouns ?? '',
+						account_type: session.profile.account_type ?? '',
+						status: session.profile.status ?? '',
+						description: session.profile.description ?? '',
+						badge: session.profile.badge?.id || null
+					}
 
-			settings.value = session.settings as typeof settings.value;
-		}
-	});
+					settings.value = session.settings as typeof settings.value;
+				}
+			});
 
-	axios.get(
-		`${$apiUrl}/auth/credentials`,
+		axios.get(
+			`${$apiUrl}/auth/credentials`,
 			{
 				withCredentials: true
 			}
@@ -135,7 +141,7 @@
 		});
 
 		axios.get(
-		`${$apiUrl}/me/entitlements/badges`,
+			`${$apiUrl}/me/entitlements/badges`,
 			{
 				withCredentials: true
 			}
@@ -144,7 +150,7 @@
 		});
 
 		axios.get(
-		`${$apiUrl}/me/entitlements`,
+			`${$apiUrl}/me/entitlements`,
 			{
 				withCredentials: true,
 				params: {
@@ -158,21 +164,16 @@
 	});
 
 	onUnmounted(() => {
-		syncTheme()
-	})
+		syncTheme();
+	});
 
 	watch(settings, (newSettings) => {
-		if (me?.value) {
-			setMe({
-				...me.value,
-				settings: newSettings
-			});
-		}
+		setTheme(newSettings.appearance.global_theme);
 	}, { immediate: true, deep: true });
 
 	function saveProfile() {
 		axios.put(
-		`${$apiUrl}/me/profile`,
+			`${$apiUrl}/me/profile`,
 			profile.value,
 			{
 				withCredentials: true
@@ -186,7 +187,7 @@
 
 	function saveSettings() {
 		axios.put(
-		`${$apiUrl}/me/settings`,
+			`${$apiUrl}/me/settings`,
 			settings.value,
 			{
 				withCredentials: true
@@ -203,7 +204,7 @@
 		formData.append('avatar', (document.getElementById('avatarInput') as HTMLInputElement).files![0]!);
 
 		axios.post(
-		`${$apiUrl}/me/avatar`,
+			`${$apiUrl}/me/avatar`,
 			formData,
 			{
 				withCredentials: true,
@@ -220,8 +221,8 @@
 	}
 </script>
 <template>
-	<main class="grow select-none flex flex-col p-4 gap-4 sm:p-8">
-		<h1 v-if="section == 'home'" class="text-3xl text-center font-bold">Paramètres</h1>
+	<main class="flex flex-col p-4 gap-4 xs:p-8">
+		<h1 v-if="section == 'home'" class="text-4xl text-center font-bold">Paramètres</h1>
 		<div v-else class="flex items-center gap-4">
 			<button @click="section = 'home'" class="cursor-pointer flex items-center gap-1 bg-background-surface text-text-surface font-medium border-2 border-border-surface rounded-full w-fit px-4 py-2">
 				<ChevronRightIcon class="w-4 h-4 rotate-180 stroke-2 stroke-subtext text-subtext" />
@@ -230,7 +231,7 @@
 		</div>
 		<section v-if="section == 'home'" class="space-y-8">
 			<div class="space-y-1">
-				<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+				<div class="grid grid-cols-1 gap-2 xl:grid-cols-2">
 					<button
 						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium border-2 border-border-surface rounded-3xl w-full px-6 py-6"
 						@click="() => section = 'profile'"
@@ -246,14 +247,6 @@
 						<SparklesIcon class="text-[#d013ff] w-7 h-7 mx-0.5" />
 						<span class="grow text-lg text-left line-clamp-1">Gérer mon grade</span>
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-[#d013ff] text-[#d013ff]" />
-					</button>
-					<button
-						class="cursor-pointer flex gap-1 items-center bg-danger/15 text-danger font-medium border-2 border-danger/50 rounded-3xl w-full px-6 py-6"
-						@click="() => router.push('/auth/logout')"
-					>
-						<ArrowRightStartOnRectangleIcon class="text-danger w-7 h-7 mx-0.5" />
-						<span class="grow text-lg text-left line-clamp-1">Se déconnecter</span>
-						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-danger text-danger" />
 					</button>
 				</div>
 			</div>
@@ -294,7 +287,7 @@
 		</section>
 		<section v-if="section == 'profile'" class="px-4 space-y-8">
 			<h1 class="text-3xl font-bold">Paramètres du profil</h1>
-			<div class="flex gap-8 max-sm:flex-col max-sm:items-center sm:justify-center">
+			<div class="grid gap-8 max-sm:grid-cols-1 sm:grid-cols-2">
 				<div class="shrink-0 w-48 sm:w-56">
 					<input type="file" id="avatarInput" class="hidden" accept="image/*" @change="() => uploadAvatar()" />
 					<label for="avatarInput" class="cursor-pointer">
@@ -411,17 +404,19 @@
 				<div v-if="entitlements.length == 0" class="text-center text-subtext">
 					<p>Vous n'avez aucune récompense.</p>
 				</div>
-				<div v-else class="divide-y divide-border-surface">
+				<div v-else class="flex flex-col gap-2">
 					<div
 						v-for="entitlement in entitlements"
 						:key="entitlement.id"
-						class="py-4 space-y-2"
-						:class="(entitlement.revoked || entitlement.expires_at <= new Date() ? 'opacity-50' : '')"
+						class="bg-background-surface text-text-surface border-2 border-border-surface rounded-2xl px-5 py-4 space-y-1"
+						:class="(entitlement.revoked || (entitlement.expires_at && entitlement.expires_at <= new Date()) ? 'opacity-50' : '')"
 					>
 						<h3 class="text-lg font-semibold">{{ entitlement.name }}</h3>
-						<p class="text-sm">Attribué le {{ new Date(entitlement.granted_at).toLocaleDateString() }}</p>
-						<p v-if="entitlement.expires_at" class="text-sm">Expire le {{ new Date(entitlement.expires_at).toLocaleDateString() }}</p>
-						<p v-if="entitlement.reason" class="text-sm">Raison: {{ entitlement.reason }}</p>
+						<div>
+							<p v-if="entitlement.expires_at" class="text-sm">Valable du {{ new Date(entitlement.granted_at).toLocaleDateString('fr-FR', { month: 'long', day: '2-digit', year: 'numeric' }) }} au {{ new Date(entitlement.expires_at).toLocaleDateString('fr-FR', { month: 'long', day: '2-digit', year: 'numeric' }) }}</p>
+							<p v-else class="text-sm"><strong>Date:</strong> {{ new Date(entitlement.granted_at).toLocaleDateString('fr-FR', { month: 'long', day: '2-digit', year: 'numeric' }) }}</p>
+							<p v-if="entitlement.reason" class="text-sm"><strong>Raison:</strong> {{ entitlement.reason }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -436,14 +431,14 @@
 					</label>
 					<label class="block font-medium text-subtext">Adresse email<br />
 						<input type="email" v-model="credentials.email" disabled class="bg-background-surface text-sm border border-border-surface rounded-lg px-4 py-2 w-auto" />
-						<button @click="router.push('/account/sudo?action=change-email')" class="ml-2 bg-action text-white text-sm px-4 py-2 rounded-full hover:bg-action-hovered transition">Modifier</button>
+						<button @click="router.push('/auth/sudo?action=reset-email')" class="ml-2 bg-action text-white text-sm px-4 py-2 rounded-full hover:bg-action-hovered transition">Modifier</button>
 					</label>
 				</div>
-				<button @click="router.push('/account/sudo?action=change-password')" class="bg-action text-white text-sm px-4 py-2 rounded-full hover:bg-action-hovered transition">Changer mon mot de passe</button>
+				<button @click="router.push('/auth/sudo?action=reset-password')" class="bg-action text-white text-sm px-4 py-2 rounded-full hover:bg-action-hovered transition">Changer mon mot de passe</button>
 			</div>
 			<div class="space-y-2">
 				<h2 class="text-2xl font-semibold">Zone de danger</h2>
-				<button @click="router.push('/account/sudo?action=delete-account')" class="block bg-danger text-white px-4 py-2 rounded-full hover:bg-danger-hovered transition">Supprimer mon compte</button>
+				<button @click="router.push('/auth/sudo?action=delete-account')" class="block bg-danger text-white px-4 py-2 rounded-full hover:bg-danger-hovered transition">Supprimer mon compte</button>
 			</div>
 		</section>
 		<section v-if="section == 'privacy'" class="px-4 space-y-8">

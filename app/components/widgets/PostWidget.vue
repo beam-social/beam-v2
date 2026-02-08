@@ -2,9 +2,6 @@
 	import PictureRing from '@/components/PictureRing.vue';
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 
-	import { onMounted, ref, watch } from 'vue';
-	import { useRouter } from 'vue-router';
-
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
 	import { Post } from 'beamsocial'
@@ -20,42 +17,18 @@
 	}>()
 
 	const router = useRouter();
-	const content = ref<string>('');
-
-	const post = ref<Post | null>(props.data);
-
-	const age = ref<string>(post.value?.creation_date.toLocaleString('fr-FR') || '1970-01-01')
-
-	onMounted(async () => {
-		content.value = post.value?.content.slice(0, 200) || "Ce post est privé."
-
-		age.value = deltatime(post.value?.creation_date || new Date(0));
-	});
-
-
-	watch(() => props.data, (newData) => {
-		post.value = newData;
-		content.value = post.value?.content.slice(0, 200) || "Ce post est privé.";
-		age.value = deltatime(post.value?.creation_date || new Date(0));
-	})
-
+	const post = computed(() => props.data);
+	const content = computed(() => post.value && post.value.content.length > 200 ? post.value.content.slice(0, 200) + "..." : post.value?.content || "Ce post est privé.");
+	const age = computed(() => deltatime(post.value?.creation_date || new Date(0)));
 
 	const patterns: MarkdownPattern[] = [
 		{
-			pattern: /@([a-zA-Z0-9_]+)/g,
-			replace: (match, username) => `[@${username}](/@${username})`
+			pattern: /(^|\s)@([a-z0-9._]+)/g,
+			replace: (match, leading, username) => `${leading}[@${username}](/@${username})`
 		},
 		{
-			pattern: /#([a-zA-Z0-9_]+)/g,
-			replace: (match, tag) => `[#${tag}](/explore?tag=${tag})`
-		},
-		{
-			pattern: /\r\n/g,
-			replace: () => '<br>'
-		},
-		{
-			pattern: /\[([a-zA-Z0-9_]+)\]\(([a-zA-Z0-9_]+)\)/g,
-			replace: (match, link, url) => `${url}`
+			pattern: /(^|\s)#([\p{L}\p{N}_]+)/gu,
+			replace: (match, leading, tag) => `${leading}[#${tag}](/search?q=${tag})`
 		}
 	]
 </script>
@@ -77,16 +50,16 @@
 			/>
 			<RouterLink :to="'/@' + post.author?.name" class="block font-semibold">{{ post.author?.display_name || post.author?.name || '...' }} <ProfileBadge :badge="post.author?.badge || null" class="inline w-4 h-4 -translate-y-0.5" /></RouterLink>
 			<div class="grow"></div>
-			<span class="text-text-secondary text-sm">{{ age }}</span>
+			<span class="text-subtext text-sm">{{ age }}</span>
 		</div>
-		<div v-if="post.attachments.length" class="flex flex-wrap gap-0.5 rounded-2xl w-fit overflow-hidden">
+		<div v-if="post.attachments.length" class="flex flex-wrap gap-1 rounded-2xl w-fit overflow-hidden">
 			<img
-				v-for="(file, index) in post.attachments"
-				:src="file.path"
-				:class="index == 0 && post.attachments.length % 2 == 1
-				? 'w-full'
-				: 'w-[calc(50%-0.0625rem)]'"
+				:src="$apiUrl + '/drive/' + post.attachments[0]!.id"
+				class="min-w-full h-full aspect-video object-cover"
 			/>
+		</div>
+		<div v-if="post.attachments.length > 1" class="px-1">
+			<span class="text-sm text-subtext">{{ post.attachments.length }} pièces jointes</span>
 		</div>
 		<div
 			class="md-area max-w-full px-1"

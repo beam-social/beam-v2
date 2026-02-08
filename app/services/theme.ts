@@ -1,5 +1,4 @@
-import { watch, ref } from 'vue';
-import { me } from '@/stores/session';
+import { useSession } from '@/stores/session';
 
 export const themes: Record<string, Record<string, string>> = {
 	light: {
@@ -44,44 +43,54 @@ export const themes: Record<string, Record<string, string>> = {
 	}
 }
 
-export const theme = ref<string>('light');
+export const useTheme = () => {
+	const { me } = useSession();
+	const theme = useState<string>('theme', () => 'light');
 
-export const syncTheme = () => {
-	const newTheme = me.value?.settings.appearance.global_theme;
-	setTheme(newTheme);
-}
+	const setTheme = (newTheme?: string) => {
+		if (typeof window === 'undefined') return; // Skip on server
 
-export const setTheme = (newTheme?: string) => {
-	if (typeof window === 'undefined') return; // Skip on server
+		if (!newTheme) {
+			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.classList.add('theme-dark');
+				theme.value = 'dark';
+			} else {
+				document.documentElement.classList.add('theme-light');
+				theme.value = 'light';
+			}
 
-	if (!newTheme) {
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			document.documentElement.classList.add('theme-dark');
-			theme.value = 'dark';
-		} else {
-			document.documentElement.classList.add('theme-light');
-			theme.value = 'light';
+			return;
 		}
 
-		return;
+		document.documentElement.className = "";
+		document.documentElement.classList.add(`theme-${newTheme}`);
+		theme.value = newTheme;
+	};
+
+	const syncTheme = () => {
+		const newTheme = me.value?.settings.appearance.global_theme;
+		setTheme(newTheme);
+	};
+
+	const themeWatchInitialized = useState<boolean>('themeWatchInitialized', () => false);
+	if (!themeWatchInitialized.value) {
+		watch(
+			me,
+			(newMe) => {
+				if (!newMe) {
+					setTheme();
+					return;
+				}
+
+				const newTheme = newMe?.settings.appearance.global_theme || 'light';
+
+				setTheme(newTheme);
+			},
+			{ immediate: true }
+		);
+
+		themeWatchInitialized.value = true;
 	}
 
-	document.documentElement.className = "";
-	document.documentElement.classList.add(`theme-${newTheme}`);
-	theme.value = newTheme;
-}
-
-watch(
-	me,
-	(newMe) => {
-		if (!newMe) {
-			setTheme();
-			return;
-		};
-
-		const newTheme = newMe?.settings.appearance.global_theme || 'light';
-
-		setTheme(newTheme);
-	},
-	{ immediate: true }
-);
+	return { theme, setTheme, syncTheme };
+};

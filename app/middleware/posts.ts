@@ -37,15 +37,18 @@ export default defineNuxtRouteMiddleware(async (to) => {
 				meta: [
 					{
 						name: 'description',
-						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
+						content: "Connectez-vous à Beam pour voir cette publication."
+						// content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
 						property: 'og:title',
-						content: meta.author_name ? `Post de ${meta.author_name} • Beam` : `@${meta.author_name} • Beam`
+						content: "Publication • Beam"
+						// content: meta.author_name ? `Post de ${meta.author_name} • Beam` : `@${meta.author_name} • Beam`
 					},
 					{
 						property: 'og:description',
-						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
+						content: "Connectez-vous à Beam pour voir cette publication."
+						// content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
 						property: 'og:type',
@@ -53,15 +56,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:image',
-						content: meta.author_avatar_url || ''
+						// content: meta.author_avatar_url || ''
 					},
 					{
 						property: 'og:url',
-						content: `https://beam.ejnalo.me/@${meta.author_name}`
+						content: `https://beam.ejnalo.me/post/${id}`
 					},
 					{
 						property: 'og:color',
-						content: meta.author_badge_color || '#e021ff'
+						content: '#e021ff'
+						// content: meta.author_badge_color || '#e021ff'
 					}
 				]
 			});

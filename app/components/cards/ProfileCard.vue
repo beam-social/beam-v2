@@ -2,7 +2,6 @@
 	import PictureRing from '../PictureRing.vue';
 	import ProfileBadge from '../ProfileBadge.vue';
 
-	import { ref } from 'vue';
 	import { useRouter } from 'vue-router';
 
 	import type { Session, User } from 'beamsocial';
@@ -11,6 +10,7 @@
 		profile: User
 		me?: Session | null
 		clickable?: boolean
+		minified?: boolean
 		actions?: {
 			title: string
 			color: "action" | "danger" | "success" | "gray" | "transparent"
@@ -41,9 +41,19 @@
 				return "text-subtext"
 		}
 	}
+
+	let _class = ''
+
+	if (props.minified) {
+		_class = 'flex items-center gap-2 py-1'
+	} else {
+		_class = 'flex items-center gap-2 bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4'
+	}
 </script>
 <template>
-	<div class="flex items-center gap-2 bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4">
+	<div
+		:class=_class
+	>
 		<PictureRing
 			:src=profile.avatar_url!
 			:size=12
@@ -52,9 +62,9 @@
 			:second="profile.badge?.colors['stops']![1] || 'transparent'"
 		/>
 		<div
-			class="flex flex-col -space-y-2"
-			:class="clickable ? 'cursor-pointer' : ''"
-			@click="() => { if (clickable){ router.push(`/@${profile.name}`) }}"
+			class="flex flex-col -space-y-1.5"
+			:class="clickable ? 'cursor-pointer ' : ''"
+			@click="() => { if (clickable) { router.push(`/@${profile.name}`) }}"
 		>
 			<span class="font-semibold">{{ profile.display_name || profile.name }} <ProfileBadge :badge=profile.badge class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /></span>
 			<span class="text-subtext text-sm font-medium">@{{ profile.name }}</span>

@@ -1,17 +1,21 @@
 <script setup lang="ts">
-	import { onMounted } from 'vue';
-	import { useRouter } from 'vue-router';
-
-	import { refreshMe } from '@/stores/session';
+	import { useSession } from '@/stores/session';
 
 	import axios from 'axios';
 
+	useHead({
+		title: 'Déconnexion • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Se déconnecter de mon compte.' }
+		]
+	})
+
 	const router = useRouter();
 	const { $apiUrl } = useNuxtApp();
+	const { refreshMe } = useSession();
 
 	onMounted(async () => {
-		document.title = "Déconnexion • Beam";
-
 		axios.post(
 			`${$apiUrl}/auth/logout`,
 			{},
