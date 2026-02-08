@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const postMeta = useState<PostMeta | null>("postMeta", () => null);
 
 	try {
-		const post = await $client.getPost(id);
+		/*const post = await $client.getPost(id);
 		if (post) {
 			const meta = {
 				date: post.creation_date ? new Date(post.creation_date).toISOString() : undefined,
@@ -30,10 +30,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
 				content: post.content ?? null,
 			};
 
-			postMeta.value = meta;
+			postMeta.value = meta;*/
 
 			useHead({
-				title: meta.author_name ? `${meta.author_name} • Beam` : `@${meta.author_name} • Beam`,
+				title: 'Publication • Beam',
+				// title: meta.author_name ? `${meta.author_name} • Beam` : `@${meta.author_name} • Beam`,
 				meta: [
 					{
 						name: 'description',
@@ -69,9 +70,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					}
 				]
 			});
-		} else {
+		/*} else {
 			throw new Error("Post not found");
-		}
+		}*/
 	} catch (error) {
 		throw createError({
 			statusCode: 404,

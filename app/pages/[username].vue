@@ -2,7 +2,7 @@
 	definePageMeta({
 		title: 'Profil',
 		path: '/@:username',
-		// middleware: 'users'
+		middleware: 'users'
 	})
 
 	import PostCard from '@/components/cards/PostCard.vue';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	definePageMeta({
 		title: 'Publication • Beam',
-		// middleware: 'posts'
+		middleware: 'posts'
 	});
 
 	import PostCard from "@/components/cards/PostCard.vue";

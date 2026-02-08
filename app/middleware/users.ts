@@ -24,7 +24,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const profileUserMeta = useState<ProfileMeta | null>("profileUserMeta", () => null);
 
 	try {
-		const user = await $client.getUser(username);
+		/*const user = await $client.getUser(username);
 		if (user) {
 			const meta = {
 				name: user.name,
@@ -34,10 +34,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
 				badge: user.badge ? { colors: user.badge.colors } : undefined,
 			};
 
-			profileUserMeta.value = meta;
+			profileUserMeta.value = meta;*/
 
 			useHead({
-				title: `@${meta.name} • Beam`,
+				// title: `@${meta.name} • Beam`,
+				title: 'Profil • Beam',
 				meta: [
 					{
 						name: 'description',
@@ -64,7 +65,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:url',
-						content: `https://beam.ejnalo.me/@${meta.name}`
+						content: `https://beam.ejnalo.me/@${username}`
 					},
 					{
 						property: 'og:color',
@@ -73,9 +74,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					}
 				]
 			});
-		} else {
+		/*} else {
 			throw new Error("User not found");
-		}
+		}*/
 	} catch (error) {
 		throw createError({
 			statusCode: 404,
