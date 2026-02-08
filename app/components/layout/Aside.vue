@@ -17,9 +17,9 @@
 		me: Session | null
 	}>();
 
-	const searchQuery = useState<string>('searchQuery', () => '');
+	const searchQuery = ref<string>('');
 
-	const suggestions = useState<User[]>('suggestions', () =>
+	const suggestions = computed<User[]>(() =>
 		users.value
 			.filter(u => u.id !== props.me?.profile.id)
 			.filter(u => !props.me?.relations.following.includes(u.id))
