@@ -20,25 +20,23 @@
 		clickable?: boolean
 	}>()
 
-	const apiUrl = useNuxtApp().$apiUrl;
-
 	const router = useRouter();
-	const content = useState<string>('content', () => '');
-	const actions = useState<Array<{ label: string, style: string, handler: () => Promise<void> }>>(() => [
+	const content = ref<string>('');
+	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([
 		{
 			'label': 'Partager',
 			'style': 'normal',
 			'handler': async () => {
-				await navigator.clipboard.writeText(apiUrl + '/p/' + comment.value.post?.id + '#comment-' + comment.value.id);
-				alert('Lien du commentaire copié dans le presse-papier: \n' + apiUrl + '/p/' + comment.value.post?.id + '#comment-' + comment.value.id);
+				await navigator.clipboard.writeText(window.location.origin + '/post/' + comment.value.post!.id + '#comment-' + comment.value.id);
+				alert('Lien du commentaire copié dans le presse-papier: \n' + window.location.origin + '/post/' + comment.value.post!.id + '#comment-' + comment.value.id);
 			}
 		}
 	])
 
-	const comment = useState<Comment>('comment', () => props.data);
+	const comment = ref<Comment>(props.data);
 
-	const baselike = useState<number | null>('baselike', () => null);
-	const age = useState<string | undefined>('age', () => deltatime(comment.value.creation_date || new Date(0)))
+	const baselike = ref<number | null>(null);
+	const age = ref<string | undefined>(deltatime(comment.value.creation_date || new Date(0)))
 
 	onMounted(async () => {
 		content.value = comment.value.content

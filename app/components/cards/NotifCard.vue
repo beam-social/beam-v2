@@ -12,8 +12,8 @@
 		client: Client
 	}>();
 
-	const post = useState<Post | null>('post', () => null);
-	const comment = useState<Comment | null>('comment', () => null);
+	const post = ref<Post | null>(null);
+	const comment = ref<Comment | null>(null);
 
 	switch (props.notif.type) {
 		case 'like':

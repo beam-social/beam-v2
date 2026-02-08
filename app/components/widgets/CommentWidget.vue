@@ -17,11 +17,11 @@
 	}>()
 
 	const router = useRouter();
-	const content = useState<string>('content', () => '');
+	const content = ref<string>('');
 
-	const comment = useState<Comment | null>('comment', () => props.data);
+	const comment = ref<Comment | null>(props.data);
 
-	const age = useState<string>('age', () => comment.value?.creation_date.toLocaleString('fr-FR') || '1970-01-01')
+	const age = ref<string>(comment.value?.creation_date.toLocaleString('fr-FR') || '1970-01-01')
 
 	onMounted(async () => {
 		content.value = comment.value?.content.slice(0, 200) || "Ce commentaire est privé."

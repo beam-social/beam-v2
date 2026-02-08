@@ -64,8 +64,8 @@
 				'label': 'Partager',
 				'style': 'normal',
 				'handler': async () => {
-					await navigator.clipboard.writeText($apiUrl + '/p/' + post.value.id);
-					alert('Lien du post copié dans le presse-papier: \n' + $apiUrl + '/p/' + post.value.id);
+					await navigator.clipboard.writeText(window.location.origin + '/post/' + post.value.id);
+					alert('Lien du post copié dans le presse-papier: \n' + window.location.origin + '/post/' + post.value.id);
 				}
 			}
 		];
