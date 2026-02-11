@@ -36,7 +36,7 @@
 	<nav
 		class="h-screen w-full box-border"
 	>
-		<div class="flex flex-col gap-4 z-1000 bg-background-surface text-text-surface border-r-2 border-border-surface h-full p-8">
+		<div class="flex flex-col gap-4 z-1000 bg-background-navbar text-text-navbar border-r-2 border-border-navbar h-full p-8">
 			<RouterLink
 				v-if=me
 				:to="'/@' + me.profile.name"
