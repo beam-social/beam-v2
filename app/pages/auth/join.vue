@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import axios from 'axios';
 
-	import { countryList } from '@/utils/countries';
+	// import { countryList } from '@/utils/countries';
 	import { isYoungerThan18 } from '@/utils/profiles';
 	import { useSession } from '@/stores/session';
 
