@@ -150,11 +150,10 @@
 					</div>
 				</div>
 				<div class="space-x-2" v-if="me && profile.id != me.profile.id">
-					<button v-if="!(blocked || me.relations.following.includes(profile.id))" @click="async () => { await profile!.follow(); await refreshSession() }" class="cursor-pointer bg-action text-white font-medium rounded-full px-5 py-2.5 hover:bg-action-hovered">Suivre</button>
-					<button v-if="!blocked && me.relations.following.includes(profile.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-background-surface text-text-surface font-medium rounded-full px-5 py-2.5">Suivi(e)</button>
-
-					<button v-if="!blocked" @click="async () => { await profile!.block(); await refreshSession() }" class="cursor-pointer bg-danger text-white font-medium rounded-full px-5 py-2.5">Bloquer</button>
 					<button v-if="blocked" @click="async () => { await profile!.unblock(); await refreshSession() }" class="cursor-pointer bg-danger/25 text-danger font-medium rounded-full px-5 py-2.5">Bloqué(e)</button>
+					<button v-else-if="me.relations.following.includes(profile.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-background-surface text-text-surface font-medium rounded-full px-5 py-2.5">Suivi(e)</button>
+					<button v-else-if="inbox?.outgoing.follow.some(f => f.to.id == profile?.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-zinc-600/10 text-zinc-600 font-medium rounded-full px-5 py-2.5">Demande envoyée</button>
+					<button v-else @click="async () => { await profile!.follow(); await refreshSession() }" class="cursor-pointer bg-action text-white font-medium rounded-full px-5 py-2.5 hover:bg-action-hovered">Suivre</button>
 				</div>
 				<div class="space-y-1">
 					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
