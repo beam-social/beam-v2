@@ -1,13 +1,13 @@
 <script setup lang="ts">
+	import { TrashIcon, UsersIcon } from '@heroicons/vue/24/solid';
+
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 	import NotifCard from '@/components/cards/NotifCard.vue';
 
-	import axios from 'axios';
-
-	import type { User } from 'beamsocial'
+	import type { IncomingRequest } from 'beamsocial'
 	import type { Notification } from 'beamsocial'
 
-	import { useSession } from '@/stores/session';
+	import { useSession, useInbox } from '@/stores/session';
 
 	useHead({
 		title: 'Notifications • Beam',
@@ -15,48 +15,41 @@
 			{ name: 'robots', content: 'noindex,nofollow' },
 			{ name: 'description', content: 'Consultez vos notifications sur Beam.' }
 		]
-	})
+	});
 
 	const router = useRouter();
-	const { $client, $apiUrl } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { $client } = useNuxtApp();
+	const { me, refreshSession } = useSession();
+	const { inbox } = useInbox();
 
 	const section = ref<string>('unread');
 
-	const requests = ref<User[]>([]);
+	const requests = ref<IncomingRequest[]>([]);
 	const unread = ref<Notification[]>([]);
 	const read = ref<Notification[]>([]);
 
-
-	await refreshMe(() => {
-		router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+	onMounted(async () => {
+		await refreshSession(() => {
+			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+		});
 	});
 
-	axios.get(
-		`${$apiUrl}/me/inbox`,
-		{
-			withCredentials: true
+	watch(inbox, () => {
+		if (inbox.value) {
+			requests.value = inbox.value.incoming.follow;
+			unread.value = inbox.value.unread;
+			read.value = inbox.value.read;
+		} else {
+			requests.value = [];
+			unread.value = [];
+			read.value = [];
 		}
-	).then(response => {
-		const inbox = response.data;
-
-		for (const u of inbox.requests.followers || []) {
-			$client.getUser(u.name)
-				.then(user => {
-					if (user) {
-						requests.value.push(user);
-					}
-				});
-		}
-
-		read.value = inbox.read
-		unread.value = inbox.unread
-	});
+	}, { immediate: true });
 </script>
 <template>
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<h1 class="text-4xl text-center font-bold">Notifications</h1>
-		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border-2 border-border-surface rounded-full w-fit p-2">
+		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border-2 border-border-surface rounded-full w-fit p-2 mx-auto">
 			<button
 				class="cursor-pointer text-sm font-medium rounded-full px-4 py-2 duration-300"
 				:class="section == 'requests' ? 'text-primary bg-primary/10' : 'text-text-surface hover:bg-primary/5'"
@@ -76,11 +69,32 @@
 		<section class="" v-if="section == 'requests'">
 			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
 				<ProfileCard
-					v-for="user in requests"
-					:key=user.id
-					:profile=user
+					v-for="req in requests"
+					:key="'follow-req-' + req.from.id"
+					:profile=req.from
 					:me=me
 					:clickable=true
+					:deployed=true
+					:actions="[
+						{
+							title: 'Refuser',
+							color: 'gray',
+							icon: TrashIcon,
+							callback: async () => {
+								await req.reject();
+								refreshSession();
+							}
+						},
+						{
+							title: 'Accepter',
+							color: 'action',
+							icon: UsersIcon,
+							callback: async () => {
+								await req.accept();
+								refreshSession();
+							}
+						}
+					]"
 				/>
 			</div>
 		</section>

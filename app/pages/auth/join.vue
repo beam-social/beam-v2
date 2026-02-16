@@ -15,7 +15,7 @@
 	})
 
 	const { $client, $apiUrl } = useNuxtApp();
-	const { refreshMe } = useSession();
+	const { refreshSession } = useSession();
 	$client.refresh();
 
 	const router = useRouter()
@@ -69,7 +69,7 @@
 	}
 
 	onMounted(async () => {
-		await refreshMe();
+		await refreshSession();
 	});
 
 	function check(field: string, regex: RegExp, min?: number, max?: number) {

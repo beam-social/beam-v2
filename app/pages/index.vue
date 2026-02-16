@@ -9,10 +9,10 @@
 	})
 
 	const router = useRouter();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 
 	onMounted(async () => {
-		await refreshMe();
+		await refreshSession();
 
 		if (me.value) {
 			router.push('/discover');

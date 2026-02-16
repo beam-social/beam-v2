@@ -18,7 +18,7 @@
 	const router = useRouter();
 
 	const { $client, $apiUrl } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 
 	const tab = ref<'users' | 'posts'>('posts')
 
@@ -26,7 +26,7 @@
 	const users = ref<User[]>([]);
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
@@ -63,8 +63,6 @@
 				post.__load(p, me.value || undefined, $apiUrl);
 				posts.value.push(post);
 			}
-
-			console.log(posts.value);
 		});
 	});
 </script>
@@ -109,11 +107,11 @@
 						me.relations.following.includes(user.id) ? {
 							title: 'Suivi(e)',
 							color: 'gray',
-							callback: async () => { await user.unfollow(); await refreshMe() }
+							callback: async () => { await user.unfollow(); await refreshSession() }
 						} : {
 							title: 'Suivre',
 							color: 'action',
-							callback: async () => { await user.follow(); await refreshMe() }
+							callback: async () => { await user.follow(); await refreshSession() }
 						}
 					] : [
 						{

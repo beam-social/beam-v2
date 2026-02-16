@@ -7,11 +7,12 @@ import { useSession } from '@/stores/session';
 export const useFeed = () => {
 	const posts = useState<Post[]>('posts', () => []);
 	const users = useState<User[]>('users', () => []);
-	const { me, refreshMe } = useSession();
+
+	const { me, refreshSession } = useSession();
 	const { $apiUrl } = useNuxtApp();
 
 	const getFeed = async () => {
-		await refreshMe();
+		await refreshSession();
 
 		let _posts = [];
 

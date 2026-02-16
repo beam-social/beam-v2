@@ -2,20 +2,20 @@
 	import { useSession } from '@/stores/session';
 	import { useTheme } from '@/services/theme';
 
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 	const { syncTheme } = useTheme();
 
 	const route = useRoute();
 
 	onMounted(async () => {
-		await refreshMe();
+		await refreshSession();
 		syncTheme();
 	});
 
 	watch(
 		() => route.path,
 		async () => {
-			await refreshMe();
+			await refreshSession();
 			syncTheme();
 		},
 		{ immediate: true }

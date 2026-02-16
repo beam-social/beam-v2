@@ -13,7 +13,7 @@
 
 	const router = useRouter();
 	const { $apiUrl } = useNuxtApp();
-	const { refreshMe } = useSession();
+	const { refreshSession } = useSession();
 
 	onMounted(async () => {
 		axios.post(
@@ -24,7 +24,7 @@
 			}
 		);
 
-		await refreshMe();
+		await refreshSession();
 
 		router.push('/');
 	});

@@ -23,7 +23,7 @@
 	})
 
 	const { $client, $apiUrl } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 
 	const router = useRouter()
 	const route = useRoute()
@@ -61,7 +61,7 @@
 	]
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
@@ -205,7 +205,7 @@
 			<textarea
 				v-else
 				v-model="content"
-				class="border-none rounded-xl outline-none w-full h-32 resize-none px-2"
+				class="border-none rounded-xl outline-none w-full h-32 resize-none px-2 placeholder:text-subtext"
 				placeholder="Qu'allez-vous partager aujourd'hui ?"
 				:minlength=1
 				:maxlength=max

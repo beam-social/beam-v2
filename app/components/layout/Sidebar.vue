@@ -4,29 +4,24 @@
 
 	import type { Session } from 'beamsocial'
 
-	import axios from 'axios';
+	import { useInbox } from '@/stores/session';
 
 
 	const props = defineProps<{
 		me: Session | null
 	}>()
 
+	const inbox = useInbox().inbox;
+
 	const notifications = useState<number>('notifications', () => 0);
 
 	watch(props, () => {
 		if (props.me) {
-			const apiUrl = useNuxtApp().$apiUrl;
-
-			axios.get(`${apiUrl}/me/inbox`, {
-				withCredentials: true,
-				params: {
-					leave_unread: true
-				}
-			}).then(response => {
-				notifications.value = response.data.unread.length;
-			}).catch(() => {
+			if (inbox.value) {
+				notifications.value = inbox.value.incoming.follow.length + inbox.value.unread.length;
+			} else {
 				notifications.value = 0;
-			});
+			}
 		} else {
 			notifications.value = 0;
 		}

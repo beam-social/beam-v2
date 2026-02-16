@@ -9,7 +9,7 @@
 	})
 
 	const { $client } = useNuxtApp();
-	const { refreshMe } = useSession();
+	const { refreshSession } = useSession();
 
 	const router = useRouter();
 
@@ -27,7 +27,7 @@
 	}
 
 	onMounted(async () => {
-		await refreshMe();
+		await refreshSession();
 	})
 </script>
 <template>

@@ -25,7 +25,7 @@
 	import { themes, useTheme } from '@/services/theme';
 	import { grades } from '@/utils/profiles';
 
-	const { me, refreshMe, setMe } = useSession();
+	const { me, refreshSession, setMe } = useSession();
 	const { syncTheme, setTheme } = useTheme();
 
 	interface Entitlement {
@@ -106,7 +106,7 @@
 	const entitlements = ref<Entitlement[]>([]);
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 

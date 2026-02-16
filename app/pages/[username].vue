@@ -14,10 +14,11 @@
 	import type { Post } from 'beamsocial'
 
 	import { toLiteralNumber } from '@/utils/format';
-	import { useSession } from '@/stores/session';
+	import { useSession, useInbox } from '@/stores/session';
 
 	const { $client } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
+	const { inbox } = useInbox();
 
 	const route = useRoute();
 	const router = useRouter();
@@ -46,7 +47,7 @@
 
 		document.title = "@" + profileUsername + " • Beam"
 
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
@@ -149,11 +150,11 @@
 					</div>
 				</div>
 				<div class="space-x-2" v-if="me && profile.id != me.profile.id">
-					<button v-if="!(blocked || me.relations.following.includes(profile.id))" @click="async () => { await profile!.follow(); await refreshMe() }" class="cursor-pointer bg-action text-white font-medium rounded-full px-5 py-2.5 hover:bg-action-hovered">Suivre</button>
-					<button v-if="!blocked && me.relations.following.includes(profile.id)" @click="async () => { await profile!.unfollow(); await refreshMe() }" class="cursor-pointer bg-background-surface text-text-surface font-medium rounded-full px-5 py-2.5">Suivi(e)</button>
+					<button v-if="!(blocked || me.relations.following.includes(profile.id))" @click="async () => { await profile!.follow(); await refreshSession() }" class="cursor-pointer bg-action text-white font-medium rounded-full px-5 py-2.5 hover:bg-action-hovered">Suivre</button>
+					<button v-if="!blocked && me.relations.following.includes(profile.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-background-surface text-text-surface font-medium rounded-full px-5 py-2.5">Suivi(e)</button>
 
-					<button v-if="!blocked" @click="async () => { await profile!.block(); await refreshMe() }" class="cursor-pointer bg-danger text-white font-medium rounded-full px-5 py-2.5">Bloquer</button>
-					<button v-if="blocked" @click="async () => { await profile!.unblock(); await refreshMe() }" class="cursor-pointer bg-danger/25 text-danger font-medium rounded-full px-5 py-2.5">Bloqué(e)</button>
+					<button v-if="!blocked" @click="async () => { await profile!.block(); await refreshSession() }" class="cursor-pointer bg-danger text-white font-medium rounded-full px-5 py-2.5">Bloquer</button>
+					<button v-if="blocked" @click="async () => { await profile!.unblock(); await refreshSession() }" class="cursor-pointer bg-danger/25 text-danger font-medium rounded-full px-5 py-2.5">Bloqué(e)</button>
 				</div>
 				<div class="space-y-1">
 					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
@@ -209,11 +210,15 @@
 									me.relations.following.includes(user.id) ? {
 										title: 'Suivi(e)',
 										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshMe() }
+										callback: async () => { await user.unfollow(); await refreshSession() }
+									} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
+										title: 'Demande envoyée',
+										color: 'gray',
+										callback: async () => { await user.unfollow(); await refreshSession() }
 									} : {
 										title: 'Suivre',
 										color: 'action',
-										callback: async () => { await user.follow(); await refreshMe() }
+										callback: async () => { await user.follow(); await refreshSession() }
 									}
 								] : [
 									{
@@ -241,11 +246,15 @@
 									me.relations.following.includes(user.id) ? {
 										title: 'Suivi(e)',
 										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshMe() }
+										callback: async () => { await user.unfollow(); await refreshSession() }
+									} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
+										title: 'Demande envoyée',
+										color: 'gray',
+										callback: async () => { await user.unfollow(); await refreshSession() }
 									} : {
 										title: 'Suivre',
 										color: 'action',
-										callback: async () => { await user.follow(); await refreshMe() }
+										callback: async () => { await user.follow(); await refreshSession() }
 									}
 								] : [
 									{

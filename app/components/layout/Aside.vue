@@ -7,11 +7,12 @@
 	import { User } from 'beamsocial';
 
 	import { useFeed } from '@/services/feed';
-	import { useSession } from '@/stores/session';
+	import { useSession, useInbox } from '@/stores/session';
 
 	const router = useRouter();
 	const { users } = useFeed();
-	const { refreshMe } = useSession();
+	const { refreshSession } = useSession();
+	const { inbox } = useInbox();
 
 	const props = defineProps<{
 		me: Session | null
@@ -50,8 +51,6 @@
 						<MagnifyingGlassIcon class="stroke-3 w-4 h-4" />
 					</button>
 				</div>
-
-
 			</form>
 		</div>
 		<div class="flex flex-col gap-4 mt-4" v-if=suggestions.length>
@@ -69,11 +68,15 @@
 							me.relations.following.includes(user.id) ? {
 								title: 'Suivi(e)',
 								color: 'gray',
-								callback: async () => { await user.unfollow(); await refreshMe() }
+								callback: async () => { await user.unfollow(); await refreshSession() }
+							} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
+								title: 'Demande envoyée',
+								color: 'gray',
+								callback: async () => { await user.unfollow(); await refreshSession() }
 							} : {
 								title: 'Suivre',
 								color: 'action',
-								callback: async () => { await user.follow(); await refreshMe() }
+								callback: async () => { await user.follow(); await refreshSession() }
 							}
 						] : [
 							{

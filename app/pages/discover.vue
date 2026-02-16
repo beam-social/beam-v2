@@ -14,7 +14,7 @@
 	const { $client } = useNuxtApp();
 	import { useFeed } from '@/services/feed';
 
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 	const { getFeed, posts } = useFeed();
 
 	const router = useRouter();
@@ -22,7 +22,7 @@
 	const tab = ref<'feed' | 'following' | 'top'>('feed')
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 

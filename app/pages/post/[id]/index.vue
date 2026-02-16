@@ -17,7 +17,7 @@
 	import axios from "axios";
 
 	const { $client: client, $apiUrl: apiUrl } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 
 	const route = useRoute();
 	const router = useRouter();
@@ -74,7 +74,7 @@
 		loading.value = true;
 		errorMessage.value = null;
 
-		await refreshMe(
+		await refreshSession(
 			() => router.push("/auth/login?return=" + encodeURIComponent(window.location.pathname)),
 		);
 
@@ -124,7 +124,7 @@
 	}
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await refreshSession(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
@@ -151,7 +151,7 @@
 	<main v-else-if="post" class="p-4 space-y-2 xs:p-8">
 		<PostCard :data="post" :me="me" :client="client" />
 		<section class="mt-8">
-			<h2 class="text-2xl font-bold mb-4">
+			<h2 class="text-xl font-bold mb-4">
 				Commentaires ({{ post.comments }})
 			</h2>
 			<div class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">

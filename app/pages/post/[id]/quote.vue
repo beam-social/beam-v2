@@ -23,7 +23,7 @@
 	})
 
 	const { $client, $apiUrl } = useNuxtApp();
-	const { me, refreshMe } = useSession();
+	const { me, refreshSession } = useSession();
 
 	const router = useRouter()
 	const route = useRoute()
@@ -61,7 +61,7 @@
 	]
 
 	onMounted(async () => {
-		await refreshMe(() => {
+		await ref(() => {
 			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
 		});
 
