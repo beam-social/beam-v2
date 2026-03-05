@@ -40,10 +40,6 @@
 	--border-surface: #40425A;
 	--text-surface: #E2E2EA;
 
-	--background-navbar: var(--primary-darker);
-	--border-navbar: var(--primary-darkest);
-	--text-navbar: #ffffff;
-
 	--text: #FFFFFF;
 	--subtext: #D0D2DA;
 
@@ -58,10 +54,6 @@
 	--background-surface: #10121A;
 	--border-surface: #20222A;
 	--text-surface: #E2E2EA;
-
-	--background-navbar: var(--primary-darkest);
-	--border-navbar: var(--primary-darkest);
-	--text-navbar: #FFFFFF;
 
 	--text: #FFFFFF;
 	--subtext: #D0D2DA;
@@ -104,9 +96,16 @@
 	--primary-darker: #CB8C13;
 	--primary-darkest: #95670E;
 
-	--background-navbar: var(--primary);
-	--border-navbar: var(--primary-darker);
-	--text-navbar: #FFFFFF;
+	--background: transparent;
+	--background-stop1: #95670e;
+	--background-stop2: #a77310;
+
+	--text: #FFFFFF;
+	--subtext: #f7ddab;
+
+	--background-surface: #b97f12;
+	--text-surface: #ffffff;
+	--border-surface: #EBAA2E;
 
 	--action: var(--primary);
 	--action-hovered: var(--primary-darker);
@@ -118,10 +117,17 @@
 	--primary: #131A4B;
 	--primary-darker: #0B0F2C;
 	--primary-darkest: #070A1C;
+	--background: transparent;
 
-	--background-navbar: var(--primary);
-	--border-navbar: var(--primary-darker);
-	--text-navbar: #FFFFFF;
+	--background-stop1: #95670e;
+	--background-stop2: #a77310;
+
+	--text: #FFFFFF;
+	--subtext: #f7ddab;
+
+	--background-surface: #b97f12;
+	--text-surface: #ffffff;
+	--border-surface: #EBAA2E;
 
 	--action: var(--primary);
 	--action-hovered: var(--primary-darker);

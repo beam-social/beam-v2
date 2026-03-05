@@ -45,7 +45,7 @@
 			document.body.classList.add('with-sidebar');
 			return 'no-suggest';
 		} else if (route.path.startsWith('/hc') || route.path.startsWith('/legal')) {
-			document.body.classList.remove('with-sidebar');
+			document.body.classList.add('both-sidebars');
 			return 'docs';
 		} else if (me.value) {
 			document.body.classList.add('with-sidebar');

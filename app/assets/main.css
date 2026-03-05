@@ -51,7 +51,7 @@
 	--color-success-hovered: var(--success-hovered);
 	--color-success-text: var(--success-text);
 
-	--font-sans: 'Poppins', sans-serif;
+	--font-sans: 'Outfit', sans-serif;
 	--font-mono: 'Ubuntu Mono', monospace;
 }
 
@@ -96,6 +96,7 @@
 		padding: 0;
 		overflow-x: hidden;
 	}
+}
 
 	@media screen and (min-width: 640px) {
 		#__nuxt {
@@ -115,8 +116,8 @@
 			grid-template-columns: 1fr 2fr;
 		}
 
-		.with-sidebar #__nuxt>nav,
-		.with-sidebar #__nuxt>aside {
+		.with-sidebar #__nuxt > nav,
+		.with-sidebar #__nuxt > aside {
 			position: sticky;
 			top: 0;
 			column-span: 1;
@@ -124,12 +125,19 @@
 	}
 
 	@media screen and (min-width: 1280px) {
-		.with-sidebar #__nuxt {
+		.with-sidebar #__nuxt, .both-sidebars #__nuxt {
 			display: grid;
 			grid-template-columns: 1fr 2fr 1fr;
 		}
+
+		.with-sidebar #__nuxt, .both-sidebars #__nuxt > nav,
+		.with-sidebar #__nuxt, .both-sidebars #__nuxt > aside {
+			position: sticky;
+			top: 0;
+			column-span: 1;
+		}
 	}
-}
+
 
 @layer components {
 	.md-area * {

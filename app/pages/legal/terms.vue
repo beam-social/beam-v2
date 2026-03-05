@@ -7,14 +7,12 @@
 	});
 </script>
 <template>
-	<header class="bg-primary p-8 lg:px-0 lg:py-16">
-		<div class="lg:w-1/2 lg:mx-auto">
+	<main class="p-4 space-y-8 xs:p-8 lg:py-16 xl:col-start-2 xl:py-24">
+		<section id="header">
 			<h1 class="text-white text-5xl font-bold">Conditions Générales d'Utilisation</h1>
-			<p class="text-white mt-4">Version 1 • 07 janvier 2026</p>
+			<p class="text-white mt-4">Version 2 • 04 février 2026</p>
 			<p class="text-white italic">Une partie de ces conditions a été rédigée à l'aide d'une intelligence artificielle</p>
-		</div>
-	</header>
-	<main class="p-4 space-y-8 xs:p-8 md:px-16 lg:px-32 lg:py-16 xl:px-48 xl:py-24">
+		</section>
 		<section id="objet">
 			<h2 class="text-3xl font-bold mb-2">1. Objet</h2>
 			<p>Les présentes Conditions Générales d'Utilisation (dites « CGU ») définissent les conditions d'accès et d'utilisation de la plateforme de réseau social Beam (ci-après « la plateforme »).</p>
