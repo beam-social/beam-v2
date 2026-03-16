@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import axios from 'axios';
 
-	// import { countryList } from '@/utils/countries';
+	import { countryList } from '@/utils/countries';
 	import { isYoungerThan18 } from '@/utils/profiles';
 	import { useSession } from '@/stores/session';
 
@@ -28,7 +28,7 @@
 		username: '',
 		display_name: '',
 		birthday: new Date().toISOString().split('T')[0]!,
-		// country: 'FR',
+		country: 'FR',
 		private: true,
 		sudo_code: ''
 	});
@@ -39,7 +39,7 @@
 		username: true,
 		display_name: true,
 		birthday: true,
-		// country: false
+		country: true,
 		private: true,
 		sudo_code: true
 	});
@@ -214,12 +214,12 @@
 				<label for="birthday" class="block text-sm font-medium">Date de naissance:</label>
 				<input type="date" id="birthday" name="birthday" class="block bg-background-surface text-sm border border-border-surface rounded-lg w-full px-4 py-2" v-model=payload.birthday required />
 			</div>
-			<!--div class="space-y-1">
+			<div class="space-y-1">
 				<label for="country" class="block text-sm font-medium">Pays de résidence</label>
 				<select id="country" name="country" v-model="payload.country" class="block bg-background-surface text-sm border border-border-surface rounded-lg w-full px-4 py-2" required>
 					<option v-for="ctr in countryList" :value=ctr.code>{{ ctr.flag }} {{ ctr.name }}</option>
 				</select>
-			</div-->
+			</div>
 			<div class="flex justify-center gap-4">
 				<button v-if="step > 0" @click="() => step -= 1" class="cursor-pointer block text-subtext text-sm font-medium underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-subtext">Retour</button>
 				<button type="submit" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">Suivant</button>

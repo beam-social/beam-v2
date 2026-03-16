@@ -1,11 +1,13 @@
 <script setup lang="ts">
 	import { ChatBubbleOvalLeftIcon, HeartIcon, ArrowPathRoundedSquareIcon } from '@heroicons/vue/24/outline';
-	import { HeartIcon as HeartFilled } from '@heroicons/vue/24/solid';
+	import { HeartIcon as HeartFilled, CpuChipIcon, BugAntIcon } from '@heroicons/vue/24/solid';
 
 	import PictureRing from '@/components/PictureRing.vue';
 	import ProfileBadge from '@/components/ProfileBadge.vue';
+
 	import PostWidget from '../widgets/PostWidget.vue';
 	import Menu from '../Menu.vue';
+	import UpdateFlagsDialog from '../dialogs/UpdatePostFlagsDialog.vue';
 
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
@@ -26,6 +28,8 @@
 
 	const router = useRouter();
 	const show_all = ref<boolean>(true);
+	const isFlagDialogOpen = ref<boolean>(false);
+
 	const content = ref<string>('');
 	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([])
 
@@ -61,16 +65,23 @@
 	const buildActions = () => {
 		const list: Array<{ label: string, style: string, handler: () => Promise<void> }> = [
 			{
-				'label': 'Partager',
+				'label': 'Copier le lien',
 				'style': 'normal',
 				'handler': async () => {
 					await navigator.clipboard.writeText(window.location.origin + '/post/' + post.value.id);
-					alert('Lien du post copié dans le presse-papier: \n' + window.location.origin + '/post/' + post.value.id);
 				}
 			}
 		];
 
-		if (props.me && (props.me.profile.id == post.value.author?.id || props.me.profile.level >= 8)) {
+		if (props.me && props.me.profile.level >= 6) {
+			list.push({
+				'label': 'Modifier les flags',
+				'style': 'normal',
+				'handler': async () => { isFlagDialogOpen.value = true }
+			})
+		}
+
+		if (props.me && (props.me.profile.id == post.value.author?.id || props.me.profile.level >= 6)) {
 			list.push({
 				'label': 'Supprimer',
 				'style': 'danger',
@@ -134,6 +145,14 @@
 				<RouterLink :to="'/@' + post.author?.name" class="block text-subtext font-medium text-sm">@{{ post.author?.name || '...' }}</RouterLink>
 			</div>
 			<div class="grow"></div>
+			<div v-if="post.flags.includes('AI')" class="flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
+				<CpuChipIcon class="text-primary w-4 h-4" />
+				<span class="text-primary text-sm">Généré par IA</span>
+			</div>
+			<div v-if="post.flags.includes('NFE')" class="flex items-center bg-danger/15 border-2 border-danger/10 rounded-full px-2 py-1 gap-1">
+				<BugAntIcon class="text-danger w-4 h-4" />
+				<span class="text-danger text-sm">Nudité</span>
+			</div>
 			<span class="text-subtext text-sm">{{ age }}</span>
 			<Menu :actions="actions" />
 		</div>
@@ -185,4 +204,5 @@
 			<div class="grow"></div>
 		</div>
 	</div>
+	<UpdateFlagsDialog :isOpen="isFlagDialogOpen" :post="post" @update:isOpen="($val: boolean) => isFlagDialogOpen = $val" />
 </template>

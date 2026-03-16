@@ -36,6 +36,8 @@
 	const target = ref<"me" | "friends" | "followers" | "everyone">('everyone')
 	const parent = ref<Post | null>(null)
 	const attachments = ref<File[]>([])
+	const is_nudity = ref<boolean>(false)
+	const is_ai = ref<boolean>(false)
 
 	const privacyOptions = [
 		{
@@ -97,7 +99,13 @@
 	]
 
 	const submit = async () => {
-		const post = await $client.writePost(content.value, target.value, parent.value ? parent.value.id : undefined)
+		const post = await $client.writePost(
+			content.value,
+			target.value,
+			parent.value ? parent.value.id : undefined,
+			is_ai.value,
+			is_nudity.value
+		);
 		router.push(returnUrl ? returnUrl : '/post/' + post.id)
 
 		for (const file of attachments.value) {
@@ -229,6 +237,16 @@
 					<option value="followers">Mes abonnés</option>
 					<option value="everyone">Tout le monde</option>
 				</select>
+			</div>
+			<div class="px-2">
+				<div class="flex items-center gap-1">
+					<input type="checkbox" id="nudity" v-model="is_nudity" class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered">
+					<label for="nudity" class="text-sm">Mon contenu est inadapté à un public mineur (nudité, violence, etc.)</label>
+				</div>
+				<div class="flex items-center gap-1">
+					<input type="checkbox" id="ai" v-model="is_ai" class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered">
+					<label for="ai" class="text-sm">Mon contenu ou une partie de celui-ci est généré par une IA</label>
+				</div>
 			</div>
 			<div class="flex gap-2 justify-center items-center w-fit mx-auto">
 				<button

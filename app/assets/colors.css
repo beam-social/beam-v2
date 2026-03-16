@@ -111,42 +111,6 @@
 	--action-hovered: var(--primary-darker);
 }
 
-.theme-pro {
-	--primary-lightest: #ADB5EB;
-	--primary-lighter: #4F5FD3;
-	--primary: #131A4B;
-	--primary-darker: #0B0F2C;
-	--primary-darkest: #070A1C;
-	--background: transparent;
-
-	--background-stop1: #95670e;
-	--background-stop2: #a77310;
-
-	--text: #FFFFFF;
-	--subtext: #f7ddab;
-
-	--background-surface: #b97f12;
-	--text-surface: #ffffff;
-	--border-surface: #EBAA2E;
-
-	--action: var(--primary);
-	--action-hovered: var(--primary-darker);
-}
-
-.theme-sky {
-	--primary-lightest: #A7DFFF;
-	--primary-lighter: #32B3FF;
-	--primary: #0076BB;
-	--primary-darker: #005180;
-	--primary-darkest: #002C45;
-
-	--background-navbar: var(--primary-lighter);
-	--border-navbar: var(--primary);
-	--text-navbar: #FFFFFF;
-
-	--action: var(--primary);
-	--action-hovered: var(--primary-darker);
-}
 
 .theme-fonda { /* Fonda uniquement */
 	--primary-lightest: #FF8386;
