@@ -1,13 +1,14 @@
 <script setup lang="ts">
 	import { ChatBubbleOvalLeftIcon, HeartIcon, ArrowPathRoundedSquareIcon } from '@heroicons/vue/24/outline';
-	import { HeartIcon as HeartFilled, CpuChipIcon, BugAntIcon } from '@heroicons/vue/24/solid';
+	import { HeartIcon as HeartFilled, CpuChipIcon, PencilIcon } from '@heroicons/vue/24/solid';
 
 	import PictureRing from '@/components/PictureRing.vue';
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 
-	import PostWidget from '../widgets/PostWidget.vue';
 	import Menu from '../Menu.vue';
+	import PostWidget from '../widgets/PostWidget.vue';
 	import UpdateFlagsDialog from '../dialogs/UpdatePostFlagsDialog.vue';
+	import EditPostDialog from '../dialogs/EditPostDialog.vue';
 
 	import { Client } from 'beamsocial';
 	import type { Session } from 'beamsocial'
@@ -29,6 +30,7 @@
 	const router = useRouter();
 	const show_all = ref<boolean>(true);
 	const isFlagDialogOpen = ref<boolean>(false);
+	const isEditDialogOpen = ref<boolean>(false);
 
 	const content = ref<string>('');
 	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([])
@@ -63,45 +65,56 @@
 	};
 
 	const buildActions = () => {
-		const list: Array<{ label: string, style: string, handler: () => Promise<void> }> = [
+		let list: Array<{ label: string, style: string, handler: () => Promise<void> }> = [
 			{
-				'label': 'Copier le lien',
-				'style': 'normal',
-				'handler': async () => {
+				label: 'Copier le lien',
+				style: 'normal',
+				handler: async () => {
 					await navigator.clipboard.writeText(window.location.origin + '/post/' + post.value.id);
 				}
 			}
 		];
 
+		if (props.me && (props.me.profile.id == post.value.author?.id || props.me.profile.level >= 6)) {
+			list = [
+				{
+					label: 'Modifier la publication',
+					style: 'normal',
+					handler: async () => { isEditDialogOpen.value = true }
+				},
+				...list
+			]
+		}
+
 		if (props.me && props.me.profile.level >= 6) {
 			list.push({
-				'label': 'Modifier les flags',
-				'style': 'normal',
-				'handler': async () => { isFlagDialogOpen.value = true }
+				label: 'Modifier les flags',
+				style: 'normal',
+				handler: async () => { isFlagDialogOpen.value = true }
 			})
 		}
 
 		if (props.me && (props.me.profile.id == post.value.author?.id || props.me.profile.level >= 6)) {
 			list.push({
-				'label': 'Supprimer',
-				'style': 'danger',
-				'handler': async () => { await post.value.delete(); router.back() }
+				label: 'Supprimer',
+				style: 'danger',
+				handler: async () => { await post.value.delete(); router.back() }
 			})
 		}
 
 		if (props.me?.profile.id != post.value.author?.id) {
 			list.push({
-				'label': 'Signaler',
-				'style': 'danger',
-				'handler': async () => {
+				label: 'Signaler',
+				style: 'danger',
+				handler: async () => {
 					alert('Fonction de signalement non implémentée pour le moment.')
 				}
 			})
 
 			list.push({
-				'label': `Bloquer ${post.value.author?.display_name || post.value.author?.name || "l'auteur"}`,
-				'style': 'danger',
-				'handler': async () => {
+				label: `Bloquer ${post.value.author?.display_name || post.value.author?.name || "l'auteur"}`,
+				style: 'danger',
+				handler: async () => {
 					await props.data.author?.block();
 				}
 			});
@@ -145,13 +158,15 @@
 				<RouterLink :to="'/@' + post.author?.name" class="block text-subtext font-medium text-sm">@{{ post.author?.name || '...' }}</RouterLink>
 			</div>
 			<div class="grow"></div>
-			<div v-if="post.flags.includes('AI')" class="flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
+			<div v-if="post.flags.includes('AI')" class="select-none flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
 				<CpuChipIcon class="text-primary w-4 h-4" />
-				<span class="text-primary text-sm">Généré par IA</span>
+				<span class="text-primary text-sm max-sm:hidden">Généré par IA</span>
+				<span class="text-primary text-sm sm:hidden">IA</span>
 			</div>
-			<div v-if="post.flags.includes('NFE')" class="flex items-center bg-danger/15 border-2 border-danger/10 rounded-full px-2 py-1 gap-1">
-				<BugAntIcon class="text-danger w-4 h-4" />
-				<span class="text-danger text-sm">Nudité</span>
+			<div v-if="post.update_date" class="select-none flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
+				<PencilIcon class="text-primary w-4 h-4" />
+				<span class="text-primary text-sm max-sm:hidden">Modifié •</span>
+				<span class="text-primary text-sm">{{ deltatime(post.update_date!) }}</span>
 			</div>
 			<span class="text-subtext text-sm">{{ age }}</span>
 			<Menu :actions="actions" />
@@ -205,4 +220,5 @@
 		</div>
 	</div>
 	<UpdateFlagsDialog :isOpen="isFlagDialogOpen" :post="post" @update:isOpen="($val: boolean) => isFlagDialogOpen = $val" />
+	<EditPostDialog :isOpen="isEditDialogOpen" :post="post" @update:isOpen="($val: boolean) => isEditDialogOpen = $val" />
 </template>
