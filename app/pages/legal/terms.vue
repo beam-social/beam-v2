@@ -2,16 +2,23 @@
 	useHead({
 		title: 'Conditions Générales d\'Utilisation • Beam',
 		meta: [
-			{ name: 'description', content: 'Conditions Générales d\'Utilisation de la plateforme Beam.' }
+			{
+				name: 'description',
+				content: 'Conditions Générales d\'Utilisation de la plateforme Beam.'
+			},
+			{
+				name: 'date',
+				content: '2026-03-16'
+			}
 		]
 	});
 </script>
 <template>
 	<main class="p-4 space-y-8 xs:p-8 lg:py-16 xl:col-start-2 xl:py-24">
 		<section id="header">
-			<h1 class="text-white text-5xl font-bold">Conditions Générales d'Utilisation</h1>
-			<p class="text-white mt-4">Version 2 • 04 février 2026</p>
-			<p class="text-white italic">Une partie de ces conditions a été rédigée à l'aide d'une intelligence artificielle</p>
+			<h1 class="text-5xl font-bold">Conditions Générales d'Utilisation</h1>
+			<p class="mt-4">Version 2 • 16 mars 2026</p>
+			<p class="italic">Une partie de ces conditions a été rédigée à l'aide d'une intelligence artificielle</p>
 		</section>
 		<section id="objet">
 			<h2 class="text-3xl font-bold mb-2">1. Objet</h2>

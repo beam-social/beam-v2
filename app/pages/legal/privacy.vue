@@ -5,21 +5,23 @@
 			{
 				name: 'description',
 				content: 'Politique de Confidentialité de la plateforme Beam.'
+			},
+			{
+				name: 'date',
+				content: '2026-03-16'
 			}
 		]
 	});
 </script>
 <template>
-	<header class="bg-primary p-8 lg:px-0 lg:py-16">
-		<div class="lg:w-1/2 lg:mx-auto">
-			<h1 class="text-white text-5xl font-bold">Politique de Confidentialité</h1>
-			<p class="text-white mt-4">Version 1 • 04 février 2026</p>
-			<p class="text-white italic">
+	<main class="p-4 space-y-8 xs:p-8 lg:py-16 xl:col-start-2 xl:py-24">
+		<section id="header">
+			<h1 class="text-5xl font-bold">Politique de Confidentialité</h1>
+			<p class="mt-4">Version 1 • 16 mars 2026</p>
+			<p class="italic">
 				Une partie de cette politique a été rédigée à l'aide d'une intelligence artificielle
 			</p>
-		</div>
-	</header>
-	<main class="p-4 space-y-8 xs:p-8 md:px-16 lg:px-32 lg:py-16 xl:px-48 xl:py-24">
+		</section>
 		<section id="objet">
 			<h2 class="text-3xl font-bold mb-2">1. Objet</h2>
 			<p>
