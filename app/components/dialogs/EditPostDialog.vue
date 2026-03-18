@@ -50,18 +50,18 @@
 			</div>
 		</div>
 		<div class="flex justify-center gap-2">
-			<button
-				class="cursor-pointer bg-gray-500/10 text-gray-500 text-sm font-medium rounded-full px-5 py-3 hover:bg-gray-500/20"
-				@click="() => $emit('update:isOpen', false)"
-			>
-				Annuler
-			</button>
-			<button
-				class="cursor-pointer bg-action text-white text-sm font-medium rounded-full px-5 py-3 hover:bg-action-hovered"
-				@click="() => { post.edit(post.content); $emit('update:isOpen', false) }"
-			>
-				Valider
-			</button>
+			<Button
+				:key="`cancel-${post.id}`"
+				label="Annuler"
+				type="transparent"
+				:handler="() => $emit('update:isOpen', false)"
+			/>
+			<Button
+				:key="`validate-${post.id}`"
+				label="Valider"
+				type="action"
+				:handler="() => { post.edit(post.content); $emit('update:isOpen', false) }"
+			/>
 		</div>
 	</Dialog>
 </template>

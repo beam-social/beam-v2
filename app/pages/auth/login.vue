@@ -49,7 +49,11 @@
 			</div>
 			<div class="flex justify-center items-center gap-4">
 				<RouterLink to="/auth/join" class="text-sm text-primary font-medium underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-primary-hovered">Je n'ai pas de compte</RouterLink>
-				<button type="submit"  class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">Se connecter</button>
+				<Button
+					label="Se connecter"
+					type="action"
+					:handler="login"
+				/>
 			</div>
 		</form>
 	</main>

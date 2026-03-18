@@ -10,6 +10,9 @@
 	import ProfileBadge from '@/components/ProfileBadge.vue';
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 
+	import Button from '~/components/Button.vue';
+	import Menu from '~/components/Menu.vue';
+
 	import type { User } from 'beamsocial'
 	import type { Post } from 'beamsocial'
 
@@ -149,11 +152,49 @@
 						<span class="opacity-50 text-sm font-medium">Abonnés</span>
 					</div>
 				</div>
-				<div class="space-x-2" v-if="me && profile.id != me.profile.id">
-					<button v-if="blocked" @click="async () => { await profile!.unblock(); await refreshSession() }" class="cursor-pointer bg-danger/25 text-danger font-medium rounded-full px-5 py-2.5">Bloqué(e)</button>
-					<button v-else-if="me.relations.following.includes(profile.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-background-surface text-text-surface font-medium rounded-full px-5 py-2.5">Suivi(e)</button>
-					<button v-else-if="inbox?.outgoing.follow.some(f => f.to.id == profile?.id)" @click="async () => { await profile!.unfollow(); await refreshSession() }" class="cursor-pointer bg-zinc-600/10 text-zinc-600 font-medium rounded-full px-5 py-2.5">Demande envoyée</button>
-					<button v-else @click="async () => { await profile!.follow(); await refreshSession() }" class="cursor-pointer bg-action text-white font-medium rounded-full px-5 py-2.5 hover:bg-action-hovered">Suivre</button>
+				<div class="flex justify-center items-center gap-x-2" v-if="me && profile.id != me.profile.id">
+					<Button
+						v-if="me.relations.following.includes(profile.id)"
+						label="Suivi(e)"
+						type="neutral"
+						size="lg"
+						:handler="async () => { await profile!.unfollow(); await refreshSession() }"
+					/>
+					<Button
+						v-else-if="inbox?.outgoing.follow.some(f => f.to.id == profile?.id)"
+						label="Demande envoyée"
+						type="neutral"
+						size="lg"
+						:handler="async () => { await profile!.unfollow(); await refreshSession() }"
+					/>
+					<Button
+						v-else
+						label="Suivre"
+						type="action"
+						size="lg"
+						:handler="async () => { await profile!.follow(); await refreshSession() }"
+					/>
+					<div class="bg-zinc-600/5 rounded-full p-2">
+						<Menu
+							:actions="[
+								(me?.relations.blocklist.includes(profile.id) ? {
+									label: `Débloquer ${profile.display_name || profile.name}`,
+									style: 'normal',
+									handler: async () => {
+										await profile!.unblock();
+										await refreshSession();
+									}
+								} : {
+									label: `Bloquer ${profile.display_name || profile.name}`,
+									style: 'danger',
+									handler: async () => {
+										await profile!.block();
+										await refreshSession();
+									}
+								})
+							]"
+						/>
+					</div>
 				</div>
 				<div class="space-y-1">
 					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
@@ -207,22 +248,23 @@
 							:actions="me ? (
 								me.profile.id != user.id ? [
 									me.relations.following.includes(user.id) ? {
-										title: 'Suivi(e)',
-										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshSession() }
+										label: 'Suivi(e)',
+										type: 'neutral',
+										handler: async () => { await user.unfollow(); await refreshSession() }
 									} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
-										title: 'Demande envoyée',
-										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshSession() }
+										label: 'Demande envoyée',
+										type: 'neutral',
+										handler: async () => { await user.unfollow(); await refreshSession() }
 									} : {
-										title: 'Suivre',
-										color: 'action',
-										callback: async () => { await user.follow(); await refreshSession() }
+										label: 'Suivre',
+										type: 'action',
+										handler: async () => { await user.follow(); await refreshSession() }
 									}
 								] : [
 									{
-										title: 'Vous',
-										color: 'transparent',
+										label: 'Vous',
+										type: 'transparent',
+										handler: async () => { /* Rien à faire */ }
 									}
 								]
 							) : []"
@@ -243,22 +285,23 @@
 							:actions="me ? (
 								me.profile.id != user.id ? [
 									me.relations.following.includes(user.id) ? {
-										title: 'Suivi(e)',
-										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshSession() }
+										label: 'Suivi(e)',
+										type: 'neutral',
+										handler: async () => { await user.unfollow(); await refreshSession() }
 									} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
-										title: 'Demande envoyée',
-										color: 'gray',
-										callback: async () => { await user.unfollow(); await refreshSession() }
+										label: 'Demande envoyée',
+										type: 'neutral',
+										handler: async () => { await user.unfollow(); await refreshSession() }
 									} : {
-										title: 'Suivre',
-										color: 'action',
-										callback: async () => { await user.follow(); await refreshSession() }
+										label: 'Suivre',
+										type: 'action',
+										handler: async () => { await user.follow(); await refreshSession() }
 									}
 								] : [
 									{
-										title: 'Vous',
-										color: 'transparent',
+										label: 'Vous',
+										type: 'transparent',
+										handler: async () => { /* Rien à faire */ }
 									}
 								]
 							) : []"

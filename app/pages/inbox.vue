@@ -77,20 +77,20 @@
 					:deployed=true
 					:actions="[
 						{
-							title: 'Refuser',
-							color: 'gray',
-							icon: TrashIcon,
-							callback: async () => {
-								await req.reject();
+							label: 'Accepter',
+							type: 'action',
+							icon: UsersIcon,
+							handler: async () => {
+								await req.accept();
 								refreshSession();
 							}
 						},
 						{
-							title: 'Accepter',
-							color: 'action',
-							icon: UsersIcon,
-							callback: async () => {
-								await req.accept();
+							label: 'Refuser',
+							type: 'neutral',
+							icon: TrashIcon,
+							handler: async () => {
+								await req.reject();
 								refreshSession();
 							}
 						}

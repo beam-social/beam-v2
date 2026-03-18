@@ -93,7 +93,11 @@
 			</div>
 			<p class="text-danger text-sm"><strong>Attention !</strong> Vous êtes sur le point d'effectuer une action potentiellement destructrice. Si vous n'êtes pas arrivé ici de votre plein gré, merci de revenir en arrière et de ne rien renseigner.</p>
 			<div class="flex items-center gap-4">
-				<button type="submit"  class="cursor-pointer block bg-danger text-white text-sm font-medium rounded-full px-5 py-3 mx-auto duration-300 hover:bg-danger-hovered">Suivant</button>
+				<Button
+					label="Suivant"
+					type="action"
+					:handler="sudo"
+				/>
 			</div>
 		</form>
 	</main>

@@ -16,6 +16,7 @@
 
 	import { toLiteralNumber, applyMarkdownPatterns, type MarkdownPattern } from '@/utils/format';
 	import { deltatime } from '@/utils/time';
+import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 
 	const props = defineProps<{
 		data: Post
@@ -31,6 +32,7 @@
 	const show_all = ref<boolean>(true);
 	const isFlagDialogOpen = ref<boolean>(false);
 	const isEditDialogOpen = ref<boolean>(false);
+	const isDeleteDialogOpen = ref<boolean>(false);
 
 	const content = ref<string>('');
 	const actions = ref<Array<{ label: string, style: string, handler: () => Promise<void> }>>([])
@@ -98,7 +100,7 @@
 			list.push({
 				label: 'Supprimer',
 				style: 'danger',
-				handler: async () => { await post.value.delete(); router.back() }
+				handler: async () => { isDeleteDialogOpen.value = true }
 			})
 		}
 
@@ -221,4 +223,5 @@
 	</div>
 	<UpdateFlagsDialog :isOpen="isFlagDialogOpen" :post="post" @update:isOpen="($val: boolean) => isFlagDialogOpen = $val" />
 	<EditPostDialog :isOpen="isEditDialogOpen" :post="post" @update:isOpen="($val: boolean) => isEditDialogOpen = $val" />
+	<DeleteConfirmation :isOpen="isDeleteDialogOpen" :post="post" @update:isOpen="($val: boolean) => isDeleteDialogOpen = $val" />
 </template>

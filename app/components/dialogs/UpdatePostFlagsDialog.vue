@@ -36,12 +36,16 @@
 			</div>
 		</div>
 		<div class="flex justify-center">
-			<button
-				class="cursor-pointer bg-action text-action-text text-sm font-medium rounded-full px-5 py-3 hover:bg-action-hovered"
-				@click="() => { post.edit_flags(selectedFlags); $emit('update:isOpen', false) }"
-			>
-				Valider
-			</button>
+			<Button
+				label="Annuler"
+				type="transparent"
+				:handler="() => $emit('update:isOpen', false)"
+			/>
+			<Button
+				label="Valider"
+				type="action"
+				:handler="() => { post.edit_flags(selectedFlags); $emit('update:isOpen', false) }"
+			/>
 		</div>
 	</Dialog>
 </template>

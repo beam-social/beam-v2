@@ -7,6 +7,8 @@
 
 	import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/solid';
 
+	import Button from '~/components/Button.vue';
+
 	useHead({
 		title: 'Rejoindre Beam',
 		meta: [
@@ -125,9 +127,20 @@
 			<p class="max-w-md mx-auto">
 				La plateforme a restreint la création de compte et n'est désormais accessible que sur invitation. Contactez-nous à l'adresse <a href="mailto:beam.sc@proton.me" class="text-primary font-medium">beam.sc@proton.me</a> pour en savoir plus.
 			</p>
+			<p class="max-w-md mx-auto">
+				Si vous avez déjà un code d'invitation, cliquez sur le bouton ci-dessous pour commencer le processus d'inscription.
+			</p>
 			<div class="flex justify-center gap-4">
-				<button @click="() => step = 0" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">J'ai un code</button>
-				<button @click="() => router.back()" class="cursor-pointer block text-subtext text-sm font-medium underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-subtext">Retour</button>
+				<Button
+					label="J'ai un code"
+					type="action"
+					:handler="() => step = 0"
+				/>
+				<Button
+					label="Retour"
+					type="transparent"
+					:handler="() => router.back()"
+				/>
 			</div>
 		</section>
 	</main>
@@ -137,7 +150,7 @@
 			<div class="grow"></div>
 			<a href="/auth/login" class="text-primary font-semibold">Se connecter</a>
 		</nav>
-		<form @submit.prevent="() => step = 1" class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl text-center font-bold">Créer un compte</h1>
 			<div class="space-y-1">
 				<label for="email" class="block text-sm font-medium">Adresse mail:</label>
@@ -190,12 +203,21 @@
 				</ul>
 			</div>
 			<div>
-				<button type="submit" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 mx-auto duration-300 hover:bg-action-hovered">Continuer</button>
+				<Button
+					label="Suivant"
+					type="action"
+					:handler="() => step = 1"
+				/>
+				<Button
+					label="Annuler l'inscription"
+					type="transparent"
+					:handler="() => router.back()"
+				/>
 			</div>
 		</form>
 	</main>
 	<main v-if="step === 1" class="p-4 xs:p-8">
-		<form @submit.prevent="() => step = 2" class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Personnaliser votre profil</h1>
 			<div class="space-y-1">
 				<label for="display_name" class="block text-sm font-medium">Nom d'affichage:</label>
@@ -221,13 +243,21 @@
 				</select>
 			</div>
 			<div class="flex justify-center gap-4">
-				<button v-if="step > 0" @click="() => step -= 1" class="cursor-pointer block text-subtext text-sm font-medium underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-subtext">Retour</button>
-				<button type="submit" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">Suivant</button>
+				<Button
+					label="Précédent"
+					type="transparent"
+					:handler="() => step -= 1"
+				/>
+				<Button
+					label="Suivant"
+					type="action"
+					:handler="() => step += 1"
+				/>
 			</div>
 		</form>
 	</main>
 	<main v-if="step === 2" class="p-4 xs:p-8">
-		<form @submit.prevent="() => step = 3" class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Gardez le contrôle</h1>
 			<div class="space-y-1">
 				<label for="target" class="block text-sm font-medium">Garder mon profil privé</label>
@@ -248,13 +278,21 @@
 			<div
 				class="flex gap-4 justify-center"
 			>
-				<button v-if="step > 0" @click="() => step -= 1" class="cursor-pointer block text-subtext text-sm font-medium underline decoration-1 decoration-transparent duration-300 hover:decoration-subtext">Retour</button>
-				<button type="submit" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">Entrer mon code</button>
+				<Button
+					label="Précédent"
+					type="transparent"
+					:handler="() => step -= 1"
+				/>
+				<Button
+					label="Entrer mon code"
+					type="action"
+					:handler="() => step = 3"
+				/>
 			</div>
 		</form>
 	</main>
 	<main v-if="step === 3" class="p-4 xs:p-8">
-		<form @submit.prevent="signup" class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Code de vérification</h1>
 			<div class="space-y-1">
 				<label for="code" class="block text-sm font-medium">Le code à 14 caractères qui vous a été donné</label>
@@ -272,8 +310,17 @@
 			<div
 				class="flex gap-4 justify-center"
 			>
-				<button v-if="step > 0" @click="() => step -= 1" class="cursor-pointer block text-subtext text-sm font-medium underline decoration-1 decoration-transparent duration-300 hover:decoration-subtext">Retour</button>
-				<button type="submit" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered">Valider</button>
+				<Button
+					label="Précédent"
+					type="transparent"
+					:handler="() => step -= 1"
+				/>
+				<Button
+					label="Valider"
+					type="action"
+					:handler="async () => await signup()"
+					:disabled="!valid.sudo_code"
+				/>
 			</div>
 		</form>
 	</main>

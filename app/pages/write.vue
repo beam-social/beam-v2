@@ -33,7 +33,7 @@
 	const show_preview = ref<boolean>(false)
 	const max = ref<number>(500)
 	const content = ref<string>('')
-	const target = ref<"me" | "friends" | "followers" | "everyone">('everyone')
+	const target = ref<"me" | "friends" | "followers" | "everyone">('followers')
 	const parent = ref<Post | null>(null)
 	const attachments = ref<File[]>([])
 	const is_nudity = ref<boolean>(false)
@@ -249,12 +249,23 @@
 				</div>
 			</div>
 			<div class="flex gap-2 justify-center items-center w-fit mx-auto">
-				<button
-					@click="submit"
-					class="cursor-pointer block bg-primary text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-primary-darker"
-				>Publier</button>
-				<button v-if="show_preview" @click="() => show_preview = false" class="cursor-pointer block text-primary mx-3 text-sm font-medium duration-300 hover:underline">Retourner à l'écriture</button>
-				<button v-else @click="() => show_preview = true" class="cursor-pointer block text-primary mx-3 text-sm font-medium duration-300 hover:underline">Voir le résultat</button>
+				<Button
+					label="Publier"
+					type="action"
+					:handler=submit
+				/>
+				<Button
+					v-if="show_preview"
+					label="Retourner à l'écriture"
+					type="transparent"
+					:handler="() => show_preview = false"
+				/>
+				<Button
+					v-else
+					label="Voir le résultat"
+					type="transparent"
+					:handler="() => show_preview = true"
+				/>
 			</div>
 		</div>
 	</main>

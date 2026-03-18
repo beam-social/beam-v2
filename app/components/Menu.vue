@@ -54,10 +54,10 @@
 
 		<div
 			v-if="showMenu"
-			class="relative top-0 z-1000 flex flex-col bg-background-surface text-text-surface border-2 border-border-surface rounded-2xl w-fit h-fit p-2 shadow-lg"
+			class="relative top-0 z-1000 flex flex-col bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl w-fit h-fit p-4 shadow-xl"
 		>
 			<button
-				:class="classNames[action.style] + ' cursor-pointer block text-sm text-left font-medium whitespace-nowrap w-fit px-2 py-1'"
+				:class="classNames[action.style] + ' cursor-pointer block text-left text-lg font-medium whitespace-nowrap w-fit px-2 py-1 hover:underline'"
 				v-for="action in actions"
 				@click="() => { action.handler(); closeMenu(); }"
 			>

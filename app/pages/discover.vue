@@ -30,7 +30,7 @@
 	});
 </script>
 <template>
-	<main class="flex flex-col p-4 gap-4 xs:p-8">
+	<main class="flex flex-col p-4 gap-4 xs:p-8 lg:pt-48 xl:pt-64">
 		<div class="space-y-1">
 			<h1 class="text-4xl text-center font-bold">Discover</h1>
 		</div>

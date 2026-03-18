@@ -1,5 +1,6 @@
 <script setup lang="ts">
-	import PictureRing from '../PictureRing.vue';
+	import Button from '../Button.vue';
+import PictureRing from '../PictureRing.vue';
 	import ProfileBadge from '../ProfileBadge.vue';
 
 	import type { Session, User } from 'beamsocial';
@@ -11,44 +12,14 @@
 		minified?: boolean
 		deployed?: boolean
 		actions?: {
-			title: string
-			color: "action" | "danger" | "success" | "gray" | "transparent"
+			label: string
+			type: "action" | "danger" | "success" | "neutral" | "transparent"
 			icon?: Component
-			callback?: (payload: PointerEvent) => void
+			handler: () => void
 		}[]
 	}>();
 
 	const router = useRouter();
-
-	const getColor = (color: "action" | "danger" | "success" | "gray" | "transparent") => {
-		let base = 'cursor-pointer flex items-center gap-1 text-sm font-medium px-3 py-2'
-
-		if (props.deployed) {
-			base += ' rounded-xl'
-		} else {
-			base += ' rounded-lg'
-		}
-
-		switch (color) {
-			case "action":
-				return base + " bg-action text-white hover:bg-action-hovered"
-
-			case "danger":
-				return base + " bg-danger text-white hover:bg-danger-hovered"
-
-			case "success":
-				return base + " bg-success text-white hover:bg-success-hovered"
-
-			case "gray":
-				return base + " bg-zinc-600/10 text-zinc-600 hover:bg-zinc-600/20"
-
-			case "transparent":
-				return base + " text-subtext"
-
-			default:
-				return base + " text-subtext"
-		}
-	}
 
 	let _class = ''
 
@@ -92,16 +63,16 @@
 		<div
 			v-if=actions
 			class="flex gap-1 transition-all duration-150"
-			:class="deployed ? 'justify-end' : ''"
 		>
-			<button
+			<Button
 				v-for="action in actions"
-				:class="getColor(action.color)"
-				@click=action.callback
-			>
-				<component :is=action.icon v-if=action.icon class="inline-block w-4 h-4" />
-				{{ action.title }}
-			</button>
+				:key=action.label
+				:label=action.label
+				:type=action.type
+				:size="deployed ? 'sm' : 'sm'"
+				:icon=action.icon
+				:handler=action.handler
+			/>
 		</div>
 	</div>
 </template>

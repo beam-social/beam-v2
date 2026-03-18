@@ -66,22 +66,23 @@
 					:actions="me ? (
 						me.profile.id != user.id ? [
 							me.relations.following.includes(user.id) ? {
-								title: 'Suivi(e)',
-								color: 'gray',
-								callback: async () => { await user.unfollow(); await refreshSession() }
+								label: 'Suivi(e)',
+								type: 'neutral',
+								handler: async () => { await user.unfollow(); await refreshSession() }
 							} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
-								title: 'Demande envoyée',
-								color: 'gray',
-								callback: async () => { await user.unfollow(); await refreshSession() }
+								label: 'Demande envoyée',
+								type: 'neutral',
+								handler: async () => { await user.unfollow(); await refreshSession() }
 							} : {
-								title: 'Suivre',
-								color: 'action',
-								callback: async () => { await user.follow(); await refreshSession() }
+								label: 'Suivre',
+								type: 'action',
+								handler: async () => { await user.follow(); await refreshSession() }
 							}
 						] : [
 							{
-								title: 'Vous',
-								color: 'transparent',
+								label: 'Vous',
+								type: 'transparent',
+								handler: () => {}
 							}
 						]
 					) : []"
