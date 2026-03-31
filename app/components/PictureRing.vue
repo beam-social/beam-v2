@@ -16,8 +16,11 @@
 </script>
 <template>
 	<div class="rounded-full w-fit h-fit" :style="{
-		backgroundImage: `linear-gradient(135deg, ${stop1}a0, ${stop2}a0)`,
-		padding: primary == 'transparent' ? '0' : thickness * multiplier + 'px',
+		borderColor: primary,
+		backgroundColor: 'transparent',
+		borderWidth: primary == 'transparent' ? '0' : (size * multiplier) * (6.4/96) + 'px',
+		borderRadius: '50%',
+		padding: primary == 'transparent' ? '0' : (size * multiplier) * (6/96) + 'px',
 		height: size * multiplier + 'px',
 		width: size * multiplier + 'px'
 	}">
