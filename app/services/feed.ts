@@ -67,6 +67,7 @@ export const useFeed = () => {
 			withCredentials: true,
 			params: {
 				tag,
+				after: new Date().getTime() - 1000 * 60 * 60 * 24 * 28, // Last month
 			},
 		})).data;
 

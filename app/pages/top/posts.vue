@@ -31,6 +31,7 @@
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<div class="space-y-1">
 			<h1 class="text-4xl text-center font-bold">Hit Beams</h1>
+			<p class="text-center text-subtext">Meilleures publications du moment</p>
 		</div>
 		<section class="flex flex-col gap-2 md:gap-4" v-if="topPosts.length">
 			<PostView
