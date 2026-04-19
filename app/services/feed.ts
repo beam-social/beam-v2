@@ -8,6 +8,9 @@ export const useFeed = () => {
 	const posts = useState<Post[]>('posts', () => []);
 	const users = useState<User[]>('users', () => []);
 
+	const topPosts = useState<Post[]>('topPosts', () => []);
+	const topUsers = useState<User[]>('topUsers', () => []);
+
 	const { me, refreshSession } = useSession();
 	const { $apiUrl } = useNuxtApp();
 
@@ -55,5 +58,42 @@ export const useFeed = () => {
 		}
 	};
 
-	return { posts, users, getFeed };
+	const getLeaderboard = async (tag?: string) => {
+		await refreshSession();
+
+		let _posts = [];
+
+		_posts = (await axios.get(`${$apiUrl}/top/posts?sort_by=stats`, {
+			withCredentials: true,
+			params: {
+				tag,
+			},
+		})).data;
+
+		topPosts.value = [];
+
+		for (const p of _posts) {
+			let post = new Post(p.id);
+			post.__load(p, me.value || undefined, $apiUrl);
+
+			topPosts.value.push(post);
+		}
+
+		let _users = (
+			await axios.get(`${$apiUrl}/top/users`, {
+				withCredentials: true,
+			})
+		).data;
+
+		topUsers.value = [];
+
+		for (const u of _users) {
+			let user = new User(u.id);
+			user.__load(u, me.value || undefined, $apiUrl);
+
+			topUsers.value.push(user);
+		}
+	};
+
+	return { posts, users, topPosts, topUsers, getFeed, getLeaderboard };
 };
