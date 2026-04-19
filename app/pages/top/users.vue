@@ -3,6 +3,7 @@
 	import ProfileCard from '@/components/cards/ProfileCard.vue';
 
 	import { useSession } from '@/stores/session';
+	import { useInbox } from '@/stores/session';
 
 	useHead({
 		title: 'Classement • Beam',
@@ -16,6 +17,7 @@
 
 	const { me, refreshSession } = useSession();
 	const { getLeaderboard, topUsers } = useFeed();
+	const { inbox } = useInbox();
 
 	const router = useRouter();
 
@@ -40,6 +42,30 @@
 				:me=me
 				:client=$client
 				:clickable=true
+				:deployed=true
+				:actions="me ? (
+					me.profile.id != user.id ? [
+						me.relations.following.includes(user.id) ? {
+							label: 'Suivi(e)',
+							type: 'neutral',
+							handler: async () => { await user.unfollow(); await refreshSession() }
+						} : inbox?.outgoing.follow.some(req => req.to.id === user.id) ? {
+							label: 'Demande envoyée',
+							type: 'neutral',
+							handler: async () => { await user.unfollow(); await refreshSession() }
+						} : {
+							label: 'Suivre',
+							type: 'action',
+							handler: async () => { await user.follow(); await refreshSession() }
+						}
+					] : [
+						{
+							label: 'Vous',
+							type: 'transparent',
+							handler: () => {}
+						}
+					]
+				) : []"
 			/>
 			<p class="text-subtext text-center">Oups ! Tu arrives déjà à la fin du classement...</p>
 		</section>

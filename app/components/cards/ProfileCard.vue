@@ -52,7 +52,7 @@ import PictureRing from '../PictureRing.vue';
 				@click="() => { if (clickable) { router.push(`/@${profile.name}`) }}"
 			>
 				<span class="font-semibold">{{ profile.display_name || profile.name }} <ProfileBadge :badge=profile.badge class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /></span>
-				<span class="text-subtext text-sm font-medium">@{{ profile.name }}</span>
+				<span class="text-subtext text-sm font-medium">@{{ profile.name }} • {{ profile.followers }} abonnés</span>
 			</div>
 		</div>
 		<div v-if=deployed class="px-2">
