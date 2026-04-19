@@ -154,7 +154,7 @@
 			<h2 class="text-xl font-bold mb-4">
 				Commentaires ({{ post.comments }})
 			</h2>
-			<div class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">
+			<div class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 				<div class="flex items-center gap-x-2">
 					<PictureRing
 						:src=me?.avatar!

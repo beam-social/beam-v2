@@ -17,7 +17,7 @@
 		@update:isOpen="($val) => $emit('update:isOpen', $val)"
 	>
 		<h2 class="text-xl font-medium">Modifier le post</h2>
-		<textarea v-model="post.content" class="w-full h-48 p-3 border-2 border-border-surface rounded-lg bg-background-surface text-text-surface focus:outline-none focus:ring-2 focus:ring-action"></textarea>
+		<textarea v-model="post.content" class="w-full h-48 p-3 border border-border-surface rounded-lg bg-background-surface text-text-surface focus:outline-none focus:ring-2 focus:ring-action"></textarea>
 		<div class="flex justify-start items-center gap-2">
 			<label for="visibility" class="text-sm font-bold">Visibilité</label>
 			<select v-model="post.visibility" name="visibility" class="block bg-background-surface text-sm border border-border-surface rounded-lg px-4 py-2">

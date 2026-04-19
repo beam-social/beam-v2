@@ -37,7 +37,7 @@
 				@submit.prevent="() => router.push(`/search?q=${encodeURIComponent(searchQuery)}`)"
 				class="flex w-full"
 			>
-				<div class="flex w-full gap-1 justify-between items-center bg-background-surface text-text-surface border-2 border-border-surface rounded-full w-full p-1 overflow-hidden">
+				<div class="flex gap-1 justify-between items-center bg-background-surface text-text-surface border border-border-surface rounded-full w-full p-1 overflow-hidden">
 					<input
 						type="text"
 						placeholder="Rechercher des profils, des posts..."

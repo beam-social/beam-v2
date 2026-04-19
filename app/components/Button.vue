@@ -7,7 +7,7 @@
 		icon?: Component
 	}>();
 
-	let base = 'cursor-pointer inline-flex gap-x-1 items-center font-medium transition-colors duration-200'
+	let base = 'cursor-pointer inline-flex gap-x-1 items-center line-clamp-1 font-medium transition-colors duration-200'
 
 	switch (props.type) {
 		case "action":

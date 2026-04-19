@@ -37,7 +37,7 @@
 			<div class="grow"></div>
 			<a href="/auth/join" class="text-primary font-semibold">S'inscrire</a>
 		</nav>
-		<form @submit.prevent="login" class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form @submit.prevent="login" class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Se connecter</h1>
 			<div class="space-y-1">
 				<label for="login" class="block text-sm font-medium">Nom d'utilisateur ou adresse mail:</label>
@@ -50,7 +50,7 @@
 			<div class="flex justify-center items-center gap-4">
 				<RouterLink to="/auth/join" class="text-sm text-primary font-medium underline decoration-[1.5px] decoration-transparent duration-300 hover:decoration-primary-hovered">Je n'ai pas de compte</RouterLink>
 				<Button
-					label="Se connecter"
+					label="Connexion"
 					type="action"
 					:handler="login"
 				/>

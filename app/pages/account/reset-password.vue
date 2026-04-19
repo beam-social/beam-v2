@@ -41,7 +41,7 @@
 </script>
 <template>
 	<main class="p-4 xs:p-8">
-		<form @submit.prevent="submit" class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl p-8 space-y-4 md:w-1/3 md:mx-auto">
+		<form @submit.prevent="submit" class="bg-background-surface text-text-surface border border-border-surface rounded-4xl p-8 space-y-4 md:w-1/3 md:mx-auto">
 			<h1 class="text-2xl font-bold text-center">Changer mon mot de passe</h1>
 			<div class="space-y-1">
 				<label for="newPassword" class="block text-sm font-medium">Nouveau mot de passe:</label>

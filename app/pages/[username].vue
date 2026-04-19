@@ -118,7 +118,7 @@
 
 	<main v-else-if="profile" class="xs:p-8">
 		<section class="flex flex-col xs:gap-6">
-			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 xs:border-2 xs:border-border-surface xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
+			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 xs:border xs:border-border-surface xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
 				<div class="space-y-4">
 					<PictureRing
 						:src=profile.avatar_url!
@@ -202,7 +202,7 @@
 				</div>
 			</div>
 			<div class="grow space-y-4 h-full max-md:p-4">
-				<div class="flex gap-1 bg-background-surface backdrop-blur-sm text-text-surface border-2 border-border-surface rounded-full w-fit p-2 mx-auto">
+				<div class="flex gap-1 bg-background-surface backdrop-blur-sm text-text-surface border border-border-surface rounded-full w-fit p-2 mx-auto">
 					<button
 						class="cursor-pointer text-primary text-sm font-medium rounded-full px-4 py-2 duration-300"
 						:class="section == 'posts' ? 'bg-primary/10' : 'hover:bg-primary/5'"

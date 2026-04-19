@@ -80,7 +80,7 @@
 			<a href="/" class="text-primary font-semibold">Retour en zone sécurisée</a>
 			<div class="grow"></div>
 		</nav>
-		<form @submit.prevent="sudo" class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl p-8 space-y-4">
+		<form @submit.prevent="sudo" class="bg-background-surface text-text-surface border border-border-surface rounded-4xl p-8 space-y-4">
 			<h1 class="text-2xl font-bold text-center">Confirmez que c'est bien vous</h1>
 			<p><strong>Mode sudo:</strong> {{ actions[action!] || 'Action inconnue' }}</p>
 			<div class="space-y-1">

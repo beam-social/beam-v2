@@ -224,7 +224,7 @@
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<h1 v-if="section == 'home'" class="text-4xl text-center font-bold">Paramètres</h1>
 		<div v-else class="flex items-center gap-4">
-			<button @click="section = 'home'" class="cursor-pointer flex items-center gap-1 bg-background-surface text-text-surface font-medium border-2 border-border-surface rounded-full w-fit px-4 py-2">
+			<button @click="section = 'home'" class="cursor-pointer flex items-center gap-1 bg-background-surface text-text-surface font-medium border border-border-surface rounded-full w-fit px-4 py-2">
 				<ChevronRightIcon class="w-4 h-4 rotate-180 stroke-2 stroke-subtext text-subtext" />
 				<span>Retour</span>
 			</button>
@@ -233,7 +233,7 @@
 			<div class="space-y-1">
 				<div class="grid grid-cols-1 gap-2 xl:grid-cols-2">
 					<button
-						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium border-2 border-border-surface rounded-3xl w-full px-6 py-6"
+						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium border border-border-surface rounded-3xl w-full px-6 py-6"
 						@click="() => section = 'profile'"
 					>
 						<UserCircleIcon class="w-8 h-8" />
@@ -241,7 +241,7 @@
 						<ChevronRightIcon class="w-4 h-4 stroke-2 stroke-subtext text-subtext" />
 					</button>
 					<button
-						class="cursor-pointer flex gap-1 items-center bg-[#d013ff]/15 text-[#d013ff] font-medium border-2 border-[#d013ff]/50 rounded-3xl w-full px-6 py-6"
+						class="cursor-pointer flex gap-1 items-center bg-[#d013ff]/15 text-[#d013ff] font-medium border border-[#d013ff]/50 rounded-3xl w-full px-6 py-6"
 						@click="() => section = 'plus'"
 					>
 						<SparklesIcon class="text-[#d013ff] w-7 h-7 mx-0.5" />
@@ -252,7 +252,7 @@
 			</div>
 			<div class="space-y-1">
 				<h2 class="text-subtext font-medium uppercase px-6">Compte & Sécurité</h2>
-				<div class="flex flex-col border-2 border-border-surface rounded-3xl divide-y divide-border-surface overflow-hidden">
+				<div class="flex flex-col border border-border-surface rounded-3xl divide-y divide-border-surface overflow-hidden">
 					<button
 						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium w-full px-6 py-6"
 						@click="() => section = 'account'"
@@ -273,7 +273,7 @@
 			</div>
 			<div class="space-y-1">
 				<h2 class="text-subtext font-medium uppercase px-6">Personnalisation</h2>
-				<div class="flex flex-col border-2 border-border-surface rounded-3xl divide-y divide-border-surface overflow-hidden">
+				<div class="flex flex-col border border-border-surface rounded-3xl divide-y divide-border-surface overflow-hidden">
 					<button
 						class="cursor-pointer flex gap-1 items-center bg-background-surface text-text-surface font-medium w-full px-6 py-6"
 						@click="() => section = 'appearance'"
@@ -408,7 +408,7 @@
 					<div
 						v-for="entitlement in entitlements"
 						:key="entitlement.id"
-						class="bg-background-surface text-text-surface border-2 border-border-surface rounded-2xl px-5 py-4 space-y-1"
+						class="bg-background-surface text-text-surface border border-border-surface rounded-2xl px-5 py-4 space-y-1"
 						:class="(entitlement.revoked || (entitlement.expires_at && entitlement.expires_at <= new Date()) ? 'opacity-50' : '')"
 					>
 						<h3 class="text-lg font-semibold">{{ entitlement.name }}</h3>

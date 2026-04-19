@@ -38,7 +38,7 @@
 </script>
 <template>
 	<main class="p-4 xs:p-8">
-		<section class="bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl">
+		<section class="bg-background-surface text-text-surface border border-border-surface rounded-3xl">
 			<h1 class="text-3xl font-bold mb-4">Suppression de mon compte</h1>
 			<form @submit.prevent="submit" class="flex flex-col gap-4">
 				<h2 class="text-lg font-medium">Êtes-vous sûr de vouloir supprimer votre compte ?</h2>

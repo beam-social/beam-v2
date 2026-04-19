@@ -83,7 +83,7 @@
 	]
 </script>
 <template>
-	<div :key="comment.id" :id="'comment-' + comment.id" class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">
+	<div :key="comment.id" :id="'comment-' + comment.id" class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 		<div class="flex gap-2">
 			<PictureRing
 				:src=comment.author!.avatar_url!

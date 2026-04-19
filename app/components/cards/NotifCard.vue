@@ -57,7 +57,7 @@
 <template>
 	<div
 		v-if="notif.type == 'like'"
-		class="block bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4 space-y-2"
+		class="block bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4 space-y-2"
 	>
 		<div class="flex items-center gap-2">
 			<p class="text-subtext text-sm">❤️</p>
@@ -69,7 +69,7 @@
 
 	<div
 		v-else-if="notif.type == 'repost'"
-		class="block bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4 space-y-2"
+		class="block bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4 space-y-2"
 	>
 		<div class="flex items-center gap-2">
 			<p class="text-subtext text-sm">🔁</p>
@@ -81,7 +81,7 @@
 
 	<div
 		v-else-if="notif.type == 'follow'"
-		class="block bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4 space-y-2"
+		class="block bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4 space-y-2"
 	>
 		<div class="flex items-center gap-2">
 			<p class="text-subtext text-sm">👥</p>
@@ -92,7 +92,7 @@
 
 	<div
 		v-else-if="notif.type == 'accept_follow'"
-		class="block bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4 space-y-2"
+		class="block bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4 space-y-2"
 	>
 		<div class="flex items-center gap-2">
 			<p class="text-subtext text-sm">👥</p>
@@ -103,7 +103,7 @@
 
 	<div
 		v-else-if="notif.type == 'add_comment'"
-		class="block bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4 space-y-2"
+		class="block bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4 space-y-2"
 	>
 		<div class="flex items-center gap-2">
 			<p class="text-subtext text-sm">💬</p>

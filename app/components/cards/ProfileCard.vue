@@ -26,9 +26,9 @@ import PictureRing from '../PictureRing.vue';
 	if (props.minified) {
 		_class = 'flex items-center gap-2 py-1'
 	} else if (props.deployed) {
-		_class = 'flex flex-col items-stretch gap-4 bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4'
+		_class = 'flex flex-col items-stretch gap-4 bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4'
 	} else {
-		_class = 'flex items-center gap-2 bg-background-surface text-text-surface border-2 border-border-surface rounded-3xl p-4'
+		_class = 'flex items-center gap-2 bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4'
 	}
 </script>
 <template>

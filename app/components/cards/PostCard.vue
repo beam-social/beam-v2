@@ -146,7 +146,7 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 	]
 </script>
 <template>
-	<div :key="post.id" :id="'post-' + post.id" class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">
+	<div :key="post.id" :id="'post-' + post.id" class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 		<div class="flex items-center gap-x-2">
 			<PictureRing
 				:src=post.author!.avatar_url!
@@ -160,12 +160,12 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 				<RouterLink :to="'/@' + post.author?.name" class="block text-subtext font-medium text-sm">@{{ post.author?.name || '...' }}</RouterLink>
 			</div>
 			<div class="grow"></div>
-			<div v-if="post.flags.includes('AI')" class="select-none flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
+			<div v-if="post.flags.includes('AI')" class="select-none flex items-center bg-primary/15 border border-primary/10 rounded-full px-2 py-1 gap-1">
 				<CpuChipIcon class="text-primary w-4 h-4" />
 				<span class="text-primary text-sm max-sm:hidden">Généré par IA</span>
 				<span class="text-primary text-sm sm:hidden">IA</span>
 			</div>
-			<div v-if="post.update_date" class="select-none flex items-center bg-primary/15 border-2 border-primary/10 rounded-full px-2 py-1 gap-1">
+			<div v-if="post.update_date" class="select-none flex items-center bg-primary/15 border border-primary/10 rounded-full px-2 py-1 gap-1">
 				<PencilIcon class="text-primary w-4 h-4" />
 				<span class="text-primary text-sm max-sm:hidden">Modifié •</span>
 				<span class="text-primary text-sm">{{ deltatime(post.update_date!) }}</span>

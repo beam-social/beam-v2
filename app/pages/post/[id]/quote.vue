@@ -140,7 +140,7 @@
 <template>
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<h1 class="text-4xl text-center font-bold">Écrire un post</h1>
-		<div class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">
+		<div class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 			<div class="flex items-center gap-x-2">
 				<PictureRing
 					:src=me?.avatar!

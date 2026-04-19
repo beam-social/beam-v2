@@ -22,7 +22,7 @@
 
 	const router = useRouter()
 
-	const step = ref<number>(-1);
+	const step = ref<number>(0);
 
 	const payload = ref<Record<string, string | boolean>>({
 		email: '',
@@ -116,13 +116,13 @@
 	}
 </script>
 <template>
-	<main v-if="step === -1" class="p-4 xs:p-8">
+	<!--main v-if="step === -1" class="p-4 xs:p-8">
 		<nav class="flex max-w-md px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>
 			<a href="/auth/login" class="text-primary font-semibold">Se connecter</a>
 		</nav>
-		<section class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-8">
+		<section class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-8">
 			<h1 class="text-4xl font-bold mb-4">La création de compte est restreinte.</h1>
 			<p class="max-w-md mx-auto">
 				La plateforme a restreint la création de compte et n'est désormais accessible que sur invitation. Contactez-nous à l'adresse <a href="mailto:beam.sc@proton.me" class="text-primary font-medium">beam.sc@proton.me</a> pour en savoir plus.
@@ -143,14 +143,14 @@
 				/>
 			</div>
 		</section>
-	</main>
+	</main-->
 	<main v-if="step === 0" class="p-4 xs:p-8">
 		<nav class="flex max-w-md px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>
 			<a href="/auth/login" class="text-primary font-semibold">Se connecter</a>
 		</nav>
-		<form class="bg-background-surface text-text-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl text-center font-bold">Créer un compte</h1>
 			<div class="space-y-1">
 				<label for="email" class="block text-sm font-medium">Adresse mail:</label>
@@ -217,7 +217,7 @@
 		</form>
 	</main>
 	<main v-if="step === 1" class="p-4 xs:p-8">
-		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Personnaliser votre profil</h1>
 			<div class="space-y-1">
 				<label for="display_name" class="block text-sm font-medium">Nom d'affichage:</label>
@@ -257,7 +257,7 @@
 		</form>
 	</main>
 	<main v-if="step === 2" class="p-4 xs:p-8">
-		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Gardez le contrôle</h1>
 			<div class="space-y-1">
 				<label for="target" class="block text-sm font-medium">Garder mon profil privé</label>
@@ -284,15 +284,15 @@
 					:handler="() => step -= 1"
 				/>
 				<Button
-					label="Entrer mon code"
+					label="Valider"
 					type="action"
-					:handler="() => step = 3"
+					:handler="async () => await signup()"
 				/>
 			</div>
 		</form>
 	</main>
-	<main v-if="step === 3" class="p-4 xs:p-8">
-		<form class="bg-background-surface border-2 border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+	<!--main v-if="step === 3" class="p-4 xs:p-8">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Code de vérification</h1>
 			<div class="space-y-1">
 				<label for="code" class="block text-sm font-medium">Le code à 14 caractères qui vous a été donné</label>
@@ -323,5 +323,5 @@
 				/>
 			</div>
 		</form>
-	</main>
+	</main-->
 </template>

@@ -36,7 +36,7 @@
 	<nav
 		class="col-span-4 w-full box-border"
 	>
-		<div class="flex gap-4 z-1000 bg-background-surface text-text-surface border-b-2 border-border-surface w-full h-20 px-8">
+		<div class="flex gap-4 z-1000 bg-background-surface text-text-surface border-b border-border-surface w-full h-20 px-8">
 			<RouterLink
 				v-if=me
 				to="/discover"

@@ -9,7 +9,7 @@
 </script>
 <template>
 	<div
-		class="cursor-pointer text-center border-2 rounded-2xl p-4 space-y-1 duration-300 hover:bg-primary/10 transition-colors"
+		class="cursor-pointer text-center border rounded-2xl p-4 space-y-1 duration-300 hover:bg-primary/10 transition-colors"
 		:class="theme == current ? 'bg-primary/25 border-primary' : 'border-transparent'"
 		@click="current = theme"
 	>

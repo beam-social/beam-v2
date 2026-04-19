@@ -17,8 +17,15 @@
 	}>()
 
 	const router = useRouter();
+
 	const post = computed(() => props.data);
-	const content = computed(() => post.value && post.value.content.length > 200 ? post.value.content.slice(0, 200) + "..." : post.value?.content || "Ce post est privé.");
+	const content = computed(() => post.value
+		? post.value.content.length > 200
+			? post.value.content.slice(0, 200) + "..."
+			: post.value.content
+		: "Ce post est privé."
+	);
+
 	const age = computed(() => deltatime(post.value?.creation_date || new Date(0)));
 
 	const patterns: MarkdownPattern[] = [
@@ -37,7 +44,7 @@
 		v-if="post"
 		:key="post.id"
 		:id="'repost-' + post.id"
-		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-2xl w-full p-4 space-y-3"
+		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 		@click="() => router.push('/post/' + post!.id)"
 	>
 		<div class="flex items-center gap-x-2">
@@ -68,7 +75,7 @@
 	</div>
 	<div
 		v-else
-		class="select-none block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-2xl w-full p-4 space-y-3"
+		class="select-none block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 	>
 		Ce post est privé.
 	</div>

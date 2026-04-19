@@ -53,7 +53,7 @@
 		v-if="comment"
 		:key="comment.id"
 		:id="'comment-' + comment.id"
-		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-2xl w-full p-4 space-y-3"
+		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 		@click="() => router.push('/post/' + comment!.post?.id + '#comment-' + comment!.id)"
 	>
 		<div class="flex items-center gap-x-2">
@@ -75,7 +75,7 @@
 	</div>
 	<div
 		v-else
-		class="select-none block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-2xl w-full p-4 space-y-3"
+		class="select-none block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 	>
 		Ce commentaire est privé.
 	</div>

@@ -49,7 +49,7 @@
 <template>
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<h1 class="text-4xl text-center font-bold">Notifications</h1>
-		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border-2 border-border-surface rounded-full w-fit p-2 mx-auto">
+		<nav class="sticky z-500 top-4 flex gap-1 bg-background-surface backdrop-blur-xl text-text-surface border border-border-surface rounded-full w-fit p-2 mx-auto">
 			<button
 				class="cursor-pointer text-sm font-medium rounded-full px-4 py-2 duration-300"
 				:class="section == 'requests' ? 'text-primary bg-primary/10' : 'text-text-surface hover:bg-primary/5'"
