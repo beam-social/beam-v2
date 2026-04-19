@@ -24,7 +24,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const profileUserMeta = useState<ProfileMeta | null>("profileUserMeta", () => null);
 
 	try {
-		/*const user = await $client.getUser(username);
+		const user = await $client.getUser(username);
 		if (user) {
 			const meta = {
 				name: user.name,
@@ -34,26 +34,26 @@ export default defineNuxtRouteMiddleware(async (to) => {
 				badge: user.badge ? { colors: user.badge.colors } : undefined,
 			};
 
-			profileUserMeta.value = meta;*/
+			profileUserMeta.value = meta;
 
 			useHead({
-				// title: `@${meta.name} • Beam`,
-				title: 'Profil • Beam',
+				title: `@${meta.name} • Beam`,
+				// title: 'Profil • Beam',
 				meta: [
 					{
 						name: 'description',
-						content: "Connectez-vous à Beam pour voir ce profil."
-						// content: meta.description || `Voir le profil Beam de @${meta.name}.`
+						// content: "Connectez-vous à Beam pour voir ce profil."
+						content: meta.description || `Voir le profil Beam de @${meta.name}.`
 					},
 					{
 						property: 'og:title',
-						content: "Profil • Beam"
-						// content: meta.display_name ? `${meta.display_name} • Beam` : `@${meta.name} • Beam`
+						// content: "Profil • Beam"
+						content: meta.display_name ? `${meta.display_name} • Beam` : `@${meta.name} • Beam`
 					},
 					{
 						property: 'og:description',
-						content: "Connectez-vous à Beam pour voir ce profil."
-						// content: meta.description || `Voir le profil Beam de @${meta.name}.`
+						// content: "Connectez-vous à Beam pour voir ce profil."
+						content: meta.description || `Voir le profil Beam de @${meta.name}.`
 					},
 					{
 						property: 'og:type',
@@ -61,7 +61,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:image',
-						// content: meta.avatar_url || ''
+						content: meta.avatar_url || ''
 					},
 					{
 						property: 'og:url',
@@ -69,14 +69,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:color',
-						content: '#e021ff'
-						// content: meta.badge?.colors?.primary || '#e021ff'
+						// content: '#e021ff'
+						content: meta.badge?.colors?.primary || '#e021ff'
 					}
 				]
 			});
-		/*} else {
+		} else {
 			throw new Error("User not found");
-		}*/
+		}
 	} catch (error) {
 		throw createError({
 			statusCode: 404,

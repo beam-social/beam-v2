@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const postMeta = useState<PostMeta | null>("postMeta", () => null);
 
 	try {
-		/*const post = await $client.getPost(id);
+		const post = await $client.getPost(id);
 		if (post) {
 			const meta = {
 				date: post.creation_date ? new Date(post.creation_date).toISOString() : undefined,
@@ -30,26 +30,26 @@ export default defineNuxtRouteMiddleware(async (to) => {
 				content: post.content ?? null,
 			};
 
-			postMeta.value = meta;*/
+			postMeta.value = meta;
 
 			useHead({
-				title: 'Publication • Beam',
-				// title: meta.author_name ? `${meta.author_name} • Beam` : `@${meta.author_name} • Beam`,
+				// title: 'Publication • Beam',
+				title: meta.author_name ? `${meta.author_name} • Beam` : `@${meta.author_name} • Beam`,
 				meta: [
 					{
 						name: 'description',
-						content: "Connectez-vous à Beam pour voir cette publication."
-						// content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
+						// content: "Connectez-vous à Beam pour voir cette publication."
+						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
 						property: 'og:title',
-						content: "Publication • Beam"
-						// content: meta.author_name ? `Post de ${meta.author_name} • Beam` : `@${meta.author_name} • Beam`
+						// content: "Publication • Beam"
+						content: meta.author_name ? `Post de ${meta.author_name} • Beam` : `@${meta.author_name} • Beam`
 					},
 					{
 						property: 'og:description',
-						content: "Connectez-vous à Beam pour voir cette publication."
-						// content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
+						// content: "Connectez-vous à Beam pour voir cette publication."
+						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
 						property: 'og:type',
@@ -57,7 +57,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:image',
-						// content: meta.author_avatar_url || ''
+						content: meta.author_avatar_url || ''
 					},
 					{
 						property: 'og:url',
@@ -65,14 +65,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
 					},
 					{
 						property: 'og:color',
-						content: '#e021ff'
-						// content: meta.author_badge_color || '#e021ff'
+						// content: '#e021ff'
+						content: meta.author_badge_color || '#e021ff'
 					}
 				]
 			});
-		/*} else {
+		} else {
 			throw new Error("Post not found");
-		}*/
+		}
 	} catch (error) {
 		throw createError({
 			statusCode: 404,
