@@ -32,12 +32,12 @@
 </script>
 <template>
 	<main class="p-4 xs:p-8">
-		<nav class="flex max-w-md px-10 mx-auto mb-1">
+		<nav class="flex max-w-lg px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>
 			<a href="/auth/join" class="text-primary font-semibold">S'inscrire</a>
 		</nav>
-		<form @submit.prevent="login" class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form @submit.prevent="login" class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Se connecter</h1>
 			<div class="space-y-1">
 				<label for="login" class="block text-sm font-medium">Nom d'utilisateur ou adresse mail:</label>

@@ -5,7 +5,7 @@
 	import { isYoungerThan18 } from '@/utils/profiles';
 	import { useSession } from '@/stores/session';
 
-	import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/solid';
+	import { AtSymbolIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/24/solid';
 
 	import Button from '~/components/Button.vue';
 
@@ -117,17 +117,17 @@
 </script>
 <template>
 	<!--main v-if="step === -1" class="p-4 xs:p-8">
-		<nav class="flex max-w-md px-10 mx-auto mb-1">
+		<nav class="flex max-w-lg px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>
 			<a href="/auth/login" class="text-primary font-semibold">Se connecter</a>
 		</nav>
-		<section class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-8">
+		<section class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-8">
 			<h1 class="text-4xl font-bold mb-4">La création de compte est restreinte.</h1>
-			<p class="max-w-md mx-auto">
+			<p class="max-w-lg mx-auto">
 				La plateforme a restreint la création de compte et n'est désormais accessible que sur invitation. Contactez-nous à l'adresse <a href="mailto:beam.sc@proton.me" class="text-primary font-medium">beam.sc@proton.me</a> pour en savoir plus.
 			</p>
-			<p class="max-w-md mx-auto">
+			<p class="max-w-lg mx-auto">
 				Si vous avez déjà un code d'invitation, cliquez sur le bouton ci-dessous pour commencer le processus d'inscription.
 			</p>
 			<div class="flex justify-center gap-4">
@@ -145,13 +145,13 @@
 		</section>
 	</main-->
 	<main v-if="step === 0" class="p-4 xs:p-8">
-		<nav class="flex max-w-md px-10 mx-auto mb-1">
+		<nav class="flex max-w-lg px-10 mx-auto mb-1">
 			<a href="/" class="text-primary font-semibold">Retour à l'accueil</a>
 			<div class="grow"></div>
 			<a href="/auth/login" class="text-primary font-semibold">Se connecter</a>
 		</nav>
-		<form class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
-			<h1 class="text-2xl text-center font-bold">Créer un compte</h1>
+		<form class="bg-background-surface text-text-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-4">
+			<h1 class="text-2xl text-center font-bold">Informations de connexion</h1>
 			<div class="space-y-1">
 				<label for="email" class="block text-sm font-medium">Adresse mail:</label>
 				<input
@@ -166,19 +166,23 @@
 				<p v-if="!valid.email" class="text-rose-500 text-xs">L'adresse mail doit être valide.</p>
 			</div>
 			<div class="space-y-1">
-				<label for="username" class="block text-sm font-medium">Nom d'utilisateur: <span class="text-xs text-subtext">{{ 16 - (payload.username as string).length }} caractères restants</span></label>
-				<input
-					type="text"
-					id="username"
-					name="username"
-					class="block bg-background-surface text-sm border border-border-surface rounded-lg w-full px-4 py-2"
-					@input="() => check('username', /^[a-z0-9._]{3,16}$/)"
-					v-model=payload.username
-					:minlength=3
-					:maxlength=16
-					required
-				/>
-				<p v-if="!valid.username" class="text-rose-500 text-xs">Le nom d'utilisateur doit contenir entre 3 et 16 caractères et ne peut contenir que des lettres minuscules, des chiffres et des underscores.</p>
+				<label for="username" class="block text-sm font-medium">Nom de profil: <span class="text-xs text-subtext">{{ 16 - (payload.username as string).length }} caractères restants</span></label>
+				<div class="flex items-center gap-1">
+					<AtSymbolIcon class="w-6 h-6 text-subtext" />
+					<input
+						type="text"
+						id="username"
+						name="username"
+						class="block bg-background-surface text-sm border border-border-surface rounded-lg w-full px-4 py-2"
+						placeholder="toto_27"
+						@input="() => check('username', /^[a-z0-9._]{3,16}$/)"
+						v-model=payload.username
+						:minlength=3
+						:maxlength=16
+						required
+					/>
+				</div>
+				<p v-if="!valid.username" class="text-rose-500 text-xs">Le nom de profil doit contenir entre 3 et 16 caractères et ne peut contenir que des lettres minuscules, des chiffres et des underscores.</p>
 				<p class="text-blue-400 text-xs">Celui-ci est modifiable à tout moment. Vous l'utiliserez pour vous connecter à votre compte.</p>
 			</div>
 			<div class="space-y-1">
@@ -217,7 +221,7 @@
 		</form>
 	</main>
 	<main v-if="step === 1" class="p-4 xs:p-8">
-		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Personnaliser votre profil</h1>
 			<div class="space-y-1">
 				<label for="display_name" class="block text-sm font-medium">Nom d'affichage:</label>
@@ -257,7 +261,7 @@
 		</form>
 	</main>
 	<main v-if="step === 2" class="p-4 xs:p-8">
-		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Gardez le contrôle</h1>
 			<div class="space-y-1">
 				<label for="target" class="block text-sm font-medium">Garder mon profil privé</label>
@@ -292,7 +296,7 @@
 		</form>
 	</main>
 	<!--main v-if="step === 3" class="p-4 xs:p-8">
-		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-md p-8 mx-auto space-y-4">
+		<form class="bg-background-surface border border-border-surface rounded-4xl max-w-lg p-8 mx-auto space-y-4">
 			<h1 class="text-2xl font-bold text-center">Code de vérification</h1>
 			<div class="space-y-1">
 				<label for="code" class="block text-sm font-medium">Le code à 14 caractères qui vous a été donné</label>
