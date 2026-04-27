@@ -64,7 +64,6 @@ export const useFeed = () => {
 		let _posts = [];
 
 		_posts = (await axios.get(`${$apiUrl}/top/posts?sort_by=stats`, {
-			withCredentials: true,
 			params: {
 				tag,
 				after: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 28).toISOString(), // Last month
@@ -81,9 +80,7 @@ export const useFeed = () => {
 		}
 
 		let _users = (
-			await axios.get(`${$apiUrl}/top/users`, {
-				withCredentials: true,
-			})
+			await axios.get(`${$apiUrl}/top/users`)
 		).data;
 
 		topUsers.value = [];

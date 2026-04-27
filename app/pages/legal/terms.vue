@@ -8,7 +8,7 @@
 			},
 			{
 				name: 'date',
-				content: '2026-03-16'
+				content: '2026-04-27'
 			}
 		]
 	});
@@ -17,14 +17,13 @@
 	<main class="p-4 space-y-8 xs:p-8 lg:py-16 xl:col-start-2 xl:py-24">
 		<section id="header">
 			<h1 class="text-5xl font-bold">Conditions Générales d'Utilisation</h1>
-			<p class="mt-4">Version 2 • 16 mars 2026</p>
+			<p class="mt-4">Version 3 • 27 avril 2026</p>
 			<p class="italic">Une partie de ces conditions a été rédigée à l'aide d'une intelligence artificielle</p>
 		</section>
 		<section id="objet">
 			<h2 class="text-3xl font-bold mb-2">1. Objet</h2>
 			<p>Les présentes Conditions Générales d'Utilisation (dites « CGU ») définissent les conditions d'accès et d'utilisation de la plateforme de réseau social Beam (ci-après « la plateforme »).</p>
 			<p>La plateforme permet aux utilisateurs de publier, consulter et interagir avec des contenus, publics ou privés, selon les paramètres qu'ils définissent.</p>
-			<p>La plateforme est actuellement proposée sous la forme d'un service expérimental en <strong>beta privée</strong>, dont l'accès est réservé aux utilisateurs autorisés par la plateforme.</p>
 		</section>
 		<section id="acceptation_des_cgu">
 			<h2 class="text-3xl font-bold mb-2">2. Acceptation des CGU</h2>
@@ -33,12 +32,6 @@
 		</section>
 		<section id="acces_au_service_et_inscription" class="space-y-4">
 			<h2 class="text-3xl font-bold mb-2">3. Accès au service et inscription</h2>
-			<h3 class="text-xl font-bold">3.0 Accès restreint et beta privée</h3>
-			<p>La plateforme Beam est actuellement exploitée dans le cadre d’une <strong>beta privée</strong>. L’accès au service est strictement réservé aux utilisateurs disposant d’une autorisation explicite ou d’un code d’accès fourni par la plateforme.</p>
-			<p>La plateforme se réserve le droit de refuser toute demande d’accès, sans obligation de justification.</p>
-
-			<hr class="border border-border-surface rounded-full" />
-
 			<h3 class="text-xl font-bold">3.1 Conditions d'âge</h3>
 			<p>L'accès à la plateforme est réservé aux personnes âgées d'au moins <strong>15 ans</strong>.</p>
 			<p>L'utilisateur déclare sur l'honneur remplir cette condition.
@@ -51,7 +44,6 @@
 			<p>L'utilisateur peut utiliser un <strong>pseudonyme</strong> et n'est pas tenu de rendre publique son identité civile (nom, prénom, adresse postale ou toute autre donnée personnelle).</p>
 			<p>L'identité réelle de l'utilisateur n'est accessible qu'à la plateforme, dans le respect de la législation applicable, et ne peut être communiquée à des tiers que dans les cas prévus par la loi.</p>
 			<p>Les comptes anonymes au sens technique (absence de moyen d'identification par la plateforme) ne sont pas autorisés.</p>
-			<p>La création de compte est actuellement désactivée pour le public et limitée aux accès sur invitation.</p>
 
 			<hr class="border border-border-surface rounded-full" />
 
@@ -73,6 +65,26 @@
 		</section>
 		<section id="fonctionnement_de_la_plateforme_et_mise_en_avant_des_contenus" class="space-y-4">
 			<h2 class="text-3xl font-bold mb-2">4. Fonctionnement de la plateforme et mise en avant des contenus</h2>
+			<h3 class="text-xl font-bold">4.0 Types de flux</h3>
+			<p>La plateforme propose différents types de flux de contenus</p>
+
+			<h4 class="text-lg font-bold">4.0.1 Flux publics</h4>
+			<p>Les flux publics regroupent les contenus accessibles à tous les utilisateurs, y compris mes non-authentification. Ils évoluent selon les standards de la communauté et les interactions des utilisateurs ou selon les paramètres spécifiés lors de la requête.</p>
+			<ul class="list-disc list-inside ml-4">
+				<li>Le flux <RouterLink to="/top/posts">« Hit Beams »</RouterLink> répertorie les contenus les plus populaires de la plateforme sur les 28 derniers jours.</li>
+				<li>Le flux <RouterLink to="/top/users">« Melleurs Beameurs »</RouterLink> répertorie les utilisateurs les plus suivis de la plateforme.</li>
+			</ul>
+
+			<h4 class="text-lg font-bold">4.0.2 Flux privés</h4>
+			<p>Les flux privés sont personnalisés en fonction des préférences et des interactions de chaque utilisateur. Ils peuvent inclure des contenus d'utilisateurs suivis, des recommandations basées sur les intérêts de l'utilisateur, ou d'autres critères définis par la plateforme.</p>
+			<ul class="list-disc list-inside ml-4">
+				<li>Le flux <RouterLink to="/discover">« Discover »</RouterLink> propose une sélection personnalisée de contenus, basée sur les interactions et les intérêts de l'utilisateur.</li>
+			</ul>
+
+			<h4 class="text-lg font-bold">4.0.3 Autres flux</h4>
+			<p>Des flux spécifiques peuvent être proposés, tels que des flux thématiques, des flux de tendances, ou des flux de communautés, selon les évolutions du service.</p>
+			<hr class="border border-border-surface rounded-full" />
+
 			<h3 class="text-xl font-bold">4.1 Fil d'actualité et systèmes de recommandation</h3>
 			<p>La plateforme utilise des systèmes de classement et de recommandation afin d'organiser l'affichage des contenus.</p>
 			<p>La visibilité d'un contenu dépend notamment :</p>
@@ -84,8 +96,13 @@
 			</ul>
 			<p>Ces systèmes peuvent avoir pour effet de limiter ou d'amplifier la visibilité de certains contenus, sans que cela constitue une prise de position éditoriale de la plateforme.</p>
 			<p>Aucune visibilité minimale ou garantie n'est assurée.</p>
-			<p>Les contenus publiés sur la plateforme ne sont accessibles qu’aux utilisateurs disposant d’un compte actif. Aucune consultation sans authentification n’est possible.</p>
-
+			<p>L'apparition d'une publication dans un flux public est soumise à des critères spécifiques, listés ci-dessous :</p>
+			<ul class="list-disc list-inside ml-4">
+				<li>L'auteur du post doit avoir au minimum 16 ans,</li>
+				<li>Le compte doit être en situation régulière (ni banni, ni désactivé, ni sous l'effet d'un <i>shadow ban</i>),</li>
+				<li>Le post ne doit pas comporter de contenu explicite ou généré par IA,</li>
+				<li>Le post doit être visible par tout le monde explicitement.</li>
+			</ul>
 			<hr class="border border-border-surface rounded-full" />
 
 			<h3 class="text-xl font-bold">4.2 Absence de modification des contenus</h3>
