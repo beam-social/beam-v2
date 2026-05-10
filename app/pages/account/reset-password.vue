@@ -20,9 +20,7 @@
 	const newPassword = ref<string>('');
 
 	onMounted(async () => {
-		await refreshSession(() => {
-			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
-		});
+		await refreshSession(() => {});
 	});
 
 	function submit() {
