@@ -25,7 +25,7 @@
 	--color-background-stop2: var(--background-stop2);
 	--color-background-stop3: var(--background-stop3);
 
-	/* there was a --text before. It doesn't exist anymore. If you see any text-text in my tailwind classes, notify me and let it as it is.  */
+	--color-text: var(--text);
 	--color-muted: var(--muted); /* old: --subtext */
 
 	--color-surface: var(--background-surface); /* old: --background-surface */

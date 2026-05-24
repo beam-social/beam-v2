@@ -63,6 +63,7 @@
 	--background-stop2: #000000;
 	--background-stop3: var(--primary);
 
+	--text: #ffffff;
 	--muted: #a0a6af;
 
 	--background-surface: #30324a;
@@ -136,6 +137,10 @@
 	--primary-darker: #cb8c13;
 	--primary-darkest: #95670e;
 
+	--text: #ffffff;
+	--muted: #ffffff80;
+
+	--background: transparent;
 	--background-stop1: #95670e;
 	--background-stop2: #a77310;
 	--background-stop3: #b38014;
@@ -154,6 +159,9 @@
 }
 
 .theme-fonda {
+	--text: #ffffff;
+	--muted: #ffffff80;
+
 	--background: transparent;
 	--background-stop1: #ff6b4a;
 	--background-stop2: #ff4a75;
@@ -173,6 +181,9 @@
 }
 
 .theme-emerald {
+	--text: #ffffff;
+	--muted: #ffffff80;
+
 	--primary-lightest: #a3f7d1;
 	--primary-lighter: #4de4aa;
 	--primary: #00c884;
@@ -198,6 +209,9 @@
 }
 
 .theme-royal {
+	--text: #ffffff;
+	--muted: #ffffff80;
+
 	--primary-lightest: #d1b3ff;
 	--primary-lighter: #9e66ff;
 	--primary: #6b19ff;
@@ -222,6 +236,9 @@
 }
 
 .theme-sunset {
+	--text: #ffffff;
+	--muted: #ffffff80;
+
 	--primary-lightest: #ffb3a3;
 	--primary-lighter: #ff6e4d;
 	--primary: #ff2900;
@@ -246,6 +263,9 @@
 }
 
 .theme-amethyst {
+	--text: #ffffff;
+	--muted: #ffffff80;
+
 	--primary-lightest: #e6a3ff;
 	--primary-lighter: #c24dff;
 	--primary: #9e00ff;
