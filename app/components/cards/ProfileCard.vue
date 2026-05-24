@@ -26,9 +26,9 @@ import PictureRing from '../PictureRing.vue';
 	if (props.minified) {
 		_class = 'flex items-center gap-2 py-1'
 	} else if (props.deployed) {
-		_class = 'flex flex-col items-stretch gap-4 bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4'
+		_class = 'flex flex-col items-stretch gap-4 bg-surface text-on-surface border border-surface-border rounded-3xl p-4'
 	} else {
-		_class = 'flex items-center gap-2 bg-background-surface text-text-surface border border-border-surface rounded-3xl p-4'
+		_class = 'flex items-center gap-2 bg-surface text-on-surface border border-surface-border rounded-3xl p-4'
 	}
 </script>
 <template>
@@ -52,13 +52,13 @@ import PictureRing from '../PictureRing.vue';
 				@click="() => { if (clickable) { router.push(`/@${profile.name}`) }}"
 			>
 				<span class="font-semibold">{{ profile.display_name || profile.name }} <ProfileBadge :badge=profile.badge class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /></span>
-				<span class="text-subtext text-sm font-medium">@{{ profile.name }} • {{ profile.followers }} abonnés</span>
+				<span class="text-muted text-sm font-medium">@{{ profile.name }} • {{ profile.followers }} abonnés</span>
 			</div>
 		</div>
 		<div v-if=deployed class="px-2">
-			<p class="text-text-surface text-sm line-clamp-1">{{ profile.description }}</p>
+			<p class="text-on-surface text-sm line-clamp-1">{{ profile.description }}</p>
 		</div>
-		<div v-if=deployed class="w-full border-t-2 border-border-surface"></div>
+		<div v-if=deployed class="w-full border-t-2 border-surface-border"></div>
 		<div v-if=!deployed class="grow"></div>
 		<div
 			v-if=actions

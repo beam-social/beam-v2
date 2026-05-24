@@ -1,62 +1,65 @@
-import { useSession } from '@/stores/session';
+import { useSession } from "~/composables/session";
 
 export const themes: Record<string, Record<string, string>> = {
 	light: {
-		name: 'Clair',
-		color: '#FFFFFF'
+		name: "Clair",
+		color: "#FFFFFF",
 	},
 	dark: {
-		name: 'Sombre',
-		color: '#30324A'
+		name: "Sombre",
+		color: "#30324A",
 	},
 	verydark: {
-		name: 'Vraiment très sombre',
-		color: '#00020A'
+		name: "Vraiment très sombre",
+		color: "#00020A",
 	},
 	emerald: {
-		name: 'Émeraude',
-		color: '#00C884'
+		name: "Émeraude",
+		color: "#00C884",
 	},
 	royal: {
-		name: 'Royal',
-		color: '#6B19FF'
+		name: "Royal",
+		color: "#6B19FF",
 	},
 	sunset: {
-		name: 'Sunset',
-		color: '#FF2900'
+		name: "Sunset",
+		color: "#FF2900",
 	},
 	amethyst: {
-		name: 'Améthyste',
-		color: '#9E00FF'
+		name: "Améthyste",
+		color: "#9E00FF",
 	},
 	sky: {
-		name: 'Blue Sky',
-		color: '#0076BB'
+		name: "Blue Sky",
+		color: "#0076BB",
 	},
 	pro: {
-		name: 'Pro',
-		color: '#131A4B'
+		name: "Pro",
+		color: "#131A4B",
 	},
 	gold: {
-		name: 'Couvrez-moi d\'or',
-		color: '#EBAA2E'
-	}
-}
+		name: "Couvrez-moi d'or",
+		color: "#EBAA2E",
+	},
+};
 
 export const useTheme = () => {
 	const { me } = useSession();
-	const theme = useState<string>('theme', () => 'light');
+	const theme = useState<string>("theme", () => "light");
 
 	const setTheme = (newTheme?: string) => {
-		if (typeof window === 'undefined') return; // Skip on server
+		if (typeof window === "undefined") return; // Skip on server
 
 		if (!newTheme) {
-			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				document.documentElement.classList.add('theme-dark');
-				theme.value = 'dark';
+			if (
+				window.matchMedia &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches
+			) {
+				document.documentElement.classList.add("theme-dark");
+				theme.value = "dark";
 			} else {
-				document.documentElement.classList.add('theme-light');
-				theme.value = 'light';
+				document.documentElement.classList.add("theme-light");
+				theme.value = "light";
 			}
 
 			return;
@@ -72,7 +75,10 @@ export const useTheme = () => {
 		setTheme(newTheme);
 	};
 
-	const themeWatchInitialized = useState<boolean>('themeWatchInitialized', () => false);
+	const themeWatchInitialized = useState<boolean>(
+		"themeWatchInitialized",
+		() => false,
+	);
 	if (!themeWatchInitialized.value) {
 		watch(
 			me,
@@ -82,11 +88,12 @@ export const useTheme = () => {
 					return;
 				}
 
-				const newTheme = newMe?.settings.appearance.global_theme || 'light';
+				const newTheme =
+					newMe?.settings.appearance.global_theme || "light";
 
 				setTheme(newTheme);
 			},
-			{ immediate: true }
+			{ immediate: true },
 		);
 
 		themeWatchInitialized.value = true;

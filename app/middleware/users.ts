@@ -1,14 +1,4 @@
-type ProfileMeta = {
-	name?: string;
-	display_name?: string;
-	description?: string | null;
-	avatar_url?: string | null;
-	badge?: {
-		colors?: {
-			primary?: string;
-		};
-	};
-};
+import { useProfilePageData } from "~/composables/profile";
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const username = to.params.username as string | undefined;
@@ -20,59 +10,54 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		});
 	}
 
-	const { $client } = useNuxtApp();
-	const profileUserMeta = useState<ProfileMeta | null>("profileUserMeta", () => null);
-
 	try {
-		const user = await $client.getUser(username);
+		const { profile } = await useProfilePageData(username);
+		const user = profile.value;
+
 		if (user) {
-			const meta = {
-				name: user.name,
-				display_name: user.display_name || undefined,
-				description: user.description ?? null,
-				avatar_url: user.avatar_url ?? null,
-				badge: user.badge ? { colors: user.badge.colors } : undefined,
-			};
-
-			profileUserMeta.value = meta;
-
 			useHead({
-				title: `@${meta.name} • Beam`,
+				title: `@${user.name} • Beam`,
 				// title: 'Profil • Beam',
 				meta: [
 					{
-						name: 'description',
+						name: "description",
 						// content: "Connectez-vous à Beam pour voir ce profil."
-						content: meta.description || `Voir le profil Beam de @${meta.name}.`
+						content:
+							user.description ||
+							`Voir le profil Beam de @${user.name}.`,
 					},
 					{
-						property: 'og:title',
+						property: "og:title",
 						// content: "Profil • Beam"
-						content: meta.display_name ? `${meta.display_name} • Beam` : `@${meta.name} • Beam`
+						content: user.display_name
+							? `${user.display_name} • Beam`
+							: `@${user.name} • Beam`,
 					},
 					{
-						property: 'og:description',
+						property: "og:description",
 						// content: "Connectez-vous à Beam pour voir ce profil."
-						content: meta.description || `Voir le profil Beam de @${meta.name}.`
+						content:
+							user.description ||
+							`Voir le profil Beam de @${user.name}.`,
 					},
 					{
-						property: 'og:type',
-						content: 'profile'
+						property: "og:type",
+						content: "profile",
 					},
 					{
-						property: 'og:image',
-						content: meta.avatar_url || ''
+						property: "og:image",
+						content: user.avatar_url || "",
 					},
 					{
-						property: 'og:url',
-						content: `https://beam.ejnalo.me/@${username}`
+						property: "og:url",
+						content: `https://beam.ejnalo.me/@${username}`,
 					},
 					{
-						property: 'og:color',
+						property: "og:color",
 						// content: '#e021ff'
-						content: meta.badge?.colors?.primary || '#e021ff'
-					}
-				]
+						content: user.badge?.colors?.primary || "#e021ff",
+					},
+				],
 			});
 		} else {
 			throw new Error("User not found");

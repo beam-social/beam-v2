@@ -1,7 +1,7 @@
-import { Inbox, type Session } from 'beamsocial';
+import { Inbox, type Session } from "beamsocial";
 
-const getMeState = () => useState<Session | null>('me', () => null);
-const getInboxState = () => useState<Inbox | null>('inbox', () => null);
+const getMeState = () => useState<Session | null>("me", () => null);
+const getInboxState = () => useState<Inbox | null>("inbox", () => null);
 
 export function setMe(session: Session | null) {
 	const me = getMeState();
@@ -21,6 +21,16 @@ export async function refreshSession(callback?: () => void) {
 			callback();
 		}
 	});
+}
+
+export async function ensureSession(redirectTo: string) {
+	await refreshSession();
+
+	const me = getMeState();
+
+	if (!me.value) {
+		return navigateTo(redirectTo);
+	}
 }
 
 export function clearMe() {

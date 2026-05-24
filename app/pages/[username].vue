@@ -13,101 +13,33 @@
 	import Button from '~/components/Button.vue';
 	import Menu from '~/components/Menu.vue';
 
-	import type { User } from 'beamsocial'
-	import type { Post } from 'beamsocial'
-
 	import { toLiteralNumber } from '@/utils/format';
-	import { useSession, useInbox } from '@/stores/session';
+	import { ensureSession, useSession, useInbox } from '~/composables/session';
+	import { useProfilePageData } from '~/composables/profile';
 
-	const { $client } = useNuxtApp();
 	const { me, refreshSession } = useSession();
 	const { inbox } = useInbox();
 
 	const route = useRoute();
-	const router = useRouter();
 
 	const username = route.params.username as string;
 
-	const profile = ref<User | null>(null);
-	const posts = ref<Post[] | null>(null);
-	const following = ref<User[] | null>(null);
-	const followers = ref<User[] | null>(null);
+	await ensureSession(
+		'/auth/login?return=' + encodeURIComponent(route.fullPath),
+	);
 
-	const loading = ref<boolean>(true);
-	const errorMessage = ref<string | null>(null);
+	const {
+		profile,
+		posts,
+		following,
+		followers,
+		pending,
+		errorMessage,
+	} = await useProfilePageData(username);
+
 	const section = ref<string>('posts');
 
-	const blocked = ref<boolean>(false);
-
-	async function loadProfile(profileUsername: string) {
-		loading.value = true;
-		errorMessage.value = null;
-		profile.value = null;
-		posts.value = null;
-		following.value = null;
-		followers.value = null;
-		blocked.value = false;
-
-		document.title = "@" + profileUsername + " • Beam"
-
-		await refreshSession(() => {
-			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
-		});
-
-		try {
-			const _profile: User | null = await $client.getUser(profileUsername);
-			profile.value = _profile;
-
-			document.title = (profile.value?.display_name || `@${profileUsername}`) + " • Beam"
-
-			let _posts: Post[] | null = await $client.fetchUserPosts(profileUsername);
-			posts.value = _posts;
-		} catch(err: any) {
-			const msg = err.response.data.message || '';
-			loading.value = false;
-
-			if (msg.includes('Private')) {
-				errorMessage.value = 'Ce profil est privé.';
-			} else if (msg.includes('NotFound')) {
-				errorMessage.value = 'Utilisateur introuvable.';
-			} else {
-				errorMessage.value = 'Une erreur est survenue.';
-				console.error('Erreur inconnue :', err);
-			}
-		}
-
-		try {
-			profile.value?.getFollowing().then(async users => {
-				following.value = users
-			});
-		} catch(err: any) {
-			console.error('Erreur lors du chargement des abonnements :', err);
-		}
-
-		try {
-			profile.value?.getFollowers().then(async users => {
-				followers.value = users
-			});
-		} catch(err: any) {
-			console.error('Erreur lors du chargement des abonnés :', err);
-		} finally {
-			loading.value = false;
-		}
-	}
-
-	onMounted(async () => {
-		await loadProfile(username);
-	});
-
-	watch(() => route.params.username, async (newUsername) => {
-		if (typeof newUsername === 'string') {
-			await loadProfile(newUsername);
-		}
-	});
-
-	watch(me, () => {
-		blocked.value = me.value?.relations.blocklist.includes(profile.value?.id || '') || false
-	})
+	const loading = computed(() => pending.value && !profile.value && !errorMessage.value);
 </script>
 <template>
 	<main v-if="loading"
@@ -118,7 +50,7 @@
 
 	<main v-else-if="profile" class="xs:p-8">
 		<section class="flex flex-col xs:gap-6">
-			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 xs:border xs:border-border-surface xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
+			<div id="profileBox" class="select-none shrink-0 bg-surface text-on-surface text-center p-8 xs:border xs:border-surface-border xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
 				<div class="space-y-4">
 					<PictureRing
 						:src=profile.avatar_url!
@@ -135,7 +67,7 @@
 							<span v-if="profile.pronouns && profile.account_type"> • </span>
 							<span v-if="profile.account_type">{{ profile.account_type }}</span>
 						</p>
-						<p><span class="text-subtext font-medium">@{{ profile.name }}</span></p>
+						<p><span class="text-muted font-medium">@{{ profile.name }}</span></p>
 					</div>
 				</div>
 				<div class="grid grid-cols-3 max-w-96 mx-auto">
@@ -197,12 +129,12 @@
 					</div>
 				</div>
 				<div class="space-y-1">
-					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+					<p class="opacity-50 text-muted text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
 					<p>{{ profile.description }}</p>
 				</div>
 			</div>
 			<div class="grow space-y-4 h-full max-md:p-4">
-				<div class="flex gap-1 bg-background-surface backdrop-blur-sm text-text-surface border border-border-surface rounded-full w-fit p-2 mx-auto">
+				<div class="flex gap-1 bg-surface backdrop-blur-sm text-on-surface border border-surface-border rounded-full w-fit p-2 mx-auto">
 					<button
 						class="cursor-pointer text-primary text-sm font-medium rounded-full px-4 py-2 duration-300"
 						:class="section == 'posts' ? 'bg-primary/10' : 'hover:bg-primary/5'"
@@ -233,7 +165,7 @@
 					</div>
 					<div v-else class="flex flex-col items-center justify-center h-full pt-6 gap-4">
 						<p class="text-2xl font-bold">Cette section semble vide...</p>
-						<RouterLink v-if="profile.id == me?.profile.id" :to="'/write?return=' + route.path" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-7 py-3 duration-150 hover:bg-action-hovered">Partagez quelque chose</RouterLink>
+						<RouterLink v-if="profile.id == me?.profile.id" :to="'/write?return=' + route.path" class="cursor-pointer block bg-button text-white text-sm font-medium rounded-full px-7 py-3 duration-150 hover:bg-button-hovered">Partagez quelque chose</RouterLink>
 						<p v-else>Retourner à l'<RouterLink to=/ class="text-primary">accueil</RouterLink>.</p>
 					</div>
 				</div>
@@ -312,7 +244,7 @@
 						<button
 							v-if="me?.profile.id != profile.id"
 							@click=profile.follow
-							class="cursor-pointer bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered"
+							class="cursor-pointer bg-button text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-button-hovered"
 						>
 							Devenez le 1er fan !
 						</button>

@@ -1,144 +1,77 @@
 <script setup lang="ts">
-	definePageMeta({
-		title: 'Publication • Beam',
-		middleware: 'posts'
-	});
+definePageMeta({
+	title: "Publication • Beam",
+	middleware: "posts",
+});
 
-	import PostCard from "@/components/cards/PostCard.vue";
-	import CommentCard from "@/components/cards/CommentCard.vue";
-	import PictureRing from "@/components/PictureRing.vue";
-	import ProfileBadge from "@/components/ProfileBadge.vue";
+import PostCard from "@/components/cards/PostCard.vue";
+import CommentCard from "@/components/cards/CommentCard.vue";
+import PictureRing from "@/components/PictureRing.vue";
+import ProfileBadge from "@/components/ProfileBadge.vue";
 
-	import { useSession } from "@/stores/session";
+import { ensureSession, useSession } from "~/composables/session";
+import { usePostPageData } from "~/composables/post";
 
-	import { Comment } from "beamsocial";
-	import type { Post } from "beamsocial";
+const { $client: client } = useNuxtApp();
+const { me } = useSession();
 
-	import axios from "axios";
+const route = useRoute();
 
-	const { $client: client, $apiUrl: apiUrl } = useNuxtApp();
-	const { me, refreshSession } = useSession();
+const id = route.params.id as string;
 
-	const route = useRoute();
-	const router = useRouter();
+await ensureSession("/auth/login?return=" + encodeURIComponent(route.fullPath));
 
-	const id = route.params.id as string;
+const {
+	post,
+	comments,
+	errorMessage,
+	refresh: refreshPostData,
+	pending,
+} = await usePostPageData(id);
 
-	const post = ref<Post | null>(null);
-	const comments = ref<Comment[]>([]);
-	let baselike: number | null = null;
+const loading = computed(
+	() => pending.value && !post.value && !errorMessage.value,
+);
 
-	const loading = ref<boolean>(true);
-	const errorMessage = ref<string | null>(null);
+/* Préparation du commentaire */
+const content = ref<string>("");
+const target = ref<"me" | "friends" | "followers" | "everyone">("everyone");
 
-	/* Préparation du commentaire */
-	const content = ref<string>('');
-	const target = ref<"me" | "friends" | "followers" | "everyone">("everyone");
-
-	const submit = async () => {
-		if (!me.value) {
-			alert("Vous devez être connecté pour publier un commentaire.");
-			return;
-		}
-
-		if (!post.value) {
-			alert("Post non chargé.");
-			return;
-		}
-
-		if (content.value.length < 1 || content.value.length > 250) {
-			alert("Le contenu du commentaire doit contenir entre 1 et 250 caractères.");
-			return;
-		}
-
-		try {
-			await post.value.add_comment(
-				content.value,
-				target.value,
-			);
-
-			content.value = "";
-			await loadPost(post.value.id);
-		} catch (err: any) {
-			const msg = err.response?.data?.message || "";
-			if (msg === "PrivatePost") {
-				alert("Impossible de commenter un post privé.");
-			} else {
-				alert("Une erreur est survenue lors de la publication du commentaire.");
-				console.error("Erreur inconnue :", err);
-			}
-		}
-	};
-
-	async function loadPost(postId: string) {
-		loading.value = true;
-		errorMessage.value = null;
-
-		await refreshSession(
-			() => router.push("/auth/login?return=" + encodeURIComponent(window.location.pathname)),
-		);
-
-		try {
-			let _post: Post | null = await client.getPost(postId);
-			post.value = _post;
-			baselike =
-				post.value.likes -
-				(+!!me.value?.tastes.likes.includes(postId) || 0);
-
-			try {
-				const response = await axios.get(
-					`${apiUrl}/posts/${postId}/comments`,
-					{
-						withCredentials: true,
-					},
-				);
-				const data = response?.data;
-				const rawComments = Array.isArray(data?.comments)
-					? data.comments
-					: Array.isArray(data)
-						? data
-						: [];
-				comments.value = rawComments.map((item: any) => {
-					const comment = new Comment(item.id);
-					comment.__load(item, me.value || undefined, apiUrl);
-					return comment;
-				});
-			} catch {
-				comments.value = [];
-			}
-		} catch (err: any) {
-			const msg = err.response.data.message || "";
-			loading.value = false;
-
-			if (msg == "PrivatePost") {
-				errorMessage.value = "Ce post est privé.";
-			} else if (msg == "PostNotFound") {
-				errorMessage.value = "Post introuvable.";
-			} else {
-				errorMessage.value = "Une erreur est survenue.";
-				console.error("Erreur inconnue :", err);
-			}
-		} finally {
-			loading.value = false;
-		}
+const submit = async () => {
+	if (!me.value) {
+		alert("Vous devez être connecté pour publier un commentaire.");
+		return;
 	}
 
-	onMounted(async () => {
-		await refreshSession(() => {
-			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
-		});
+	if (!post.value) {
+		alert("Post non chargé.");
+		return;
+	}
 
-		await loadPost(id);
-	});
+	if (content.value.length < 1 || content.value.length > 250) {
+		alert(
+			"Le contenu du commentaire doit contenir entre 1 et 250 caractères.",
+		);
+		return;
+	}
 
-	watch(
-		() => route.params.id,
-		async (newId) => {
-			if (typeof newId === "string") {
-				await loadPost(newId);
-			}
-		},
-	);
+	try {
+		await post.value.add_comment(content.value, target.value);
+
+		content.value = "";
+		await refreshPostData();
+	} catch (err: any) {
+		const msg = err.response?.data?.message || "";
+		if (msg === "PrivatePost") {
+			alert("Impossible de commenter un post privé.");
+		} else {
+			alert(
+				"Une erreur est survenue lors de la publication du commentaire.",
+			);
+			console.error("Erreur inconnue :", err);
+		}
+	}
+};
 </script>
 <template>
 	<main
@@ -154,31 +87,57 @@
 			<h2 class="text-xl font-bold mb-4">
 				Commentaires ({{ post.comments }})
 			</h2>
-			<div class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
+			<div
+				class="block bg-surface text-on-surface text-left border border-surface-border rounded-3xl w-full p-4 space-y-3"
+			>
 				<div class="flex items-center gap-x-2">
 					<PictureRing
-						:src=me?.avatar!
-						:size=12
-						:thickness=1.2
-						:primary="me?.profile.badge?.colors['stops']![0] || 'transparent'"
-						:second="me?.profile.badge?.colors['stops']![1] || 'transparent'"
+						:src="me?.avatar!"
+						:size="12"
+						:thickness="1.2"
+						:primary="
+							me?.profile.badge?.colors['stops']![0] ||
+							'transparent'
+						"
+						:second="
+							me?.profile.badge?.colors['stops']![1] ||
+							'transparent'
+						"
 					/>
-					<span class="font-medium">{{ me?.profile?.display_name || me?.profile?.name || '...' }} <ProfileBadge :badge="me?.profile.badge || null" class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /> </span>
+					<span class="font-medium"
+						>{{
+							me?.profile?.display_name ||
+							me?.profile?.name ||
+							"..."
+						}}
+						<ProfileBadge
+							:badge="me?.profile.badge || null"
+							class="inline w-4 h-4 ml-0.5 -translate-y-0.5"
+						/>
+					</span>
 				</div>
 				<textarea
 					v-model="content"
 					class="border-none rounded-xl outline-none w-full h-24 resize-none px-2"
 					placeholder="Qu'allez-vous partager aujourd'hui ?"
-					:minlength=1
-					:maxlength=250
+					:minlength="1"
+					:maxlength="250"
 				></textarea>
 				<div class="flex gap-4 justify-end items-center">
-					<span v-if="content.length <= 250 * 0.9" class="text-subtext text-sm">{{ content.length }}/250</span>
-					<span v-else class="text-danger text-sm">{{ content.length }}/250</span>
+					<span
+						v-if="content.length <= 250 * 0.9"
+						class="text-muted text-sm"
+						>{{ content.length }}/250</span
+					>
+					<span v-else class="text-danger text-sm"
+						>{{ content.length }}/250</span
+					>
 					<button
 						@click="submit"
 						class="cursor-pointer block bg-primary text-white text-sm font-medium rounded-xl px-5 py-3 duration-300 hover:bg-primary-darker"
-					>Répondre</button>
+					>
+						Répondre
+					</button>
 				</div>
 			</div>
 		</section>
