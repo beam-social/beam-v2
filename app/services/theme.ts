@@ -1,4 +1,4 @@
-import { useSession } from "~/composables/session";
+import { useSession } from "~/stores/session";
 
 export const themes: Record<string, Record<string, string>> = {
 	light: {
