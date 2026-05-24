@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { countryList } from "@/utils/countries";
 import { isYoungerThan18 } from "@/utils/profiles";
-import { useSession } from "~/composables/session";
+import { useSession } from "~/stores/session";
 
 import { AtSymbolIcon, CheckIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 
