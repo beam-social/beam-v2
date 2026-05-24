@@ -1,43 +1,43 @@
 <script setup lang="ts">
-	import { PlusCircleIcon } from '@heroicons/vue/24/solid';
+import { PlusCircleIcon } from "@heroicons/vue/24/solid";
 
-	import PictureRing from '@/components/PictureRing.vue';
-	import ProfileBadge from '@/components/ProfileBadge.vue';
-	import PostWidget from '@/components/widgets/PostWidget.vue';
-	import AttachmentEdit from '@/components/AttachmentEdit.vue';
+import PictureRing from "@/components/PictureRing.vue";
+import ProfileBadge from "@/components/ProfileBadge.vue";
+import PostWidget from "@/components/widgets/PostWidget.vue";
+import AttachmentEdit from "@/components/AttachmentEdit.vue";
 
-	import { Post } from 'beamsocial';
+import { Post } from "beamsocial";
 
-	import axios from 'axios';
+import axios from "axios";
 
 	import { isYoungerThan18 } from '@/utils/profiles'
 	import { applyMarkdownPatterns, type MarkdownPattern } from '@/utils/format';
 	import { useSession } from '@/stores/session';
 
-	useHead({
-		title: 'Écrire • Beam',
-		meta: [
-			{ name: 'robots', content: 'noindex,nofollow' },
-			{ name: 'description', content: 'Écrire un post.' }
-		]
-	})
+useHead({
+	title: "Écrire • Beam",
+	meta: [
+		{ name: "robots", content: "noindex,nofollow" },
+		{ name: "description", content: "Écrire un post." },
+	],
+});
 
-	const { $client, $apiUrl } = useNuxtApp();
-	const { me, refreshSession } = useSession();
+const { $client, $apiUrl } = useNuxtApp();
+const { me, refreshSession } = useSession();
 
-	const router = useRouter()
-	const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
-	const returnUrl = (route.query.return as string) || undefined
+const returnUrl = (route.query.return as string) || undefined;
 
-	const show_preview = ref<boolean>(false)
-	const max = ref<number>(500)
-	const content = ref<string>('')
-	const target = ref<"me" | "friends" | "followers" | "everyone">('followers')
-	const parent = ref<Post | null>(null)
-	const attachments = ref<File[]>([])
-	const is_nudity = ref<boolean>(false)
-	const is_ai = ref<boolean>(false)
+const show_preview = ref<boolean>(false);
+const max = ref<number>(500);
+const content = ref<string>("");
+const target = ref<"me" | "friends" | "followers" | "everyone">("followers");
+const parent = ref<Post | null>(null);
+const attachments = ref<File[]>([]);
+const is_nudity = ref<boolean>(false);
+const is_ai = ref<boolean>(false);
 
 	const privacyOptions = [
 		{
@@ -147,62 +147,98 @@
 <template>
 	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<h1 class="text-4xl text-center font-bold">Écrire un post</h1>
-		<div class="block bg-background-surface text-text-surface text-left border-2 border-border-surface rounded-3xl w-full p-4 space-y-3">
+		<div
+			class="block bg-surface text-on-surface text-left border-2 border-surface-border rounded-3xl w-full p-4 space-y-3"
+		>
 			<div class="flex items-center gap-x-2">
 				<PictureRing
-					:src=me?.avatar!
-					:size=12
-					:thickness=1.2
-					:primary="me?.profile.badge?.colors['stops']![0] || 'transparent'"
-					:second="me?.profile.badge?.colors['stops']![1] || 'transparent'"
+					:src="me?.avatar!"
+					:size="12"
+					:thickness="1.2"
+					:primary="
+						me?.profile.badge?.colors['stops']![0] || 'transparent'
+					"
+					:second="
+						me?.profile.badge?.colors['stops']![1] || 'transparent'
+					"
 				/>
-				<span class="font-medium">{{ me?.profile?.display_name || me?.profile?.name || '...' }} <ProfileBadge :badge="me?.profile.badge || null" class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /> </span>
+				<span class="font-medium"
+					>{{
+						me?.profile?.display_name || me?.profile?.name || "..."
+					}}
+					<ProfileBadge
+						:badge="me?.profile.badge || null"
+						class="inline w-4 h-4 ml-0.5 -translate-y-0.5"
+					/>
+				</span>
 			</div>
-			<div class="grid grid-cols-2 gap-1 rounded-2xl w-full overflow-hidden">
+			<div
+				class="grid grid-cols-2 gap-1 rounded-2xl w-full overflow-hidden"
+			>
 				<img
 					v-if="show_preview"
 					v-for="(file, index) in attachments"
 					:src="getTempUrl(file)"
 					class="rounded-md min-w-full h-full aspect-video object-cover"
-					:class="(index == 0 && attachments.length % 2 == 1)
-						? 'col-span-2 row-span-2'
-						: ''"
+					:class="
+						index == 0 && attachments.length % 2 == 1
+							? 'col-span-2 row-span-2'
+							: ''
+					"
 				/>
 				<AttachmentEdit
 					v-else
 					v-for="(file, index) in attachments"
-					:key=index
-					:url=getTempUrl(file)
+					:key="index"
+					:url="getTempUrl(file)"
 					:index="index"
 					:isLast="index === attachments.length - 1"
 					:onDelete="() => attachments.splice(index, 1)"
-					:onReorder="(direction: 'up' | 'down') => {
-						const newIndex = direction === 'up' ? index - 1 : index + 1;
+					:onReorder="
+						(direction: 'up' | 'down') => {
+							const newIndex =
+								direction === 'up' ? index - 1 : index + 1;
 
-						if (newIndex >= 0 && newIndex < attachments.length) {
-							const temp = attachments[newIndex]!;
-							attachments[newIndex] = attachments[index]!;
-							attachments[index] = temp;
+							if (
+								newIndex >= 0 &&
+								newIndex < attachments.length
+							) {
+								const temp = attachments[newIndex]!;
+								attachments[newIndex] = attachments[index]!;
+								attachments[index] = temp;
+							}
 						}
-					}"
+					"
 					class="rounded min-w-full h-full aspect-video object-cover"
-					:class="(index == 0 && (attachments.length % 2 == 0 && attachments.length != 4))
-						? 'col-span-2 row-span-2'
-						: ''"
+					:class="
+						index == 0 &&
+						attachments.length % 2 == 0 &&
+						attachments.length != 4
+							? 'col-span-2 row-span-2'
+							: ''
+					"
 				/>
 				<div
 					v-if="attachments.length < 4 && !show_preview"
-					:class="(attachments.length == 0)
-						? 'col-span-2 row-span-2'
-						: ''"
+					:class="
+						attachments.length == 0 ? 'col-span-2 row-span-2' : ''
+					"
 				>
-					<input type="file" id="fileInput" class="hidden" accept="image/*" @change="() => addAttachment()" />
+					<input
+						type="file"
+						id="fileInput"
+						class="hidden"
+						accept="image/*"
+						@change="() => addAttachment()"
+					/>
 					<label for="fileInput" class="cursor-pointer">
 						<div
-							class="flex flex-col items-center justify-center gap-1 bg-zinc-500/10 text-text-surface rounded-lg min-w-full h-full aspect-video"
+							class="flex flex-col items-center justify-center gap-1 bg-zinc-500/10 text-on-surface rounded-lg min-w-full h-full aspect-video"
 						>
 							<PlusCircleIcon class="w-10 h-10" />
-							<span class="text-sm font-medium">Ajouter une pièce jointe</span>
+							<span class="text-sm font-medium"
+								>Ajouter une pièce jointe</span
+							>
 						</div>
 					</label>
 				</div>
@@ -213,25 +249,39 @@
 			<textarea
 				v-else
 				v-model="content"
-				class="border-none rounded-xl outline-none w-full h-32 resize-none px-2 placeholder:text-subtext"
+				class="border-none rounded-xl outline-none w-full h-32 resize-none px-2 placeholder:text-muted"
 				placeholder="Qu'allez-vous partager aujourd'hui ?"
-				:minlength=1
-				:maxlength=max
+				:minlength="1"
+				:maxlength="max"
 			></textarea>
 			<PostWidget
-				v-if=parent
-				:data=parent
-				:me=me
-				:client=$client
-				:clickable=false
+				v-if="parent"
+				:data="parent"
+				:me="me"
+				:client="$client"
+				:clickable="false"
 			/>
 			<div class="px-2">
-				<span v-if="content.length <= max * 0.9" class="text-subtext text-sm">{{ max - content.length }} caractères restants</span>
-				<span v-else class="text-danger text-sm">{{ max - content.length }} caractères restants</span>
+				<span
+					v-if="content.length <= max * 0.9"
+					class="text-muted text-sm"
+					>{{ max - content.length }} caractères restants</span
+				>
+				<span v-else class="text-danger text-sm"
+					>{{ max - content.length }} caractères restants</span
+				>
 			</div>
 			<div class="flex items-center w-fit px-2 gap-4">
-				<label for="target" class="text-sm font-medium">Qui peut voir mon post ?</label>
-				<select id="target" name="target" v-model="target" class="block bg-background-surface text-sm border border-border-surface rounded-lg px-4 py-2" required>
+				<label for="target" class="text-sm font-medium"
+					>Qui peut voir mon post ?</label
+				>
+				<select
+					id="target"
+					name="target"
+					v-model="target"
+					class="block bg-surface text-sm border border-surface-border rounded-lg px-4 py-2"
+					required
+				>
 					<option value="me">Seulement moi</option>
 					<option value="friends">Mes amis</option>
 					<option value="followers">Mes abonnés</option>
@@ -240,31 +290,43 @@
 			</div>
 			<div class="px-2">
 				<div class="flex items-center gap-1">
-					<input type="checkbox" id="nudity" v-model="is_nudity" class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered">
-					<label for="nudity" class="text-sm">Mon contenu est inadapté à un public mineur (nudité, violence, etc.)</label>
+					<input
+						type="checkbox"
+						id="nudity"
+						v-model="is_nudity"
+						class="w-4 h-4 text-button bg-surface border-surface-border rounded focus:ring-button-hovered"
+					/>
+					<label for="nudity" class="text-sm"
+						>Mon contenu est inadapté à un public mineur (nudité,
+						violence, etc.)</label
+					>
 				</div>
 				<div class="flex items-center gap-1">
-					<input type="checkbox" id="ai" v-model="is_ai" class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered">
-					<label for="ai" class="text-sm">Mon contenu ou une partie de celui-ci est généré par une IA</label>
+					<input
+						type="checkbox"
+						id="ai"
+						v-model="is_ai"
+						class="w-4 h-4 text-button bg-surface border-surface-border rounded focus:ring-button-hovered"
+					/>
+					<label for="ai" class="text-sm"
+						>Mon contenu ou une partie de celui-ci est généré par
+						une IA</label
+					>
 				</div>
 			</div>
 			<div class="flex gap-2 justify-center items-center w-fit mx-auto">
-				<Button
-					label="Publier"
-					type="action"
-					:handler=submit
-				/>
+				<Button label="Publier" type="action" :handler="submit" />
 				<Button
 					v-if="show_preview"
 					label="Retourner à l'écriture"
 					type="transparent"
-					:handler="() => show_preview = false"
+					:handler="() => (show_preview = false)"
 				/>
 				<Button
 					v-else
 					label="Voir le résultat"
 					type="transparent"
-					:handler="() => show_preview = true"
+					:handler="() => (show_preview = true)"
 				/>
 			</div>
 		</div>

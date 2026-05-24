@@ -118,7 +118,7 @@
 
 	<main v-else-if="profile" class="xs:p-8">
 		<section class="flex flex-col xs:gap-6">
-			<div id="profileBox" class="select-none shrink-0 bg-background-surface text-text-surface text-center p-8 xs:border xs:border-border-surface xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
+			<div id="profileBox" class="select-none shrink-0 bg-surface text-on-surface text-center p-8 xs:border xs:border-surface-border xs:rounded-4xl w-full h-full xs:p-12 space-y-6">
 				<div class="space-y-4">
 					<PictureRing
 						:src=profile.avatar_url!
@@ -135,7 +135,7 @@
 							<span v-if="profile.pronouns && profile.account_type"> • </span>
 							<span v-if="profile.account_type">{{ profile.account_type }}</span>
 						</p>
-						<p><span class="text-subtext font-medium">@{{ profile.name }}</span></p>
+						<p><span class="text-muted font-medium">@{{ profile.name }}</span></p>
 					</div>
 				</div>
 				<div class="grid grid-cols-3 max-w-96 mx-auto">
@@ -197,12 +197,12 @@
 					</div>
 				</div>
 				<div class="space-y-1">
-					<p class="opacity-50 text-subtext text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
+					<p class="opacity-50 text-muted text-sm font-medium">Membre depuis le {{ new Date(profile.creation_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
 					<p>{{ profile.description }}</p>
 				</div>
 			</div>
 			<div class="grow space-y-4 h-full max-md:p-4">
-				<div class="flex gap-1 bg-background-surface backdrop-blur-sm text-text-surface border border-border-surface rounded-full w-fit p-2 mx-auto">
+				<div class="flex gap-1 bg-surface backdrop-blur-sm text-on-surface border border-surface-border rounded-full w-fit p-2 mx-auto">
 					<button
 						class="cursor-pointer text-primary text-sm font-medium rounded-full px-4 py-2 duration-300"
 						:class="section == 'posts' ? 'bg-primary/10' : 'hover:bg-primary/5'"
@@ -233,7 +233,7 @@
 					</div>
 					<div v-else class="flex flex-col items-center justify-center h-full pt-6 gap-4">
 						<p class="text-2xl font-bold">Cette section semble vide...</p>
-						<RouterLink v-if="profile.id == me?.profile.id" :to="'/write?return=' + route.path" class="cursor-pointer block bg-action text-white text-sm font-medium rounded-full px-7 py-3 duration-150 hover:bg-action-hovered">Partagez quelque chose</RouterLink>
+						<RouterLink v-if="profile.id == me?.profile.id" :to="'/write?return=' + route.path" class="cursor-pointer block bg-button text-white text-sm font-medium rounded-full px-7 py-3 duration-150 hover:bg-button-hovered">Partagez quelque chose</RouterLink>
 						<p v-else>Retourner à l'<RouterLink to=/ class="text-primary">accueil</RouterLink>.</p>
 					</div>
 				</div>
@@ -312,7 +312,7 @@
 						<button
 							v-if="me?.profile.id != profile.id"
 							@click=profile.follow
-							class="cursor-pointer bg-action text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-action-hovered"
+							class="cursor-pointer bg-button text-white text-sm font-medium rounded-full px-5 py-3 duration-300 hover:bg-button-hovered"
 						>
 							Devenez le 1er fan !
 						</button>

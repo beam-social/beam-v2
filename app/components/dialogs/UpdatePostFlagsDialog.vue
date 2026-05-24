@@ -31,7 +31,7 @@
 		<p>Sélectionnez les flags du post en fonction de ce qu'il contient. L'utilisateur n'en sera pas averti.</p>
 		<div class="flex flex-col gap-2">
 			<div v-for="(value, flag) in selectedFlags" :key="flag" class="flex items-center gap-2">
-				<input type="checkbox" :id="flag" :value="flag" v-model="selectedFlags[flag]" class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered">
+				<input type="checkbox" :id="flag" :value="flag" v-model="selectedFlags[flag]" class="w-4 h-4 text-button bg-surface border-surface-border rounded focus:ring-button-hovered">
 				<label :for="flag" class="text-sm">{{ translation[flag] }}</label>
 			</div>
 		</div>
