@@ -1,4 +1,4 @@
-import { useSession } from '@/stores/session';
+import { useSession } from "~/composables/session";
 
 export const themes: Record<string, Record<string, string>> = {
 	light: {
@@ -28,14 +28,6 @@ export const themes: Record<string, Record<string, string>> = {
 	amethyst: {
 		name: 'Améthyste',
 		color: '#9E00FF'
-	},
-	sky: {
-		name: 'Blue Sky',
-		color: '#0076BB'
-	},
-	pro: {
-		name: 'Pro',
-		color: '#131A4B'
 	},
 	gold: {
 		name: 'Couvrez-moi d\'or',

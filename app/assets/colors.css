@@ -99,32 +99,38 @@
 	--background: transparent;
 	--background-stop1: #95670e;
 	--background-stop2: #a77310;
+	--background-stop3: #b38014;
 
-	--text: #FFFFFF;
-	--subtext: #f7ddab;
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--background-surface: #b97f12;
-	--text-surface: #ffffff;
-	--border-surface: #EBAA2E;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--action: var(--primary);
-	--action-hovered: var(--primary-darker);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
 
+.theme-fonda {
+	--background: transparent;
+	--background-stop1: #ff6b4a;
+	--background-stop2: #ff4a75;
+	--background-stop3: #ff375f;
 
-.theme-fonda { /* Fonda uniquement */
-	--primary-lightest: #FF8386;
-	--primary-lighter: #FF7072;
-	--primary: #FF5C5F;
-	--primary-darker: #FF484C;
-	--primary-darkest: #FF2125;
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--background-navbar: #FF6B4A;
-	--border-navbar: #FF4A75;
-	--text-navbar: #FFFFFF;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--action: var(--primary);
-	--action-hovered: var(--primary-darker);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
 
 .theme-emerald {
@@ -135,22 +141,21 @@
 	--primary-darkest: #006644;
 
 	--background: transparent;
-	--background-stop1: #003F2A;
+	--background-stop1: #003f2a;
 	--background-stop2: #002b1c;
+	--background-stop3: #001e13;
 
-	--background-navbar: var(--primary);
-	--border-navbar: var(--primary-darker);
-	--text-navbar: #FFFFFF;
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--text: #FFFFFF;
-	--subtext: #a1ffdf;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--background-surface: #005236;
-	--text-surface: #c8ffec;
-	--border-surface: #006644;
-
-	--action: var(--primary-darker);
-	--action-hovered: var(--primary-darkest);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
 
 .theme-royal {
@@ -163,20 +168,19 @@
 	--background: transparent;
 	--background-stop1: #1e0054;
 	--background-stop2: #170040;
+	--background-stop3: #120033;
 
-	--background-navbar: var(--primary);
-	--border-navbar: var(--primary-darker);
-	--text-navbar: #FFFFFF;
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--text: #FFFFFF;
-	--subtext: #d0b6ff;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--background-surface: #250067;
-	--text-surface: #e9ddff;
-	--border-surface: #330099;
-
-	--action: var(--primary);
-	--action-hovered: var(--primary-darker);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
 
 .theme-sunset {
@@ -189,20 +193,19 @@
 	--background: transparent;
 	--background-stop1: #991500;
 	--background-stop2: #721000;
+	--background-stop3: #550b00;
 
-	--background-navbar: var(--primary);
-	--border-navbar: var(--primary-darker);
-	--text-navbar: #FFFFFF;
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--text: #FFFFFF;
-	--subtext: #ff7b6e;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--background-surface: #9d1900;
-	--text-surface: #ffcec4;
-	--border-surface: #d82300;
-
-	--action: var(--primary);
-	--action-hovered: var(--color-primary-darker);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
 
 .theme-amethyst {
@@ -213,19 +216,19 @@
 	--primary-darkest: #550099;
 
 	--background: transparent;
-	--background-stop1: #3F0072;
+	--background-stop1: #3f0072;
 	--background-stop2: #31004e;
+	--background-stop3: #26003d;
 
-	--navbar-stop1: var(--primary);
-	--navbar-stop2: var(--primary-darker);
+	--background-surface: #00000020;
+	--on-surface: #ffffff;
+	--surface-border: transparent;
 
-	--text: #FFFFFF;
-	--subtext: #e1b1ff;
+	--muted-surface: #00000020;
+	--on-muted-surface: #ffffff50;
+	--muted-surface-border: transparent;
 
-	--background-surface: #490076;
-	--text-surface: #e9c4ff;
-	--border-surface: #7A00CC;
-
-	--action: var(--primary);
-	--action-hovered: var(--color-primary-darker);
+	--widget: #00000020;
+	--on-widget: #e2e4ec;
+	--widget-border: transparent;
 }
