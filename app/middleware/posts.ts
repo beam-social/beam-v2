@@ -1,4 +1,10 @@
-import { usePostPageData } from "~/composables/post";
+type PostMeta = {
+	date?: string;
+	author_name?: string;
+	author_avatar_url?: string | null;
+	author_badge_color?: string;
+	content?: string | null;
+};
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const id = to.params.id as string | undefined;
@@ -10,56 +16,59 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		});
 	}
 
-	try {
-		const { post } = await usePostPageData(id);
-		const currentPost = post.value;
+	const { $client } = useNuxtApp();
+	const postMeta = useState<PostMeta | null>("postMeta", () => null);
 
-		if (currentPost) {
+	try {
+		const post = await $client.getPost(id);
+		if (post) {
+			const meta = {
+				date: post.creation_date ? new Date(post.creation_date).toISOString() : undefined,
+				author_name: post.author?.display_name || post.author?.name || 'Utilisateur Beam',
+				author_avatar_url: post.author?.avatar_url ?? null,
+				author_badge_color: post.author?.badge ? post.author.badge.colors['primary'] as string : '#e021ff',
+				content: post.content ?? null,
+			};
+
+			postMeta.value = meta;
+
 			useHead({
 				// title: 'Publication • Beam',
-				title: currentPost.author?.display_name
-					? `${currentPost.author.display_name} • Beam`
-					: `@${currentPost.author?.name || "Beam"} • Beam`,
+				title: meta.author_name ? `${meta.author_name} • Beam` : `@${meta.author_name} • Beam`,
 				meta: [
 					{
-						name: "description",
+						name: 'description',
 						// content: "Connectez-vous à Beam pour voir cette publication."
-						content:
-							currentPost.content ||
-							`Voir la publication de ${currentPost.author?.display_name || currentPost.author?.name || "cet utilisateur"} sur Beam.`,
+						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
-						property: "og:title",
+						property: 'og:title',
 						// content: "Publication • Beam"
-						content: `Post de ${currentPost.author?.display_name || currentPost.author?.name || "Beam"} • Beam`,
+						content: meta.author_name ? `Post de ${meta.author_name} • Beam` : `@${meta.author_name} • Beam`
 					},
 					{
-						property: "og:description",
+						property: 'og:description',
 						// content: "Connectez-vous à Beam pour voir cette publication."
-						content:
-							currentPost.content ||
-							`Voir la publication de ${currentPost.author?.display_name || currentPost.author?.name || "cet utilisateur"} sur Beam.`,
+						content: meta.content || `Voir la publication de ${meta.author_name} sur Beam.`
 					},
 					{
-						property: "og:type",
-						content: "post",
+						property: 'og:type',
+						content: 'post'
 					},
 					{
-						property: "og:image",
-						content: currentPost.author?.avatar_url || "",
+						property: 'og:image',
+						content: meta.author_avatar_url || ''
 					},
 					{
-						property: "og:url",
-						content: `https://beam.ejnalo.me/post/${id}`,
+						property: 'og:url',
+						content: `https://beam.ejnalo.me/post/${id}`
 					},
 					{
-						property: "og:color",
+						property: 'og:color',
 						// content: '#e021ff'
-						content:
-							currentPost.author?.badge?.colors?.["primary"] ||
-							"#e021ff",
-					},
-				],
+						content: meta.author_badge_color || '#e021ff'
+					}
+				]
 			});
 		} else {
 			throw new Error("Post not found");

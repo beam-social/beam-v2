@@ -146,7 +146,7 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 	]
 </script>
 <template>
-	<div :key="post.id" :id="'post-' + post.id" class="block bg-surface text-on-surface text-left border border-surface-border rounded-3xl w-full p-4 space-y-3">
+	<div :key="post.id" :id="'post-' + post.id" class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 		<div class="flex items-center gap-x-2">
 			<PictureRing
 				:src=post.author!.avatar_url!
@@ -157,7 +157,7 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 			/>
 			<div class="flex flex-col -space-y-2">
 				<RouterLink :to="'/@' + post.author?.name" class="block font-semibold">{{ post.author?.display_name || post.author?.name || '...' }} <ProfileBadge :badge="post.author?.badge || null" class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /></RouterLink>
-				<RouterLink :to="'/@' + post.author?.name" class="block text-muted font-medium text-sm">@{{ post.author?.name || '...' }}</RouterLink>
+				<RouterLink :to="'/@' + post.author?.name" class="block text-subtext font-medium text-sm">@{{ post.author?.name || '...' }}</RouterLink>
 			</div>
 			<div class="grow"></div>
 			<div v-if="post.flags.includes('AI')" class="select-none flex items-center bg-primary/15 border border-primary/10 rounded-full px-2 py-1 gap-1">
@@ -170,7 +170,7 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 				<span class="text-primary text-sm max-sm:hidden">Modifié •</span>
 				<span class="text-primary text-sm">{{ deltatime(post.update_date!) }}</span>
 			</div>
-			<span class="text-muted text-sm">{{ age }}</span>
+			<span class="text-subtext text-sm">{{ age }}</span>
 			<Menu :actions="actions" />
 		</div>
 		<div v-if="post.attachments.length" class="grid grid-cols-2 gap-1 rounded-2xl w-full overflow-hidden">
@@ -196,9 +196,9 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 		<div class="px-0">
 			<PostWidget v-if=post.parent_id :data="parent" :client=client :me=me />
 		</div>
-		<div class="flex gap-4 items-center border-t border-surface-border px-2 pt-3">
+		<div class="flex gap-4 items-center border-t border-border-surface px-2 pt-3">
 			<button
-				class="cursor-pointer flex items-center text-on-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
+				class="cursor-pointer flex items-center text-text-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
 				@click="async () => { post!.likes == baselike ? await post!.like() : await post!.unlike() }"
 			>
 				<HeartFilled v-if="post!.likes != baselike" class="text-rose-500 w-5 h-5" />
@@ -206,16 +206,16 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 				<span class="translate-y-[-0.5px]">{{ toLiteralNumber(post.likes) }}</span>
 			</button>
 			<button
-				class="cursor-pointer flex items-center text-on-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
+				class="cursor-pointer flex items-center text-text-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
 				@click="async () => { await router.push('/post/' + post!.id + '/quote') }"
 			>
-				<ArrowPathRoundedSquareIcon class="text-on-surface stroke-2 w-5 h-5" />
+				<ArrowPathRoundedSquareIcon class="text-text-surface stroke-2 w-5 h-5" />
 				<span class="translate-y-[-0.5px]">{{ toLiteralNumber(post.reposts) }}</span>
 			</button>
 			<button
-				class="cursor-pointer flex items-center text-on-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
+				class="cursor-pointer flex items-center text-text-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
 			>
-				<ChatBubbleOvalLeftIcon class="text-on-surface stroke-2 w-5 h-5" />
+				<ChatBubbleOvalLeftIcon class="text-text-surface stroke-2 w-5 h-5" />
 				<span class="translate-y-[-0.5px]">{{ toLiteralNumber(post.comments) }}</span>
 			</button>
 			<div class="grow"></div>

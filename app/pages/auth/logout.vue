@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { useSession } from "~/composables/session";
+	import { useSession } from '@/stores/session';
 
-import axios from "axios";
+	import axios from 'axios';
 
-useHead({
-	title: "Déconnexion • Beam",
-	meta: [
-		{ name: "robots", content: "noindex,nofollow" },
-		{ name: "description", content: "Se déconnecter de mon compte." },
-	],
-});
+	useHead({
+		title: 'Déconnexion • Beam',
+		meta: [
+			{ name: 'robots', content: 'noindex,nofollow' },
+			{ name: 'description', content: 'Se déconnecter de mon compte.' }
+		]
+	})
 
-const router = useRouter();
-const { $apiUrl } = useNuxtApp();
-const { refreshSession } = useSession();
+	const router = useRouter();
+	const { $apiUrl } = useNuxtApp();
+	const { refreshSession } = useSession();
 
-onMounted(async () => {
-	axios.post(
-		`${$apiUrl}/auth/logout`,
-		{},
-		{
-			withCredentials: true,
-		},
-	);
+	onMounted(async () => {
+		axios.post(
+			`${$apiUrl}/auth/logout`,
+			{},
+			{
+				withCredentials: true
+			}
+		);
 
-	await refreshSession();
+		await refreshSession();
 
-	router.push("/");
-});
+		router.push('/');
+	});
 </script>
 <template>
 	<header class="bg-primary text-white p-8 md:p-16">

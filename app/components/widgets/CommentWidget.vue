@@ -53,7 +53,7 @@
 		v-if="comment"
 		:key="comment.id"
 		:id="'comment-' + comment.id"
-		class="select-none cursor-pointer block bg-surface text-on-surface text-left border border-surface-border rounded-2xl w-full p-4 space-y-3"
+		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 		@click="() => router.push('/post/' + comment!.post?.id + '#comment-' + comment!.id)"
 	>
 		<div class="flex items-center gap-x-2">
@@ -66,7 +66,7 @@
 			/>
 			<RouterLink :to="'/@' + comment.author?.name" class="block font-semibold">{{ comment.author?.display_name || comment.author?.name || '...' }} <ProfileBadge :badge="comment.author?.badge || null" class="inline w-4 h-4 -translate-y-0.5" /></RouterLink>
 			<div class="grow"></div>
-			<span class="text-muted text-sm">{{ age }}</span>
+			<span class="text-subtext text-sm">{{ age }}</span>
 		</div>
 		<div
 			class="md-area max-w-full px-1"
@@ -75,7 +75,7 @@
 	</div>
 	<div
 		v-else
-		class="select-none block bg-surface text-on-surface text-left border border-surface-border rounded-2xl w-full p-4 space-y-3"
+		class="select-none block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 	>
 		Ce commentaire est privé.
 	</div>

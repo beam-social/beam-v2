@@ -71,7 +71,7 @@ const breadcrumbItems = computed(() => {
 						v-for="(item, index) in breadcrumbItems"
 						:key="item.path"
 					>
-						<li class="text-muted">
+						<li class="text-subtext">
 							<ChevronDoubleRightIcon class="h-4 w-4" />
 						</li>
 						<li>
@@ -99,7 +99,7 @@ const breadcrumbItems = computed(() => {
 			:value="page"
 		/>
 		<div v-else class="container px-4 md:px-8">
-			<p class="text-muted">
+			<p class="text-subtext">
 				Contenu introuvable pour {{ contentPath }}.
 			</p>
 		</div>

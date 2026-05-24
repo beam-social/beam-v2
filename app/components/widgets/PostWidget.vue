@@ -44,7 +44,7 @@
 		v-if="post"
 		:key="post.id"
 		:id="'repost-' + post.id"
-		class="select-none cursor-pointer block bg-surface text-on-surface text-left border border-surface-border rounded-2xl w-full p-4 space-y-3"
+		class="select-none cursor-pointer block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 		@click="() => router.push('/post/' + post!.id)"
 	>
 		<div class="flex items-center gap-x-2">
@@ -57,7 +57,7 @@
 			/>
 			<RouterLink :to="'/@' + post.author?.name" class="block font-semibold">{{ post.author?.display_name || post.author?.name || '...' }} <ProfileBadge :badge="post.author?.badge || null" class="inline w-4 h-4 -translate-y-0.5" /></RouterLink>
 			<div class="grow"></div>
-			<span class="text-muted text-sm">{{ age }}</span>
+			<span class="text-subtext text-sm">{{ age }}</span>
 		</div>
 		<div v-if="post.attachments.length" class="flex flex-wrap gap-1 rounded-2xl w-fit overflow-hidden">
 			<img
@@ -66,7 +66,7 @@
 			/>
 		</div>
 		<div v-if="post.attachments.length > 1" class="px-1">
-			<span class="text-sm text-muted">{{ post.attachments.length }} pièces jointes</span>
+			<span class="text-sm text-subtext">{{ post.attachments.length }} pièces jointes</span>
 		</div>
 		<div
 			class="md-area max-w-full px-1"
@@ -75,7 +75,7 @@
 	</div>
 	<div
 		v-else
-		class="select-none block bg-surface text-on-surface text-left border border-surface-border rounded-2xl w-full p-4 space-y-3"
+		class="select-none block bg-background-surface text-text-surface text-left border border-border-surface rounded-2xl w-full p-4 space-y-3"
 	>
 		Ce post est privé.
 	</div>

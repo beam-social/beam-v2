@@ -42,19 +42,19 @@
 	}
 
 	const classNames: Record<string, string> = {
-		'normal': 'text-on-surface',
+		'normal': 'text-text-surface',
 		'danger': 'text-red-500'
 	}
 </script>
 <template>
 	<div @click="closeMenu" class="flex flex-col -space-y-6 items-end cursor-pointer h-6 w-6">
 		<button @click.stop="openMenu" class="cursor-pointer block">
-			<EllipsisVerticalIcon class="w-6 h-6 text-on-surface stroke-2" />
+			<EllipsisVerticalIcon class="w-6 h-6 text-text-surface stroke-2" />
 		</button>
 
 		<div
 			v-if="showMenu"
-			class="relative top-0 z-1000 flex flex-col bg-surface text-on-surface border border-surface-border rounded-3xl w-fit h-fit p-4 shadow-xl"
+			class="relative top-0 z-1000 flex flex-col bg-background-surface text-text-surface border border-border-surface rounded-3xl w-fit h-fit p-4 shadow-xl"
 		>
 			<button
 				:class="classNames[action.style] + ' cursor-pointer block text-left text-base font-medium whitespace-nowrap w-fit px-2 py-1 hover:underline'"

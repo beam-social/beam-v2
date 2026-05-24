@@ -83,7 +83,7 @@
 	]
 </script>
 <template>
-	<div :key="comment.id" :id="'comment-' + comment.id" class="block bg-surface text-on-surface text-left border border-surface-border rounded-3xl w-full p-4 space-y-3">
+	<div :key="comment.id" :id="'comment-' + comment.id" class="block bg-background-surface text-text-surface text-left border border-border-surface rounded-3xl w-full p-4 space-y-3">
 		<div class="flex gap-2">
 			<PictureRing
 				:src=comment.author!.avatar_url!
@@ -97,10 +97,10 @@
 				<div class="flex items-center gap-x-2 h-12">
 					<div class="flex flex-col -space-y-2">
 						<RouterLink :to="'/@' + comment.author?.name" class="block font-semibold">{{ comment.author?.display_name || comment.author?.name || '...' }} <ProfileBadge :badge="comment.author?.badge || null" class="inline w-4 h-4 ml-0.5 -translate-y-0.5" /></RouterLink>
-						<RouterLink :to="'/@' + comment.author?.name" class="block text-muted font-medium text-sm">@{{ comment.author?.name || '...' }}</RouterLink>
+						<RouterLink :to="'/@' + comment.author?.name" class="block text-subtext font-medium text-sm">@{{ comment.author?.name || '...' }}</RouterLink>
 					</div>
 					<div class="grow"></div>
-					<span class="text-muted text-sm">{{ age }}</span>
+					<span class="text-subtext text-sm">{{ age }}</span>
 					<Menu :actions="actions" />
 				</div>
 				<div
@@ -110,9 +110,9 @@
 				></div>
 			</div>
 		</div>
-		<!--div class="flex gap-4 items-center border-t-1 border-surface-border px-2 pt-3">
+		<!--div class="flex gap-4 items-center border-t-1 border-border-surface px-2 pt-3">
 			<button
-				class="cursor-pointer flex items-center text-on-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
+				class="cursor-pointer flex items-center text-text-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
 				@click="async () => { comment!.likes == baselike ? await comment!.like() : await comment!.unlike() }"
 			>
 				<HeartFilled v-if="comment!.likes != baselike" class="text-rose-500 w-5 h-5" />
@@ -120,9 +120,9 @@
 				<span class="translate-y-[-0.5px]">{{ toLiteralNumber(comment.likes) }}</span>
 			</button>
 			<button
-				class="cursor-pointer flex items-center text-on-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
+				class="cursor-pointer flex items-center text-text-surface text-sm font-medium gap-0.5 duration-150 active:scale-85"
 			>
-				<ChatBubbleOvalLeftIcon class="text-on-surface stroke-2 w-5 h-5" />
+				<ChatBubbleOvalLeftIcon class="text-text-surface stroke-2 w-5 h-5" />
 				<span class="translate-y-[-0.5px]">{{ toLiteralNumber(comment.answers) }}</span>
 			</button>
 			<div class="grow"></div>

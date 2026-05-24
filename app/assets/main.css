@@ -23,59 +23,42 @@
 	--color-background: var(--background);
 	--color-background-stop1: var(--background-stop1);
 	--color-background-stop2: var(--background-stop2);
-	--color-background-stop3: var(--background-stop3);
 
-	/* there was a --text before. It doesn't exist anymore. If you see any text-text in my tailwind classes, notify me and let it as it is.  */
-	--color-muted: var(--muted); /* old: --subtext */
+	--color-background-surface: var(--background-surface);
+	--color-background-navbar: var(--background-navbar);
 
-	--color-surface: var(--background-surface); /* old: --background-surface */
-	--color-on-surface: var(--on-surface); /* old: --text-surface */
-	--color-surface-border: var(--surface-border); /* old: --border-surface */
-	--blur-surface: var(--blur-surface); /* not here before */
+	--color-text: var(--text);
+	--color-subtext: var(--subtext);
+	--color-text-surface: var(--text-surface);
+	--color-text-navbar: var(--text-navbar);
 
-	--color-muted-surface: var(--muted-surface); /* not here before */
-	--color-on-muted-surface: var(--on-muted-surface); /* not here before */
-	--color-muted-surface-border: var(
-		--muted-surface-border
-	); /* not here before */
-	--blur-muted-surface: var(--blur-muted-surface); /* not here before */
+	--color-border-surface: var(--border-surface);
+	--color-border-navbar: var(--border-navbar);
 
-	--color-widget: var(--widget); /* not here before */
-	--color-on-widget: var(--on-widget); /* not here before */
-	--color-border-widget: var(--widget-border); /* not here before */
-	--blur-widget: var(--blur-widget); /* not here before */
-
-	--color-background-navbar: var(
-		--background-navbar
-	); /* old: --background-navbar */
-	--color-on-navbar: var(--on-navbar); /* old: --text-navbar */
-	--color-navbar-border: var(--navbar-border); /* old: --border-navbar */
-	--blur-navbar: var(--blur-navbar); /* not here before */
-
-	--color-button: var(--action); /* old: --action */
-	--color-button-hovered: var(--action-hovered); /* old: --action-hovered */
-	--color-on-button: var(--on-action); /* old: --action-text */
+	--color-action: var(--action);
+	--color-action-hovered: var(--action-hovered);
+	--color-action-text: var(--action-text);
 
 	--color-danger: var(--danger);
 	--color-danger-hovered: var(--danger-hovered);
-	--color-on-danger: var(--danger-text); /* old: --danger-text */
+	--color-danger-text: var(--danger-text);
 
 	--color-success: var(--success);
 	--color-success-hovered: var(--success-hovered);
-	--color-on-success: var(--success-text); /* old: --success-text */
+	--color-success-text: var(--success-text);
 
 	--font-sans: "SN Pro", "Arial", sans-serif;
 	--font-mono: "Sono", "Courier New", monospace;
 
-	/* Needs --txt-base in colors.css */
-	--text-xs: calc(var(--txt-base) * 0.75); /* not here before */
-	--text-sm: calc(var(--txt-base) * 0.875); /* not here before */
-	--text-base: var(--txt-base); /* not here before */
-	--text-lg: calc(var(--txt-base) * 1.125); /* not here before */
-	--text-xl: calc(var(--txt-base) * 1.25); /* not here before */
-	--text-2xl: calc(var(--txt-base) * 1.5); /* not here before */
-	--text-3xl: calc(var(--txt-base) * 2); /* not here before */
-	--text-4xl: calc(var(--txt-base) * 3); /* not here before */
+	--txt-base: 16px;
+	--text-xs: calc(var(--txt-base) * 0.75);
+	--text-sm: calc(var(--txt-base) * 0.875);
+	--text-base: var(--txt-base);
+	--text-lg: calc(var(--txt-base) * 1.125);
+	--text-xl: calc(var(--txt-base) * 1.25);
+	--text-2xl: calc(var(--txt-base) * 1.5);
+	--text-3xl: calc(var(--txt-base) * 2);
+	--text-4xl: calc(var(--txt-base) * 3);
 }
 
 @keyframes showSidebar {
@@ -104,9 +87,9 @@
 		background-image: linear-gradient(
 			45deg,
 			var(--background-stop1),
-			var(--background-stop2),
-			var(--background-stop3)
+			var(--background-stop2)
 		);
+		background-color: var(--background);
 	}
 
 	* {
@@ -236,7 +219,7 @@
 	}
 
 	.md-area hr {
-		background-color: var(--color-surface-border);
+		background-color: var(--color-border);
 		border: none;
 		border-radius: 1px;
 		width: 50%;
@@ -287,7 +270,7 @@
 	}
 
 	.md-area .subtext {
-		color: var(--color-muted);
+		color: var(--color-subtext);
 		font-size: 12px;
 		font-weight: 600;
 		margin-bottom: 8px;
