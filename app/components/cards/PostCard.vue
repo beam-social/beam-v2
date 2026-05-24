@@ -177,7 +177,7 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 			<img
 				v-for="(file, index) in post.attachments"
 				:src="$apiUrl + '/drive/' + file.id"
-				class="rounded-md min-w-full h-full aspect-video object-cover"
+				class="rounded-md min-w-full h-full object-cover"
 				:class="(index == 0 && post.attachments.length % 2 == 1)
 					? 'col-span-2 row-span-2'
 					: ''"

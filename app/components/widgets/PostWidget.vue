@@ -62,7 +62,7 @@
 		<div v-if="post.attachments.length" class="flex flex-wrap gap-1 rounded-2xl w-fit overflow-hidden">
 			<img
 				:src="$apiUrl + '/drive/' + post.attachments[0]!.id"
-				class="min-w-full h-full aspect-video object-cover"
+				class="min-w-full h-full object-cover"
 			/>
 		</div>
 		<div v-if="post.attachments.length > 1" class="px-1">
