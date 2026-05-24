@@ -17,10 +17,10 @@
 		@update:isOpen="($val) => $emit('update:isOpen', $val)"
 	>
 		<h2 class="text-xl font-medium">Modifier le post</h2>
-		<textarea v-model="post.content" class="w-full h-48 p-3 border border-border-surface rounded-lg bg-background-surface text-text-surface focus:outline-none focus:ring-2 focus:ring-action"></textarea>
+		<textarea v-model="post.content" class="w-full h-48 p-3 border border-surface-border rounded-lg bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-button"></textarea>
 		<div class="flex justify-start items-center gap-2">
 			<label for="visibility" class="text-sm font-bold">Visibilité</label>
-			<select v-model="post.visibility" name="visibility" class="block bg-background-surface text-sm border border-border-surface rounded-lg px-4 py-2">
+			<select v-model="post.visibility" name="visibility" class="block bg-surface text-sm border border-surface-border rounded-lg px-4 py-2">
 				<option value="me">Seulement moi</option>
 				<option value="friends">Mes amis</option>
 				<option value="followers">Mes abonnés</option>
@@ -33,7 +33,7 @@
 					type="checkbox"
 					id="ai"
 					v-model="is_ai"
-					class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered"
+					class="w-4 h-4 text-button bg-surface border-surface-border rounded focus:ring-button-hovered"
 					:disabled="post.flags.includes('AI')"
 				>
 				<label for="ai" class="text-sm font-medium">Généré par IA</label>
@@ -43,7 +43,7 @@
 					type="checkbox"
 					id="nudity"
 					v-model="is_nudity"
-					class="w-4 h-4 text-action bg-background-surface border-border-surface rounded focus:ring-action-hovered"
+					class="w-4 h-4 text-button bg-surface border-surface-border rounded focus:ring-button-hovered"
 					:disabled="post.flags.includes('NFE')"
 				>
 				<label for="nudity" class="text-sm font-medium">Nudité</label>

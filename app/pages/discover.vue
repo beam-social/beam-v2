@@ -30,23 +30,27 @@
 	});
 </script>
 <template>
-	<main class="flex flex-col p-4 gap-4 xs:p-8 lg:pt-48 xl:pt-64">
+	<main class="flex flex-col p-4 gap-4 xs:p-8">
 		<div class="space-y-1">
 			<h1 class="text-4xl text-center font-bold">Discover</h1>
 		</div>
 		<section class="flex flex-col gap-2 md:gap-4" v-if="posts.length">
 			<PostView
 				v-for="post in posts"
-				:key=post.id
-				:data=post
-				:me=me
-				:client=$client
-				:clickable=true
+				:key="post.id"
+				:data="post"
+				:me="me"
+				:client="$client"
+				:clickable="true"
 			/>
-			<p class="text-subtext text-center">Oups ! Tu arrives déjà à la fin de ton feed...</p>
+			<p class="text-muted text-center">
+				Oups ! Tu arrives déjà à la fin de ton feed...
+			</p>
 		</section>
 		<section v-else>
-			<p class="text-2xl font-bold text-center">Aucun post à afficher pour le moment.</p>
+			<p class="text-2xl font-bold text-center">
+				Aucun post à afficher pour le moment.
+			</p>
 		</section>
 	</main>
 </template>

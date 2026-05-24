@@ -11,7 +11,7 @@
 	}
 
 	const size_class = computed(() => {
-		let base = 'relative text-text-surface bg-background-surface border border-border-surface rounded-3xl w-full px-8 py-6 space-y-2'
+		let base = 'relative text-on-surface bg-surface border border-surface-border rounded-3xl w-full px-8 py-6 space-y-2'
 
 		switch (props.size) {
 			case '2xl':
