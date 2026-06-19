@@ -106,14 +106,6 @@ import DeleteConfirmation from '../dialogs/DeleteConfirmation.vue';
 
 		if (props.me?.profile.id != post.value.author?.id) {
 			list.push({
-				label: 'Signaler',
-				style: 'danger',
-				handler: async () => {
-					alert('Fonction de signalement non implémentée pour le moment.')
-				}
-			})
-
-			list.push({
 				label: `Bloquer ${post.value.author?.display_name || post.value.author?.name || "l'auteur"}`,
 				style: 'danger',
 				handler: async () => {
