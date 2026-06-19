@@ -1,114 +1,217 @@
 <script setup lang="ts">
-	definePageMeta({
-		title: 'Profil',
-		path: '/@:username',
-		middleware: 'users'
-	})
+definePageMeta({
+	title: "Profil",
+	path: "/@:username",
+	middleware: "users",
+});
 
-	import PostCard from '@/components/cards/PostCard.vue';
-	import PictureRing from '@/components/PictureRing.vue';
-	import ProfileBadge from '@/components/ProfileBadge.vue';
-	import ProfileCard from '@/components/cards/ProfileCard.vue';
+import { defineAsyncComponent } from "vue";
 
-	import Button from '~/components/Button.vue';
-	import Menu from '~/components/Menu.vue';
+const PostCard = defineAsyncComponent(
+	() => import("@/components/cards/PostCard.vue"),
+);
 
-	import type { User } from 'beamsocial'
-	import type { Post } from 'beamsocial'
+const PictureRing = defineAsyncComponent(
+	() => import("@/components/PictureRing.vue"),
+);
 
-	import { toLiteralNumber } from '@/utils/format';
-	import { useSession, useInbox } from '@/stores/session';
+const ProfileBadge = defineAsyncComponent(
+	() => import("@/components/ProfileBadge.vue"),
+);
 
-	const { $client } = useNuxtApp();
-	const { me, refreshSession } = useSession();
-	const { inbox } = useInbox();
+const ProfileCard = defineAsyncComponent(
+	() => import("@/components/cards/ProfileCard.vue"),
+);
 
-	const route = useRoute();
-	const router = useRouter();
+const Button = defineAsyncComponent(
+	() => import("~/components/Button.vue"),
+);
 
-	const username = route.params.username as string;
+const Menu = defineAsyncComponent(
+	() => import("~/components/Menu.vue"),
+);
 
-	const profile = ref<User | null>(null);
-	const posts = ref<Post[] | null>(null);
-	const following = ref<User[] | null>(null);
-	const followers = ref<User[] | null>(null);
+import type { User } from "beamsocial";
+import type { Post } from "beamsocial";
 
-	const loading = ref<boolean>(true);
-	const errorMessage = ref<string | null>(null);
-	const section = ref<string>('posts');
+import { toLiteralNumber } from "@/utils/format";
+import { useSession, useInbox } from "@/stores/session";
 
-	const blocked = ref<boolean>(false);
+const { $client } = useNuxtApp();
 
-	async function loadProfile(profileUsername: string) {
-		loading.value = true;
-		errorMessage.value = null;
-		profile.value = null;
-		posts.value = null;
-		following.value = null;
-		followers.value = null;
-		blocked.value = false;
+const { me, refreshSession } = useSession();
+const { inbox } = useInbox();
 
-		document.title = "@" + profileUsername + " • Beam"
+const route = useRoute();
+const router = useRouter();
 
-		await refreshSession(() => {
-			router.push('/auth/login?return=' + encodeURIComponent(window.location.pathname))
+const username = computed(
+	() => route.params.username as string,
+);
+
+const profile = ref<User | null>(null);
+const posts = ref<Post[]>([]);
+const following = ref<User[]>([]);
+const followers = ref<User[]>([]);
+
+const loading = ref(true);
+const errorMessage = ref<string | null>(null);
+
+const section = ref<"posts" | "following" | "followers">(
+	"posts",
+);
+
+const followingLoaded = ref(false);
+const followersLoaded = ref(false);
+
+const blocked = computed(
+	() =>
+		me.value?.relations.blocklist.includes(
+			profile.value?.id || "",
+		) ?? false,
+);
+
+const followingSet = computed(
+	() => new Set(me.value?.relations.following ?? []),
+);
+
+const pendingFollowSet = computed(
+	() =>
+		new Set(
+			inbox.value?.outgoing.follow.map(
+				(req) => req.to.id,
+			) ?? [],
+		),
+);
+
+async function loadProfile(profileUsername: string) {
+	loading.value = true;
+	errorMessage.value = null;
+
+	followingLoaded.value = false;
+	followersLoaded.value = false;
+
+	try {
+		await Promise.allSettled([
+			refreshSession(() => {
+				router.push(
+					"/auth/login?return=" +
+						encodeURIComponent(
+							window.location.pathname,
+						),
+				);
+			}),
+		]);
+
+		const [_profile, _posts] = await Promise.all([
+			$client.getUser(profileUsername),
+			$client.fetchUserPosts(profileUsername),
+		]);
+
+		profile.value = _profile;
+		posts.value = _posts ?? [];
+
+		useSeoMeta({
+			title:
+				_profile?.display_name ||
+				`@${profileUsername}`,
 		});
+	} catch (err: any) {
+		const msg =
+			err?.response?.data?.message ?? "";
 
-		try {
-			const _profile: User | null = await $client.getUser(profileUsername);
-			profile.value = _profile;
+		if (msg.includes("Private")) {
+			errorMessage.value =
+				"Ce profil est privé.";
+		} else if (msg.includes("NotFound")) {
+			errorMessage.value =
+				"Utilisateur introuvable.";
+		} else {
+			errorMessage.value =
+				"Une erreur est survenue.";
 
-			document.title = (profile.value?.display_name || `@${profileUsername}`) + " • Beam"
-
-			let _posts: Post[] | null = await $client.fetchUserPosts(profileUsername);
-			posts.value = _posts;
-		} catch(err: any) {
-			const msg = err.response.data.message || '';
-			loading.value = false;
-
-			if (msg.includes('Private')) {
-				errorMessage.value = 'Ce profil est privé.';
-			} else if (msg.includes('NotFound')) {
-				errorMessage.value = 'Utilisateur introuvable.';
-			} else {
-				errorMessage.value = 'Une erreur est survenue.';
-				console.error('Erreur inconnue :', err);
-			}
+			console.error(err);
 		}
-
-		try {
-			profile.value?.getFollowing().then(async users => {
-				following.value = users
-			});
-		} catch(err: any) {
-			console.error('Erreur lors du chargement des abonnements :', err);
-		}
-
-		try {
-			profile.value?.getFollowers().then(async users => {
-				followers.value = users
-			});
-		} catch(err: any) {
-			console.error('Erreur lors du chargement des abonnés :', err);
-		} finally {
-			loading.value = false;
-		}
+	} finally {
+		loading.value = false;
 	}
+}
 
-	onMounted(async () => {
-		await loadProfile(username);
-	});
+async function loadFollowing() {
+	if (
+		followingLoaded.value ||
+		!profile.value
+	)
+		return;
 
-	watch(() => route.params.username, async (newUsername) => {
-		if (typeof newUsername === 'string') {
+	followingLoaded.value = true;
+
+	try {
+		following.value =
+			(await profile.value.getFollowing()) ??
+			[];
+	} catch (err) {
+		console.error(
+			"Erreur chargement following:",
+			err,
+		);
+	}
+}
+
+async function loadFollowers() {
+	if (
+		followersLoaded.value ||
+		!profile.value
+	)
+		return;
+
+	followersLoaded.value = true;
+
+	try {
+		followers.value =
+			(await profile.value.getFollowers()) ??
+			[];
+	} catch (err) {
+		console.error(
+			"Erreur chargement followers:",
+			err,
+		);
+	}
+}
+
+watch(
+	section,
+	async (value) => {
+		if (value === "following") {
+			await loadFollowing();
+		}
+
+		if (value === "followers") {
+			await loadFollowers();
+		}
+	},
+	{
+		immediate: true,
+	},
+);
+
+watch(
+	() => route.params.username,
+	async (newUsername) => {
+		if (
+			typeof newUsername === "string" &&
+			newUsername !== profile.value?.name
+		) {
 			await loadProfile(newUsername);
 		}
-	});
+	},
+);
 
-	watch(me, () => {
-		blocked.value = me.value?.relations.blocklist.includes(profile.value?.id || '') || false
-	})
+onMounted(async () => {
+	await loadProfile(username.value);
+});
 </script>
+
 <template>
 	<main v-if="loading"
 		class="relative grow flex items-center justify-center text-center p-4 xs:p-8"
