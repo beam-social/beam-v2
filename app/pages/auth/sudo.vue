@@ -21,6 +21,7 @@ const actions: Record<string, string> = {
 	"delete-account": "Supprimer mon compte",
 	"reset-email": "Changer mon adresse mail",
 	"reset-password": "Réinitialiser mon mot de passe",
+	"transfer-account": "Transférer mon compte",
 };
 
 const action = ref<string | undefined>(undefined);
@@ -71,7 +72,10 @@ async function sudo() {
 						break;
 
 					default:
-						router.push("/account/settings");
+						router.push(
+							"/account/settings?section=transfer&token=" +
+								encodeURIComponent(result.token),
+						);
 						break;
 				}
 			} else {

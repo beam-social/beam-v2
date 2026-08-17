@@ -19,7 +19,7 @@ import axios from "axios";
 
 import type { Badge } from "beamsocial";
 
-	import { useSession } from '@/stores/session';
+import { useSession } from "@/stores/session";
 
 useHead({
 	title: "Mes paramètres • Beam",
@@ -35,6 +35,8 @@ import { grades } from "@/utils/profiles";
 
 const { me, refreshSession, setMe } = useSession();
 const { syncTheme, setTheme } = useTheme();
+
+const route = useRoute();
 
 interface Entitlement {
 	id: string;
@@ -54,6 +56,15 @@ $client.refresh();
 const router = useRouter();
 
 const section = ref<string>("home");
+const sudoToken = ref<string | null>(null);
+
+if (route.query.section) {
+	section.value = route.query.section as string;
+}
+
+if (route.query.token) {
+	sudoToken.value = route.query.token as string;
+}
 
 const profile = ref<{
 	name: string;
@@ -598,6 +609,35 @@ function uploadAvatar() {
 							</p>
 						</div>
 					</div>
+				</div>
+			</div>
+		</section>
+		<section v-if="section == 'transfer'" class="px-4 space-y-8">
+			<h1 class="text-3xl font-bold">Transférer mon compte Beam</h1>
+			<div class="space-y-6">
+				<p>
+					La version 2027 de Beam va bientôt sortir. Ce code vous sera
+					utile pour obtenir le badge "Première Heure" !
+				</p>
+				<div class="bg-surface">
+					<input
+						type="text"
+						v-model="sudoToken"
+						disabled
+						class="bg-surface text-sm border border-surface-border rounded-lg px-4 py-2 w-full text-center"
+					/>
+					<Button
+						v-if="sudoToken"
+						label="Copier le code"
+						type="action"
+						:handler="
+							() => {
+								$router.push(
+									'/auth/sudo?action=transfer-account',
+								);
+							}
+						"
+					/>
 				</div>
 			</div>
 		</section>
