@@ -3,6 +3,7 @@ import {
 	EyeIcon,
 	LockClosedIcon,
 	UserCircleIcon,
+	BeakerIcon,
 } from "@heroicons/vue/24/outline";
 import {
 	FingerPrintIcon,
@@ -300,6 +301,18 @@ function uploadAvatar() {
 				<div
 					class="flex flex-col border border-surface-border rounded-3xl divide-y divide-border-surface overflow-hidden"
 				>
+					<button
+						class="cursor-pointer flex gap-1 items-center bg-surface text-on-surface font-medium w-full px-6 py-6"
+						@click="() => (section = 'transfer')"
+					>
+						<BeakerIcon class="w-8 h-8" />
+						<span class="grow text-lg text-left line-clamp-1"
+							>Transférer vers Beam 2027</span
+						>
+						<ChevronRightIcon
+							class="w-4 h-4 stroke-2 stroke-muted text-muted"
+						/>
+					</button>
 					<button
 						class="cursor-pointer flex gap-1 items-center bg-surface text-on-surface font-medium w-full px-6 py-6"
 						@click="() => (section = 'account')"
