@@ -636,6 +636,7 @@ function uploadAvatar() {
 					<input
 						type="text"
 						v-model="sudoToken"
+						placeholder="Générez un code pour transférer votre compte"
 						:disabled="!sudoToken"
 						class="bg-surface text-sm border border-surface-border rounded-lg px-4 py-2 w-full text-center"
 					/>
