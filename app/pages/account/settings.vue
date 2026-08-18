@@ -632,7 +632,15 @@ function uploadAvatar() {
 					La version 2027 de Beam va bientôt sortir. Ce code vous sera
 					utile pour obtenir le badge "Première Heure" !
 				</p>
-				<div class="bg-surface">
+				<p>
+					Le transfert ne supprimera pas votre compte actuel, il
+					permettra seulement de récupérer les données de votre profil
+					et de récolter les récompenses qui vous sont dûes en tant
+					qu'utilisateurs de la première heure.
+				</p>
+				<div
+					class="bg-surface text-on-surface border border-surface-border rounded-4xl p-6 space-y-4 max-w-xl"
+				>
 					<input
 						type="text"
 						v-model="sudoToken"
