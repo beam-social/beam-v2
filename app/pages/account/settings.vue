@@ -636,12 +636,11 @@ function uploadAvatar() {
 					<input
 						type="text"
 						v-model="sudoToken"
-						disabled
+						:disabled="!sudoToken"
 						class="bg-surface text-sm border border-surface-border rounded-lg px-4 py-2 w-full text-center"
 					/>
 					<Button
-						v-if="sudoToken"
-						label="Copier le code"
+						label="Générer un code"
 						type="action"
 						:handler="
 							() => {
